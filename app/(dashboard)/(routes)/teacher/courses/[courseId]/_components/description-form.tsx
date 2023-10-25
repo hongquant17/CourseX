@@ -3,7 +3,12 @@
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { Pencil } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { Course } from "@prisma/client";
 
 import {
     Form,
@@ -13,17 +18,12 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 
+
 interface DescriptionFormProps {
-    initialData: {
-        description: string;
-    };
+    initialData: Course;
     courseId: string;
 }
 
@@ -42,12 +42,14 @@ export const DescriptionForm = ({
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData,
+        defaultValues: {
+            description: initialData?.description || ""
+        },
     });
 
     const router = useRouter();
 
-    const {isSubmitting, isValid } = form.formState;
+    const { isSubmitting, isValid } = form.formState;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
@@ -65,14 +67,14 @@ export const DescriptionForm = ({
             <div className="font-medium flex items-center justify-between">
                 Course description
                 <Button onClick={toggleEdit} variant="ghost">
-                    {isEditing && (
+                    {isEditing ? (
                         <>Cancel</>
+                    ) : (
+                        <>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit description
+                        </>
                     )}
-                    {!isEditing && (
-                    <>
-                        <Pencil className="h-4 w-4 mr-2" />
-                        Edit description
-                    </>)}
                 </Button>
             </div>
             {!isEditing && (
@@ -92,10 +94,10 @@ export const DescriptionForm = ({
                         <FormField
                             control={form.control}
                             name="description"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Textarea 
+                                        <Textarea
                                             disabled={isSubmitting}
                                             placeholder="e.g. 'This course is about ...'"{...field}
                                         />
@@ -105,7 +107,7 @@ export const DescriptionForm = ({
                             )}
                         />
                         <div className="flex items-center gap-x-2">
-                            <Button 
+                            <Button
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >

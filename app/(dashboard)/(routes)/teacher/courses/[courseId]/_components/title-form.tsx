@@ -3,7 +3,11 @@
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { Pencil } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import {
     Form,
@@ -14,10 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 interface TitleFormProps {
     initialData: {
@@ -46,7 +46,7 @@ export const TitleForm = ({
 
     const router = useRouter();
 
-    const {isSubmitting, isValid } = form.formState;
+    const { isSubmitting, isValid } = form.formState;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
@@ -64,14 +64,14 @@ export const TitleForm = ({
             <div className="font-medium flex items-center justify-between">
                 Course title
                 <Button onClick={toggleEdit} variant="ghost">
-                    {isEditing && (
+                    {isEditing ? (
                         <>Cancel</>
+                    ) : (
+                        <>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit description
+                        </>
                     )}
-                    {!isEditing && (
-                    <>
-                        <Pencil className="h-4 w-4 mr-2" />
-                        Edit tiltle
-                    </>)}
                 </Button>
             </div>
             {!isEditing && (
@@ -88,10 +88,10 @@ export const TitleForm = ({
                         <FormField
                             control={form.control}
                             name="title"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
-                                        <Input 
+                                        <Input
                                             disabled={isSubmitting}
                                             placeholder="e.g. Web development"{...field}
                                         />
@@ -101,7 +101,7 @@ export const TitleForm = ({
                             )}
                         />
                         <div className="flex items-center gap-x-2">
-                            <Button 
+                            <Button
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >
