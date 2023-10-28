@@ -72,8 +72,8 @@ export const AttachmentForm = ({
                     )}
                     {!isEditing && initialData.imageUrl && (
                         <>
-                            <Pencil className="h-4 w-4 mr-2" />
-                            Edit image
+                            <PlusCircle className="h-4 w-4 mr-2" />
+                            Add attachment
                         </>
                     )}
                 </Button>
