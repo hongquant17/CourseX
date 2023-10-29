@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
 
@@ -54,7 +53,7 @@ export const ChapterForm = ({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.post(`/api/courses/${courseId}/chapter`, values);
+            await axios.post(`/api/courses/${courseId}/chapters`, values);
             toast.success("Chapter created");
             toggleCreating();
             router.refresh();
