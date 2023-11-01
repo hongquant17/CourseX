@@ -88,7 +88,7 @@ const CourseIdPage = async ({
           <div className="flex items-center gap-x-2">
             <IconBadge icon={LayoutDashboard} />
             <h2 className="text-xl">
-              Customize your course
+              Customization
             </h2>
           </div>
           <TitleForm
