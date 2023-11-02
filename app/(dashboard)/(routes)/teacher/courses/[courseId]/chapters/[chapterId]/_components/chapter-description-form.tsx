@@ -20,7 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Editor } from "@/components/editor";
-import { init } from "next/dist/compiled/webpack/webpack";
 import { Preview } from "@/components/preview";
 
 interface ChapterDescriptionFormProps {
@@ -55,9 +54,7 @@ export const ChapterDescriptionForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId}`,
-        values
-      );
+        `/api/courses/${courseId}/chapters/${chapterId}`, values);
       toast.success("Chapter updated");
       toggleEdit();
       router.refresh();
@@ -85,10 +82,10 @@ export const ChapterDescriptionForm = ({
         <div
           className={cn(
             "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
+            (!initialData.description || initialData.description === "") && "text-slate-500 italic"
           )}
         >
-          {initialData.description || "No description"}
+          {(!initialData.description || initialData.description === "") && "No description"}
           {initialData.description && (
             <Preview
               value={initialData.description}  
@@ -108,7 +105,9 @@ export const ChapterDescriptionForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Editor {...field} />
+                    <Editor 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
