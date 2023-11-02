@@ -54,10 +54,10 @@ const CreatePage = () => {
         <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
             <div>
                 <h1 className="text-2xl">
-                    Name your course
+                    Đặt tên cho khóa học
                 </h1>
                 <p className="text-sm text-slate-600">
-                    What would you like to name your course? Don&apos;t worry, you can change this later.
+                    Hãy đặt cho khóa học của bạn một cái tên. Bạn có thể chỉnh sửa sau.
                 </p>
                 <Form {...form}>
                     <form
@@ -70,12 +70,12 @@ const CreatePage = () => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>
-                                        Course title
+                                        Tên khóa học
                                     </FormLabel>
                                     <FormControl>
                                         <Input
                                             disabled={isSubmitting}
-                                            placeholder="e.g. 'Advanced web development'"
+                                            placeholder="Ví dụ: 'Phát triển ứng dụng Web'"
                                             {...field}
                                         />
                                     </FormControl>
@@ -92,14 +92,14 @@ const CreatePage = () => {
                                     type="button"
                                     variant="ghost"
                                 >
-                                    Cancel
+                                    Hủy bỏ
                                 </Button>
                             </Link>
                             <Button
                                 type="submit"
                                 disabled={!isValid || isSubmitting}
                             >
-                                Continue
+                                Tiếp tục
                             </Button>
                         </div>
                     </form>
