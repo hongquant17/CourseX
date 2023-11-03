@@ -105,7 +105,7 @@ export const ChapterTitleForm = ({
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >
-                                Save
+                                Lưu
                             </Button>
                         </div>
                     </form>

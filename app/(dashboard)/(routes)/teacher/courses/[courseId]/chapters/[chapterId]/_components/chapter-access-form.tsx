@@ -20,8 +20,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Editor } from "@/components/editor";
-import { Preview } from "@/components/preview";
 import { Checkbox } from "@/components/ui/checkbox"
 
 interface ChapterAccessFormProps {
@@ -71,28 +69,28 @@ export const ChapterAccessForm = ({
         Chapter access
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Hủy</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit access
+              Chỉnh sửa
             </>
           )}
         </Button>
       </div>
       {!isEditing && (
-        <div
+        <p
           className={cn(
             "text-sm mt-2",
             !initialData.isFree && "text-slate-500 italic"
           )}
         >
           {initialData.isFree ? (
-            <>Chương này được miễn phí xem trước, trả phí để xem các chương sau</>
+            <>Chương này được miễn phí xem trước, trả phí để xem các chương sau.</>
           ) :
-            <>Trả phí để được xem chương này</>
+            <>Trả phí để được xem chương này.</>
           }
-        </div>
+        </p>
       )}
       {isEditing && (
         <Form {...form}>
@@ -104,7 +102,7 @@ export const ChapterAccessForm = ({
               control={form.control}
               name="isFree"
               render={({ field }) => (
-                <FormItem className="flex flex-row item-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -121,7 +119,7 @@ export const ChapterAccessForm = ({
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
+                Lưu
               </Button>
             </div>
           </form>
