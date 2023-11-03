@@ -66,14 +66,14 @@ export const ChapterDescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Chapter description
+        Mô tả chương
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Hủy</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit description
+              Chỉnh sửa
             </>
           )}
         </Button>
@@ -85,7 +85,7 @@ export const ChapterDescriptionForm = ({
             (!initialData.description || initialData.description === "") && "text-slate-500 italic"
           )}
         >
-          {(!initialData.description || initialData.description === "") && "No description"}
+          {(!initialData.description || initialData.description === "") && "Không có mô tả"}
           {initialData.description && (
             <Preview
               value={initialData.description}  
