@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Loader2, Pencil, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -51,11 +51,11 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters`, values);
-      toast.success("Chapter created");
+      toast.success("Đã thêm chương học");
       toggleCreating();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Đã xảy ra lỗi");
     }
   };
 
@@ -66,10 +66,10 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
         list: updateData,
       });
-      toast.success("Chapters reordered");
+      toast.success("Đã sắp xếp các chương");
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Đã xảy ra lỗi");
     } finally {
       setIsUpdating(false);
     }
@@ -87,14 +87,14 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Course chapters
+        Các chương học
         <Button onClick={toggleCreating} variant="ghost">
           {isCreating ? (
-            <>Cancel</>
+            <>Hủy bỏ</>
           ) : (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add a chapter
+              Thêm chương học
             </>
           )}
         </Button>
@@ -113,7 +113,7 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Introduction to the course'"
+                      placeholder="Ví dụ: Giới thiệu chung về ..."
                       {...field}
                     />
                   </FormControl>
@@ -122,7 +122,7 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
               )}
             />
             <Button disabled={!isValid || isSubmitting} type="submit">
-              Create
+              Tạo mới
             </Button>
           </form>
         </Form>
@@ -144,7 +144,7 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       )}
       {!isCreating && (
         <p className="text-xs text-muted-foreground mt-4">
-          Drag and drop to reorder the chapters
+          Kéo thả để thay đổi thứ tự các chương
         </p>
       )}
     </div>

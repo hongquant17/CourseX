@@ -97,7 +97,7 @@ export const ChaptersList = ({
                       <div className="ml-auto pr-2 flex items-center gap-x-2">
                         {chapter.isFree && (
                           <Badge>
-                            Free
+                            Miễn phí
                           </Badge>
                         )}
                         <Badge
@@ -106,7 +106,7 @@ export const ChaptersList = ({
                             chapter.isPublished && "bg-sky-700"
                           )}
                         >
-                          {chapter.isPublished ? "Published" : "Draft"}
+                          {chapter.isPublished ? "Đã đăng" : "Bản nháp"}
                         </Badge>
                         <Pencil
                           onClick={() => onEdit(chapter.id)}

@@ -51,7 +51,7 @@ export const ChapterVideoForm = ({
       <div className="font-medium flex items-center justify-between">
         Video chương học
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Hủy</>}
+          {isEditing && <>Hủy bỏ</>}
           {!isEditing && !initialData.videoUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />

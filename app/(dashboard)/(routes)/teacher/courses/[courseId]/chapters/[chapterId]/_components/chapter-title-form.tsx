@@ -68,7 +68,7 @@ export const ChapterTitleForm = ({
         Tên chương
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Hủy bỏ</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
