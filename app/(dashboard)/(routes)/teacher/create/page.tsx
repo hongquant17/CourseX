@@ -73,7 +73,7 @@ const CreatePage = () => {
                     />
                   </FormControl>
                   <FormDescription>
-                    What will you teach in this course?
+                    Một tiêu đề thu hút, ngắn gọn sẽ gây ấn tượng đầu tiên tốt
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

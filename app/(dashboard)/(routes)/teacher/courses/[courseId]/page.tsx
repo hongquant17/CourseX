@@ -12,7 +12,6 @@ import { CategoryForm } from "./_components/category-form";
 import { PriceForm } from "./_components/price-form";
 import { AttachmentForm } from "./_components/attachment-form";
 import { ChapterForm } from "./_components/chapter-form";
-import { channel } from "diagnostics_channel";
 
 const CourseIdPage = async ({
   params
@@ -88,7 +87,7 @@ const CourseIdPage = async ({
           <div className="flex items-center gap-x-2">
             <IconBadge icon={LayoutDashboard} />
             <h2 className="text-xl">
-              Tùy biến
+              Thông tin chung
             </h2>
           </div>
           <TitleForm
@@ -129,7 +128,7 @@ const CourseIdPage = async ({
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={CircleDollarSign} />
                 <h2 className="text-xl">
-                  Sell your course
+                  Thanh toán
                 </h2>
               </div>
               <PriceForm
@@ -141,7 +140,7 @@ const CourseIdPage = async ({
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={File} />
                 <h2 className="text-xl">
-                  Resources & Attachments
+                  Tài liệu
                 </h2>
               </div>
               <AttachmentForm
