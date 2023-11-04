@@ -76,10 +76,10 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
         <p
           className={cn(
             "text-sm mt-2",
-            !initialData.price && "text-slate-500 italic"
+            !initialData.price ? "text-slate-500 italic" : ""
           )}
         >
-          {initialData.price ? formatPrice(initialData.price) : "Chưa có giá tiền"}
+          {initialData.price === undefined ? "Chưa có giá tiền" : initialData.price === 0 ? "Miễn phí" : formatPrice(initialData.price as number)}
         </p>
       )}
       {isEditing && (
@@ -96,7 +96,7 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
                   <FormControl>
                     <Input
                       type="number"
-                      step="10000"
+                      step="1"
                       min="0"
                       disabled={isSubmitting}
                       placeholder="Thêm giá tiền"
