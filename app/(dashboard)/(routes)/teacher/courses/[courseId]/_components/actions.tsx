@@ -31,7 +31,7 @@ export const Actions = ({
         toast.success("Đã ẩn khóa học");
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
-        toast.success("Đã đăng khóa");
+        toast.success("Đã đăng khóa học");
       }
 
       router.refresh();
