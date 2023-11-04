@@ -3,13 +3,11 @@ import Link from "next/link";
 
 const CoursesPage = () =>{
     return (
-        <div className="p-6">
-            <Link href="/teacher/create">
-                <Button>
-                    New Course
-                </Button>
-            </Link>
-        </div>
+      <div className="h-full flex justify-center pt-20">
+        <Link href="/teacher/create">
+          <Button>Thêm khóa học</Button>
+        </Link>
+      </div>
     );
 }
 
