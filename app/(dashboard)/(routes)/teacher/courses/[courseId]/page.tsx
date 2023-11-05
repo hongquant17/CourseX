@@ -12,6 +12,8 @@ import { CategoryForm } from "./_components/category-form";
 import { PriceForm } from "./_components/price-form";
 import { AttachmentForm } from "./_components/attachment-form";
 import { ChapterForm } from "./_components/chapter-form";
+import { Banner } from "@/components/banner";
+import { Actions } from "./_components/actions";
 
 const CourseIdPage = async ({
   params
@@ -71,86 +73,98 @@ const CourseIdPage = async ({
 
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">
-            Thiết lập khóa học
-          </h1>
-          <span className="text-sm text-slate-700">
-            Hoàn thành các mục {completionText}
-          </span>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-        <div>
-          <div className="flex items-center gap-x-2">
-            <IconBadge icon={LayoutDashboard} />
-            <h2 className="text-xl">
-              Thông tin chung
-            </h2>
+    <>
+      {!course.isPublished && (
+        <Banner
+          label="Khóa học này vẫn đang là bản nháp, sẽ không hiển thị với học viên."
+        />
+      )}
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-y-2">
+            <h1 className="text-2xl font-medium">
+              Thiết lập khóa học
+            </h1>
+            <span className="text-sm text-slate-700">
+              Hoàn thành các mục {completionText}
+            </span>
           </div>
-          <TitleForm
-            initialData={course}
-            courseId={course.id}
-          />
-          <DescriptionForm
-            initialData={course}
-            courseId={course.id}
-          />
-          <ImageForm
-            initialData={course}
-            courseId={course.id}
-          />
-          <CategoryForm
-            initialData={course}
-            courseId={course.id}
-            option={categories.map((category) => ({
-              label: category.name,
-              value: category.id,
-            }))}
+          <Actions
+            disabled={!isComplete}
+            courseId={params.courseId}
+            isPublished={course.isPublished}
           />
         </div>
-        <div className="space-y-6">
-            <div>
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={ListChecks} />
-                <h2 className="text-xl">
-                  Các chương học
-                </h2>
-              </div>
-              <ChapterForm
-                initialData={course}
-                courseId={course.id}
-              />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={LayoutDashboard} />
+              <h2 className="text-xl">
+                Thông tin chung
+              </h2>
             </div>
-            <div>
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={CircleDollarSign} />
-                <h2 className="text-xl">
-                  Thanh toán
-                </h2>
+            <TitleForm
+              initialData={course}
+              courseId={course.id}
+            />
+            <DescriptionForm
+              initialData={course}
+              courseId={course.id}
+            />
+            <ImageForm
+              initialData={course}
+              courseId={course.id}
+            />
+            <CategoryForm
+              initialData={course}
+              courseId={course.id}
+              option={categories.map((category) => ({
+                label: category.name,
+                value: category.id,
+              }))}
+            />
+          </div>
+          <div className="space-y-6">
+              <div>
+                <div className="flex items-center gap-x-2">
+                  <IconBadge icon={ListChecks} />
+                  <h2 className="text-xl">
+                    Các chương học
+                  </h2>
+                </div>
+                <ChapterForm
+                  initialData={course}
+                  courseId={course.id}
+                />
               </div>
-              <PriceForm
-                initialData={course}
-                courseId={course.id}
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={File} />
-                <h2 className="text-xl">
-                  Tài liệu
-                </h2>
+              <div>
+                <div className="flex items-center gap-x-2">
+                  <IconBadge icon={CircleDollarSign} />
+                  <h2 className="text-xl">
+                    Thanh toán
+                  </h2>
+                </div>
+                <PriceForm
+                  initialData={course}
+                  courseId={course.id}
+                />
               </div>
-              <AttachmentForm
-                initialData={course}
-                courseId={course.id}
-              />
+              <div>
+                <div className="flex items-center gap-x-2">
+                  <IconBadge icon={File} />
+                  <h2 className="text-xl">
+                    Tài liệu
+                  </h2>
+                </div>
+                <AttachmentForm
+                  initialData={course}
+                  courseId={course.id}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+    </>
   )
 }
 
