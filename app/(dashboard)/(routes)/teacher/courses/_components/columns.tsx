@@ -41,6 +41,15 @@ export const columns: ColumnDef<Course>[] = [
             </Button>
         )
     },
+    cell: ({ row }) => {
+        const price = parseFloat(row.getValue("price") || "0");
+        const formatted = new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND"
+        }).format(price);
+
+        return <div>{formatted}</div>
+    }
   },
   {
     accessorKey: "isPublished",
