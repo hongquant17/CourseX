@@ -38,9 +38,11 @@ export const CategoryItem = ({
     };
 
     return (
-       <button className={cn(
+       <button
+       onClick={onClick} 
+       className={cn(
         "py-2 px-3 text-sm boder boder-slate-200 rounded-full flex items-center gap-x-1 hover:boder-sky-700 transition",
-        // TOdo: Change style if active
+        isSelected && "border-sky-700 bg-sky-200/20 text-sky-800"
        )} type="button">
         {Icon && <Icon size={20} />}
         <div className="truncate">
