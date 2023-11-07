@@ -1,11 +1,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from '@next/font/google'
+import { Roboto } from '@next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ToasterProvider } from '@/components/providers/toaster-provider'
 import { ConfettiProvider } from '@/components/providers/confetti-provider'
 
-const inter = Inter({
+const robo = Roboto({
+  weight: '400',
   subsets: ['vietnamese']
 })
 
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-      <body className={inter.className}>
+      <body className={robo.className}>
         <ConfettiProvider/>
         <ToasterProvider />
         {children}
