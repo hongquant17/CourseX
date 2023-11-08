@@ -23,7 +23,7 @@ const CoursesPage = async() =>{
     })
 
     return (
-      <div className="h-full flex justify-center pt-20">
+      <div className="p-6">
         <DataTable columns={columns} data={courses} />
       </div>
     );
