@@ -53,12 +53,12 @@ const CreatePage = () => {
       <Link
         href={`/teacher/courses`}
         className="w-fit flex items-center text-sm hover:opacity-75
-                          transition mb-6"
+                          transition"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to course management
       </Link>
-    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
+    <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6 pb-20">
       <div>
         <h1 className="text-2xl">Đặt tên cho khóa học</h1>
         <p className="text-sm text-slate-600">
