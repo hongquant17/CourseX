@@ -78,16 +78,6 @@ export const columns: ColumnDef<Course>[] = [
   },
   {
     id: "actions",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-        >
-          Details
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
     cell: ({ row }) => {
       const { id } = row.original;
       return (

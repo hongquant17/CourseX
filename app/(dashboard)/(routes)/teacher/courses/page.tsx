@@ -23,7 +23,7 @@ const CoursesPage = async() =>{
     })
 
     return (
-      <div className="p-6">
+      <div className="py-8 px-16">
         <DataTable columns={columns} data={courses} />
       </div>
     );
