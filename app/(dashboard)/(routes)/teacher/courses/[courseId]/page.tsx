@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { IconBadge } from "@/components/icon-badge";
-import { CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
+import { ArrowLeft, CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
 
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
@@ -14,6 +14,7 @@ import { AttachmentForm } from "./_components/attachment-form";
 import { ChapterForm } from "./_components/chapter-form";
 import { Banner } from "@/components/banner";
 import { Actions } from "./_components/actions";
+import Link from "next/link";
 
 const CourseIdPage = async ({
   params
@@ -71,7 +72,6 @@ const CourseIdPage = async ({
 
   const isComplete = requiredFields.every(Boolean);
 
-
   return (
     <>
       {!course.isPublished && (
@@ -81,19 +81,29 @@ const CourseIdPage = async ({
       )}
       <div className="p-6">
         <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">
-              Thiết lập khóa học
-            </h1>
-            <span className="text-sm text-slate-700">
-              Hoàn thành các mục {completionText}
-            </span>
+          <div className="w-full">
+            <Link
+              href={`/teacher/courses`}
+              className="w-fit flex items-center text-sm hover:opacity-75
+                          transition mb-6"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to course management
+            </Link>
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-y-2">
+                <h1 className="text-2xl font-medium">Thiết lập khóa học</h1>
+                <span className="text-sm text-slate-700">
+                  Hoàn thành các mục {completionText}
+                </span>
+              </div>
+              <Actions
+                disabled={!isComplete}
+                courseId={params.courseId}
+                isPublished={course.isPublished}
+              />
+            </div>
           </div>
-          <Actions
-            disabled={!isComplete}
-            courseId={params.courseId}
-            isPublished={course.isPublished}
-          />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
