@@ -29,6 +29,15 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const title = String(row.getValue("title") || "");
+      const { id } = row.original;
+      return (
+        <Link href={`/teacher/courses/${id}`}>
+            {title}
+        </Link>
+      );
+    }
   },
   {
     accessorKey: "price",
