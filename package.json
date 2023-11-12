@@ -38,6 +38,7 @@
     "lucide-react": "^0.286.0",
     "next": "^13.5.5",
     "next-themes": "^0.2.1",
+    "nightwind": "^1.1.13",
     "postcss": "8.4.31",
     "query-string": "^8.1.0",
     "react": "18.2.0",
