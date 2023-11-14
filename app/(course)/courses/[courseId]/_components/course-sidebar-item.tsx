@@ -58,7 +58,6 @@ export const CourseSidebarItem = ({
                 isActive && "opacity-100",
                 isCompleted && "border-emerald-700",
             )} />
-            Course Sidebar Item
         </button>
     )
 }
