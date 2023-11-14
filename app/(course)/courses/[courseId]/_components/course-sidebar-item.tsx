@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
  
 
-interface CourseSideBarItemProps {
+interface CourseSidebarItemProps {
     label: string; 
     id: string; 
     isCompleted: boolean;
@@ -14,13 +14,13 @@ interface CourseSideBarItemProps {
     isLocked: boolean;
 }
 
-export const CourseSideBarItem = ({
+export const CourseSidebarItem = ({
     label, 
     id, 
     isCompleted, 
     courseId, 
     isLocked, 
-}: CourseSideBarItemProps) => {
+}: CourseSidebarItemProps) => {
     const pathname = usePathname(); 
     const router = useRouter(); 
 

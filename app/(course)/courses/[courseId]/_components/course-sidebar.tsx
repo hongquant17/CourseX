@@ -2,9 +2,9 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { Chapter, Course, UserProgress } from "@prisma/client"
 import { redirect } from "next/navigation";
-import { CourseSideBarItem } from "./course-sidebar-item";
+import { CourseSidebarItem } from "./course-sidebar-item";
 
-interface CourseSideBarProps {
+interface CourseSidebarProps {
     course: Course & {
         chapters: (Chapter & {
             userProgress: UserProgress[] | null; 
@@ -13,10 +13,10 @@ interface CourseSideBarProps {
     progressCount: number;
 }
 
-export const CourseSideBar = async ({
+export const CourseSidebar = async ({
     course, 
     progressCount,
-}: CourseSideBarProps) => {
+}: CourseSidebarProps) => {
     const { userId } = auth(); 
 
     if (!userId) {
@@ -42,7 +42,7 @@ export const CourseSideBar = async ({
             </div>
             <div className="flex flex-col w-full">
                 {course.chapters.map((chapter) => (
-                    <CourseSideBarItem
+                    <CourseSidebarItem
                         key={chapter.id}
                         id={chapter.id} 
                         label={chapter.title}
