@@ -1,5 +1,6 @@
 import { NavbarRoutes } from "@/components/navbar-routes"
 import { MobileSidebar } from "./mobile-sidebar"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export const Navbar = () => {
     return (
