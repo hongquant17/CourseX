@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 import { db } from "@/lib/db";
+import { isTeacher } from '@/lib/teacher';
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -15,7 +16,9 @@ export async function DELETE(
 ) {
   try {
     const { userId } = auth();
-    if (!userId) {
+    const isAuthorized = isTeacher(userId);
+
+    if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -65,8 +68,9 @@ export async function PATCH(
     const { userId } = auth();
     const { courseId } = params;
     const values = await req.json();
+    const isAuthorized = isTeacher(userId);
 
-    if (!userId) {
+    if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

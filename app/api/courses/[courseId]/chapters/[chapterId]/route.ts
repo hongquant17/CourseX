@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs";
 import Mux from "@mux/mux-node";
 
 import { db } from "@/lib/db";
+import { isTeacher } from "@/lib/teacher";
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -15,8 +16,9 @@ export async function DELETE(
 ) {
   try {
     const { userId } = auth();
+    const isAuthorized = isTeacher(userId);
 
-    if (!userId) {
+    if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
