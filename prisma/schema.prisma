@@ -104,13 +104,15 @@ model UserProgress {
 
 model Purchase {
   id String @id @default(uuid())
-  userId String 
+  userId String
 
   courseId String 
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
+
+  isPaid Boolean @default(false)
 
   @@unique([userId, courseId])
   @@index([courseId])
@@ -123,4 +125,11 @@ model StripeCustomer {
 
   createAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Users {
+  userId String @unique
+  isTeacher Boolean @default(false)
+  isAdmin Boolean @default(false)
+  
 }

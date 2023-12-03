@@ -40,7 +40,6 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : null}
-        )}
         <div className="pr-4">
           <ModeToggle/>
         </div>
