@@ -30,13 +30,27 @@ const teacherRoutes = [
     },
 ]
 
+const adminRoutes = [
+    {
+        icon: List,
+        label: "Users",
+        href:"/admin/users",
+    },
+    {
+        icon: BarChart,
+        label: "Enrollment",
+        href: "/admin/enrollment",
+    },
+]
 
 export const SidebarRoutes = () => {
     const pathname = usePathname();
 
     const isTeacherPage = pathname?.includes("/teacher");
 
-    const routes = isTeacherPage ? teacherRoutes : guestRoutes;
+    const isAdminPage = pathname?.includes("/admin");
+
+    const routes = isAdminPage ? adminRoutes : isTeacherPage ? teacherRoutes : guestRoutes;
 
     return (
         <div className="flex flex-col w-full">
