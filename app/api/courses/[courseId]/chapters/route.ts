@@ -32,7 +32,7 @@ export async function POST(
                 courseId: params.courseId,
             },
             orderBy: {
-                position: "asc",
+                position: "desc",
             },
         });
 
