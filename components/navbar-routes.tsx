@@ -1,6 +1,7 @@
 "use client";
 
 import { UserButton, useAuth } from "@clerk/nextjs";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname} from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
@@ -9,10 +10,11 @@ import { SearchInput } from "./search-input";
 import { isTeacher } from "@/lib/teacher";
 import { ModeToggle } from "./mode-toggle";
 import { isAdmin } from "@/lib/admin";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
 export const NavbarRoutes = () => {
     const pathname = usePathname();
-    const { userId } = useAuth();
+    const { data: session } = useSession();
 
     
     const isTeacherPage = pathname?.startsWith("/teacher");
@@ -34,7 +36,7 @@ export const NavbarRoutes = () => {
                     Exit
                 </Button>
             </Link>
-        ) : isTeacher(userId) ? (
+        ) : true ? (
           <Link href="/teacher/courses">
             <Button size="sm" variant="ghost">
               Teacher mode
@@ -51,9 +53,11 @@ export const NavbarRoutes = () => {
         <div className="pr-4">
           <ModeToggle/>
         </div>
-        <UserButton
+        {session ? <Link href="/api/auth/signout?callbackUrl=/">Logout</Link> : 
+        <Link href="/api/auth/signin">Login</Link>}
+        {/* <UserButton
           afterSignOutUrl="/"
-        />
+        /> */}
       </div>
     </>
     )

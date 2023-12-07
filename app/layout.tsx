@@ -1,10 +1,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from '@next/font/google'
-import { ClerkProvider } from '@clerk/nextjs'
+import { getServerSession } from 'next-auth';
 import { ToasterProvider } from '@/components/providers/toaster-provider'
 import { ConfettiProvider } from '@/components/providers/confetti-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
+import SessionProvider from '@/components/providers/session-provider';
+import { options } from './api/auth/[...nextauth]/options';
 
 const inter = Inter({
   subsets: ['vietnamese']
@@ -15,14 +17,15 @@ export const metadata: Metadata = {
   // description: 'Learners and educators gather!',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await getServerSession(options);
   return (
-    <ClerkProvider>
-      <html lang="en">
+    <SessionProvider session={session} >
+      <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <ConfettiProvider />
@@ -31,6 +34,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </SessionProvider>
   );
 }

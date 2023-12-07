@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs"
 import { redirect } from "next/navigation";
 import { CheckCircle, Clock } from "lucide-react";
 
@@ -6,14 +5,15 @@ import { getDashboardCourses } from "@/actions/get-dashboard-courses";
 import { CoursesList } from "@/components/courses-list";
 
 import { InfoCard } from "./_components/info-card";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
 export default async function Dashboard() {
-  const { userId } = auth();
-
-  if (!userId) {
-    return redirect("/");
+  const session = await getServerSession(options);
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/");
   }
-
+  const userId = "123";
   const {
     completedCourses,
     coursesInProgress

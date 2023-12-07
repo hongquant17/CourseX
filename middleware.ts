@@ -1,11 +1,19 @@
-import { authMiddleware } from "@clerk/nextjs";
- 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your middleware
-export default authMiddleware({});
- 
-export const config = {
-      matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
-};
- 
+import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
+
+
+export default withAuth(
+    function middleware(req) {
+        console.log(req.nextUrl.pathname);
+        console.log(req.nextauth.token?.role);
+
+        if (req.nextUrl.pathname.startsWith("/") && req.nextauth.token?.role != "admin") {
+            return NextResponse.rewrite(new URL("/denied", req.url));
+        }
+    },
+    {
+        callbacks: {
+            authorized: ({token}) => !!token,
+        },
+    }
+)

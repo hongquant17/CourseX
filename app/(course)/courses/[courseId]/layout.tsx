@@ -1,10 +1,11 @@
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { getProgress } from "@/actions/get-progress";
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
 const CourseLayout = async ({
     children, 
@@ -13,11 +14,11 @@ const CourseLayout = async ({
     children: React.ReactNode
     params: { courseId: string  }; 
 }) => {
-    const { userId } = auth(); 
-    
-    if (!userId) {
-        return redirect("/")
+    const session = await getServerSession(options);
+    if (!session) {
+        redirect("/api/auth/signin?callbackUrl=/");
     }
+    const userId = "123";
 
     const course = await db.course.findUnique({
       where: {
