@@ -15,19 +15,21 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: "userId",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          User ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="pl-20">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            User ID
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
       const userId = String(row.getValue("userId") || "");
       return (
-        <div>
+        <div className="pl-2">
           {userId}
         </div>
       );
@@ -64,7 +66,7 @@ export const columns: ColumnDef<Users>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Role
+          Highest Role
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -74,9 +76,11 @@ export const columns: ColumnDef<Users>[] = [
       const isTeacher = row.getValue("isTeacher") || false;
 
       return (
-        <Badge className={cn("bg-slate-500", isAdmin && "bg-sky-700")}>
-          {isAdmin ? "Admin" : isTeacher ? "Teacher" : "Student"}
-        </Badge>
+        <div className="pl-8">
+          <Badge className={cn("bg-slate-500", isAdmin && "bg-sky-700")}>
+            {isAdmin ? "Admin" : isTeacher ? "Teacher" : "Student"}
+          </Badge>
+        </div>
       );  
     },
   },
@@ -85,7 +89,7 @@ export const columns: ColumnDef<Users>[] = [
     cell: ({ row }) => {
       return (
             /* TODO */
-            <Button variant="ghost" type="submit" onClick={()=>{}}>
+            <Button className="bg-gray-700 rounded-md" variant="default" type="submit" onClick={()=>{}}>
               Change role
             </Button>
       );
