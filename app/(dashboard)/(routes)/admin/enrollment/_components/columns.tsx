@@ -2,13 +2,23 @@
 
 import { Course, StripeCustomer } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem,
+  DropdownMenuTrigger, 
+} from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
 export const columns: ColumnDef<Course>[] = [
   {
-    accessorKey: 'createdAt', 
+    // Change to enrolled student's id
+    accessorKey: 'userId', 
     header: ({ column }) => {
       return (
         <Button
@@ -49,4 +59,37 @@ export const columns: ColumnDef<Course>[] = [
       )
     },
   }, 
+  {
+    id: 'status', 
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        /* TODO: Handle status */
+        <Badge className={cn("bg-pink-100 text-red-500")}>
+          Pending
+        </Badge>
+      );
+    },
+  }, 
+  {
+    id: "actions", 
+    cell: ({ row }) => {
+      return (
+        /* TODO */
+        <Button variant="default" type="submit" onClick={()=>{}}>
+          Edit
+        </Button>
+      );
+    }
+  }
 ]
