@@ -1,13 +1,13 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from '@next/font/google'
+import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { ToasterProvider } from '@/components/providers/toaster-provider'
 import { ConfettiProvider } from '@/components/providers/confetti-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 
 const inter = Inter({
-  subsets: ['vietnamese']
+  subsets: ['latin-ext']
 })
 
 export const metadata: Metadata = {

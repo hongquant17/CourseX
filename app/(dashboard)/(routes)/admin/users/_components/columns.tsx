@@ -9,6 +9,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { isTeacher } from "@/lib/teacher";
+import { useRouter } from "next/router";
+import { isAdmin } from "@/lib/admin";
 
 export const columns: ColumnDef<Users>[] = [
   {
@@ -72,13 +74,14 @@ export const columns: ColumnDef<Users>[] = [
       );
     },
     cell: ({ row }) => {
-      const isAdmin = row.getValue("isAdmin") || false;
-      const isTeacher = row.getValue("isTeacher") || false;
+      const userId = String(row.getValue("userId") || "");
+      const isUserAdmin = isAdmin(userId);
+      const isUserTeacher = isTeacher(userId);
 
       return (
         <div className="pl-8">
-          <Badge className={cn("bg-slate-500", isAdmin && "bg-sky-700")}>
-            {isAdmin ? "Admin" : isTeacher ? "Teacher" : "Student"}
+          <Badge className={cn("bg-slate-500", isUserTeacher && "bg-sky-700" ,isUserAdmin && "bg-red-700")}>
+            {isUserAdmin ? "Admin" : isUserTeacher ? "Teacher" : "Student"}
           </Badge>
         </div>
       );  
@@ -87,9 +90,28 @@ export const columns: ColumnDef<Users>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const userId = String(row.getValue("userId") || "");
+      const isUserTeacher = isTeacher(userId);
+
+      const handleRoleChange = async () => {
+        try {
+          if (!isUserTeacher && prisma) {
+            await prisma.users.update({
+              where: { userId },
+              data: {
+                isTeacher: true
+              },
+            })
+          }
+          const router = useRouter();
+          router.reload();
+        } catch (error) {
+          console.error("Error updating role:", error);
+        }
+      }
       return (
             /* TODO */
-            <Button className="bg-gray-700 rounded-md" variant="default" type="submit" onClick={()=>{}}>
+            <Button className="rounded-xl" variant="default" type="submit" onClick={handleRoleChange}>
               Change role
             </Button>
       );
