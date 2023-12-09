@@ -18,7 +18,7 @@ export const NavbarRoutes = () => {
     const isTeacherPage = pathname?.startsWith("/teacher");
     const isCoursePage = pathname?.includes("/courses") || pathname==="/";
     const isSearchPage =pathname === "/search";
-
+    /* TODO : remove teacher mode for admin */
     return (
       <>
       {isSearchPage && (
@@ -34,13 +34,15 @@ export const NavbarRoutes = () => {
                     Exit
                 </Button>
             </Link>
-        ) : isTeacher(userId) ? (
+        )
+         : isTeacher(userId) ? (
           <Link href="/teacher/courses">
             <Button size="sm" variant="ghost">
               Teacher mode
             </Button>
           </Link>
-        ) : null}
+        )
+         : null}
         {isCoursePage || isTeacherPage || isSearchPage ? (
           <Link href="/admin/users">
             <Button size="sm" variant="ghost">
