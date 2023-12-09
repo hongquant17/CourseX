@@ -1,5 +1,5 @@
 export const isTeacher = (userId?: string | null) => {
-    return userId === process.env.NEXT_PUBLIC_TEACHER_ID1;
+    return userId === process.env.NEXT_PUBLIC_TEACHER_ID
 }
 
 // import { db } from "./db";

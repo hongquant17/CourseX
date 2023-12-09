@@ -9,7 +9,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { isTeacher } from "@/lib/teacher";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { isAdmin } from "@/lib/admin";
 
 export const columns: ColumnDef<Users>[] = [
@@ -103,8 +103,8 @@ export const columns: ColumnDef<Users>[] = [
               },
             })
           }
-          const router = useRouter();
-          router.reload();
+          // const router = useRouter();
+          // router.reload();
         } catch (error) {
           console.error("Error updating role:", error);
         }
