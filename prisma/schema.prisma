@@ -160,7 +160,10 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?   @unique
+  phone         String?   @unique
   email         String?   @unique
+  password      String
   emailVerified DateTime?
   image         String?
   accounts      Account[]
