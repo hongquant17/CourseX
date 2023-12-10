@@ -5,13 +5,17 @@ import { columns } from "./_components/columns";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { getSession } from "@/lib/auth";
 
 
 const CoursesPage = async() =>{
-    const {userId} = auth();
-    if (!userId) {
+  const session = await getSession();
+    
+  if (!session) {
       return redirect("/");
-    }
+  }
+
+  const userId = session.user.uid;
 
     const courses = await db.course.findMany({
       where: {

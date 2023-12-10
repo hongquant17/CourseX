@@ -5,15 +5,17 @@ import { getDashboardCourses } from "@/actions/get-dashboard-courses";
 import { CoursesList } from "@/components/courses-list";
 
 import { InfoCard } from "./_components/info-card";
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { getSession } from "@/lib/auth";
 
 export default async function Dashboard() {
-  const session = await getServerSession(options);
+  const session = await getSession();
+
   if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/");
+    redirect("/");
   }
-  const userId = "123";
+  
+  const userId = session.user.uid;
+
   const {
     completedCourses,
     coursesInProgress

@@ -1,17 +1,18 @@
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { isTeacher } from "@/lib/teacher";
+import { getSession } from "@/lib/auth";
 
 export async function POST(
     req: Request,
     { params }: { params: { courseId: string } }
 ) {
     try {
-        const { userId } = auth();
+        const session = await getSession();
+        const userId = session?.user.uid;
+        const role = session?.user.role;
         const { url } = await req.json();
-        const isAuthorized = isTeacher(userId);
+        const isAuthorized = role == "admin" || role == "teacher";
 
         if (!userId || !isAuthorized) {
             return new NextResponse("Unauthorized", { status: 401 });

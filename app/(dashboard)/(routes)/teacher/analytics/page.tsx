@@ -1,15 +1,17 @@
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { getAnalytics } from "@/actions/get-analytic";
 import { DataCard } from "./_components/data-card";
 import { Chart } from "./_components/chart";
+import { getSession } from "@/lib/auth";
 
 const AnalyticPage = async () => {
-  const { userId } = auth();
+  const session = await getSession();
+    
+    if (!session) {
+        return redirect("/");
+    }
 
-  if (!userId) {
-    return redirect("/");
-  }
+    const userId = session.user.uid;
 
   const { data, totalRevenue, totalSales } = await getAnalytics(userId);
 

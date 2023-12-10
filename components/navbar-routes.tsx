@@ -2,48 +2,49 @@
 
 import { UserButton, useAuth } from "@clerk/nextjs";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { usePathname} from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
-import { isTeacher } from "@/lib/teacher";
 import { ModeToggle } from "./mode-toggle";
-import { isAdmin } from "@/lib/admin";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/lib/auth";
 
 export const NavbarRoutes = () => {
-    const pathname = usePathname();
-    const { data: session } = useSession();
+  const pathname = usePathname();
+  const { data: session } = useSession()
 
-    
-    const isTeacherPage = pathname?.startsWith("/teacher");
-    const isCoursePage = pathname?.includes("/courses") || pathname==="/";
-    const isSearchPage =pathname === "/search";
+  const isTeacherPage = pathname?.startsWith("/teacher");
+  const isSearchPage = pathname === "/search";
+  const isAdminPage = pathname?.startsWith("/admin")
 
-    return (
-      <>
+  const role = session?.user.role;
+  const isAdmin = role == "admin";
+  const isTeacher = role == "teacher";
+
+  return (
+    <>
       {isSearchPage && (
         <div className="hidden md:block">
           <SearchInput />
         </div>
       )}
-        <div className="flex gap-x-1 place-items-center ml-auto">
-        {isTeacherPage ? (
-            <Link href="/">
-                <Button size="sm" variant="ghost">
-                    <LogOut className="h-4 w-4 mr-2"/>
-                    Exit
-                </Button>
-            </Link>
+      <div className="flex gap-x-1 place-items-center ml-auto">
+        {isTeacherPage || isAdminPage ? (
+          <Link href="/">
+            <Button size="sm" variant="ghost">
+              <LogOut className="h-4 w-4 mr-2" />
+              Exit
+            </Button>
+          </Link>
         ) : true ? (
-          <Link href="/teacher/courses">
+          <Link href="/teacher/courses">  
             <Button size="sm" variant="ghost">
               Teacher mode
             </Button>
           </Link>
         ) : null}
-        {isCoursePage || isTeacherPage || isSearchPage ? (
+        {isAdmin && !isAdminPage? (
           <Link href="/admin/users">
             <Button size="sm" variant="ghost">
               Admin
@@ -51,14 +52,14 @@ export const NavbarRoutes = () => {
           </Link>
         ) : null}
         <div className="pr-4">
-          <ModeToggle/>
+          <ModeToggle />
         </div>
-        {session ? <Link href="/api/auth/signout?callbackUrl=/">Logout</Link> : 
-        <Link href="/api/auth/signin">Login</Link>}
+        {session ? <Link href="/api/auth/signout?callbackUrl=/">Logout</Link> :
+          <Link href="/api/auth/signin">Login</Link>}
         {/* <UserButton
           afterSignOutUrl="/"
         /> */}
       </div>
     </>
-    )
+  )
 }

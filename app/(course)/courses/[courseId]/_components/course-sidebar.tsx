@@ -4,6 +4,7 @@ import { Chapter, Course, UserProgress } from "@prisma/client"
 import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
 import { CourseProgress } from "@/components/course-progress";
+import { getSession } from "@/lib/auth";
 
 interface CourseSidebarProps {
     course: Course & {
@@ -18,11 +19,13 @@ export const CourseSidebar = async ({
     course, 
     progressCount,
 }: CourseSidebarProps) => {
-    const { userId } = auth(); 
-
-    if (!userId) {
+    const session = await getSession();
+    
+    if (!session) {
         return redirect("/");
     }
+
+    const userId = session.user.uid;
 
     const purchase = await db.purchase.findUnique({
         where: {

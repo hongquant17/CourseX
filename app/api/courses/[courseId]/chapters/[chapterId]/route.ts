@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import Mux from "@mux/mux-node";
 
 import { db } from "@/lib/db";
-import { isTeacher } from "@/lib/teacher";
+import { getSession } from "@/lib/auth";
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -15,8 +15,10 @@ export async function DELETE(
   { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const { userId } = auth();
-    const isAuthorized = isTeacher(userId);
+    const session = await getSession();
+    const userId = session?.user.uid;
+    const role = session?.user.role;
+    const isAuthorized = role == "admin" || role == "teacher"
 
     if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -66,7 +68,7 @@ export async function DELETE(
         id: params.chapterId,
       }
     });
-    
+
     // check if at least 1 chapter is published
     // or else unpublish entire course
     const publishedChaptersInCourse = await db.chapter.findMany({
@@ -100,7 +102,8 @@ export async function PATCH(
   { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getSession();
+    const userId = session?.user.uid;
 
     // prevent user set isPublished to True
     const { isPublished, ...values } = await req.json();
