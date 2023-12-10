@@ -3,14 +3,11 @@ import GitHubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
 
 export const options: NextAuthOptions = {
-    // adapter: PrismaAdapter(prisma),
     providers: [
         GitHubProvider({
                   profile(profile) {
@@ -48,13 +45,13 @@ export const options: NextAuthOptions = {
             credentials: {
               email: {
                 type: "text",
-                label: "email",
-                placeholder: "your-email",
+                label: "Email",
+                placeholder: "Your email",
               },
               password: {
                 type: "text",
-                label: "password",
-                placeholder: "your-password",
+                label: "Password",
+                placeholder: "Your password",
               },
             },
             async authorize(credentials) {
@@ -66,11 +63,13 @@ export const options: NextAuthOptions = {
                 });
                 if(foundUser) {
                   console.log("Already exists");
-                  const match = await bcrypt.compare(credentials?.password, foundUser.password);
-                  if (match) {
-                    console.log("Good pass");
-                    foundUser['role'] = "Unverified Email";
-                    return foundUser;
+                  if (credentials?.password != undefined) {
+                    const match = await bcrypt.compare(credentials?.password, foundUser.password);
+                    if (match) {
+                      console.log("Good pass");
+                      delete foundUser.password;
+                      return foundUser;
+                    }
                   }
                 }
               } catch (error) {
@@ -81,13 +80,16 @@ export const options: NextAuthOptions = {
         }),
     ],
     callbacks: {
-    jwt({ token, user }) {
-        if(user) token.role = user.role;
-        return token;
+      jwt({ token, user }) {
+          if(user) token.role = user.role;
+          return token;
+      },
+      session({ session, token }) {
+          if (session?.user) session.user.role = token.role;
+          return session;
+      },
     },
-    session({ session, token }) {
-        if (session?.user) session.user.role = token.role;
-        return session;
-    },
-    },
+    // pages: {
+    //   signIn: 'auth/signin',
+    // }
 };

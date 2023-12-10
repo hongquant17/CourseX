@@ -1,7 +1,7 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import React, { useState } from "react"
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const UserForm = () => {
     const router = useRouter();
@@ -21,7 +21,7 @@ const UserForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setErrorMessage("");
-        const res = await fetch("/api/users", {
+        const res = await fetch("/api/auth/register", {
             method: "POST",
             body: JSON.stringify({ formData }),
             headers,
@@ -32,7 +32,6 @@ const UserForm = () => {
         } else {
             router.refresh();
             router.push("/");
-
         }
     };
 
@@ -57,3 +56,4 @@ const UserForm = () => {
         <p className="text-red-500">{errorMessage}</p>
     </>);
 };
+export default UserForm;
