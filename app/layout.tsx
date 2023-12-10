@@ -1,12 +1,11 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from '@next/font/google'
-import { getServerSession } from 'next-auth';
 import { ToasterProvider } from '@/components/providers/toaster-provider'
 import { ConfettiProvider } from '@/components/providers/confetti-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import SessionProvider from '@/components/providers/session-provider';
-import { options } from './api/auth/[...nextauth]/options';
+import { getSession } from '@/lib/auth';
 
 const inter = Inter({
   subsets: ['vietnamese']
@@ -22,7 +21,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await getServerSession(options);
+  const session = await getSession()
   return (
     <SessionProvider session={session} >
       <html lang="en" suppressHydrationWarning>

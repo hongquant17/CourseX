@@ -1,3 +1,4 @@
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -7,7 +8,8 @@ export async function PATCH(
   { params }: { params: { courseId: string; chapterId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getSession();
+    const userId = session?.user.uid;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

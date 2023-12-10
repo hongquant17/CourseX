@@ -1,13 +1,15 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getSession } from "@/lib/auth";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string }}
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getSession();
+    const userId = session?.user.uid;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -35,8 +37,8 @@ export async function PATCH(
     });
 
     return NextResponse.json(unPublishedCourse);
-    
-  } catch(error) {
+
+  } catch (error) {
     console.log("[QLKHGV_ADD]", error);
     return new NextResponse("Internal error", { status: 500 });
   }

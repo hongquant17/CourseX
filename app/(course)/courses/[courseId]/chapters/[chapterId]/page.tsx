@@ -11,17 +11,20 @@ import { redirect } from "next/navigation";
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import { getSession } from "@/lib/auth";
 
 const ChapterIdPage = async ({
     params
 }: {
     params: { courseId: string; chapterId: string; }
 }) => {
-    const { userId } = auth();
-
-    if (!userId) {
+    const session = await getSession();
+    
+    if (!session) {
         return redirect("/");
     }
+
+    const userId = session.user.uid;
 
     const {
         chapter,

@@ -89,7 +89,7 @@ model MuxData {
 
 model UserProgress {
   id String @id @default(uuid()) 
-  userId String 
+  userId String
 
   chapterId String 
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
@@ -129,7 +129,7 @@ model StripeCustomer {
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             Int
+  userId             String
   type               String
   provider           String
   providerAccountId  String
@@ -150,7 +150,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       Int
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -158,14 +158,15 @@ model Session {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            String       @id @default(cuid())
   name          String?
   username      String?   @unique
   phone         String?   @unique
-  email         String?   @unique
-  password      String
+  email         String   @unique
+  password      String?
   emailVerified DateTime?
   image         String?
+  role          String?
   accounts      Account[]
   sessions      Session[]
 }

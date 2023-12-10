@@ -1,12 +1,14 @@
-import { isTeacher } from "@/lib/teacher";
+import { getSession } from "@/lib/auth";
 import { auth } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
  
 const f = createUploadthing();
  
-const handleAuth = () => {
-    const { userId } = auth(); 
-    const isAuthorized = isTeacher(userId);
+const handleAuth = async () => {
+    const session = await getSession();
+    const userId = session?.user.uid;
+    const role = session?.user.role;
+    const isAuthorized = role == "admin" || role == "teacher"
 
     if (!userId || !isAuthorized) throw new Error("Unauthorized");
     return { userId }; 

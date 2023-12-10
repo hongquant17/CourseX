@@ -1,10 +1,12 @@
-import { isAdmin } from "@/lib/admin";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth";
+import { useSession } from "next-auth/react";
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-  const { userId } = auth();
-  if (!isAdmin(userId)) {
+const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getSession();
+
+  if (!session || session.user.role !== "admin") {
     return redirect("/");
   }
 

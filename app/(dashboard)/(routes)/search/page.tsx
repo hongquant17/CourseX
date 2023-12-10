@@ -7,7 +7,7 @@ import { CoursesList } from "@/components/courses-list";
 
 import { Categories } from "./_components/categories";
 import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
+import { options } from "@/lib/auth";
 
 interface SearchPageProps {
     searchParams: {
@@ -23,7 +23,8 @@ const SearchPage = async ({
     if (!session) {
         redirect("/api/auth/signin?callbackUrl=/");
     }
-    const userId = "123"
+    const userId = session.user.uid;
+    
     const categories = await db.category.findMany({
         orderBy: {
             name: "asc"
