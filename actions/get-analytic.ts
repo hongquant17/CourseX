@@ -13,7 +13,7 @@ const groupByCourse = (purchases: PurchaseWithCourse[]) => {
     if (!grouped[courseTitle]) {
       grouped[courseTitle] = 0;
     }
-    grouped[courseTitle] += purchase.course.price!;
+    grouped[courseTitle] += 1; // numbers of students in each course
   })
 
   return grouped;
@@ -32,27 +32,37 @@ export const getAnalytics = async (userId: string) => {
       }
     });
 
+    const distinctPurchases = await db.purchase.findMany({
+      where: {
+        course: {
+          userId: userId,
+        }
+      },
+      distinct: ["courseId"],
+    
+    })
+
     const groupedEarnings = groupByCourse(purchases);
     const data = Object.entries(groupedEarnings).map(([courseTitle, total]) => ({
       name: courseTitle,
       total: total,
     }));
 
-    const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
-    const totalSales = purchases.length;
+    const totalCourses = distinctPurchases.length;
+    const totalEnrollment = purchases.length;
 
     return {
       data,
-      totalRevenue,
-      totalSales,
+      totalCourses,
+      totalEnrollment,
     };
     
   } catch (error) {
     console.log("[ANALYTIC]", error);
     return {
       data: [],
-      totalRevenue: 0,
-      totalSales: 0,
+      totalCourses: 0,
+      totalEnrollment: 0,
     }
   }
 }
