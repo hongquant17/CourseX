@@ -1,6 +1,5 @@
+import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { isTeacher } from "@/lib/teacher";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function DELETE(
@@ -8,8 +7,10 @@ export async function DELETE(
     { params }: { params: { courseId: string, attachmentId: string } }
 ) {
     try {
-        const { userId } = auth();
-        const isAuthorized = isTeacher(userId);
+        const session = await getSession();
+        const userId = session?.user.uid;
+        const role = session?.user.role;
+        const isAuthorized = role == "admin" || role == "teacher";
 
         if (!userId || !isAuthorized) {
             return new NextResponse("Unauthorized", { status: 401 });

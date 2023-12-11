@@ -1,18 +1,22 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { getSession } from "@/lib/auth";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 
 const UserPage = async () => {
-  const { userId } = auth();
-  if (!userId) {
+  const session = await getSession();
+
+  if (!session) {
     return redirect("/");
   }
 
-  const users = await db.users.findMany({
+  const userId = session.user.uid;
+
+  const users = await db.user.findMany({
     where: {},
-    distinct: ['userId'],
+    distinct: ["id"],
   });
 
   return (

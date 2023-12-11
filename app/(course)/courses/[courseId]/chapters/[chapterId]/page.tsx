@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import { getSession } from "@/lib/auth";
 import Link from "next/link";
 
 const ChapterIdPage = async ({
@@ -17,25 +18,28 @@ const ChapterIdPage = async ({
 }: {
   params: { courseId: string; chapterId: string };
 }) => {
-  const { userId } = auth();
+    const session = await getSession();
+    
+    if (!session) {
+        return redirect("/");
+    }
 
-  if (!userId) {
-    return redirect("/");
-  }
+    const userId = session.user.uid;
 
-  const {
-    chapter,
-    course,
-    muxData,
-    attachments,
-    nextChapter,
-    userProgress,
-    purchase,
-  } = await getChapter({
-    userId,
-    chapterId: params.chapterId,
-    courseId: params.courseId,
-  });
+    const {
+        chapter,
+        course,
+        muxData,
+        attachments,
+        nextChapter,
+        userProgress,
+        purchase,
+    } = await getChapter({
+        userId,
+        chapterId: params.chapterId,
+        courseId: params.courseId,
+    });
+
 
   if (!chapter || !course) {
     return redirect("/");
