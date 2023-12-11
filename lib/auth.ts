@@ -2,11 +2,9 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import GitHubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import bcrypt from "bcrypt"
-import { string } from "zod";
 
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -92,7 +90,10 @@ export const options: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt'
-  }
+  },
+  // pages: {
+  //   signIn:'/auth/signin',
+  // }
 };
 
 export async function getSession() {
