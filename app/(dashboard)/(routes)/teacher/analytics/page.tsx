@@ -13,19 +13,19 @@ const AnalyticPage = async () => {
 
     const userId = session.user.uid;
 
-  const { data, totalRevenue, totalSales } = await getAnalytics(userId);
+  const { data, totalCourses, totalEnrollment } = await getAnalytics(userId);
 
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
         <DataCard
-          label="Total Revenue"
-          value={totalRevenue}
+          label="Total Courses"
+          value={totalCourses}
           shouldFormat
         />
         <DataCard
-          label="Total Sales"
-          value={totalSales}
+          label="Total Enrollment"
+          value={totalEnrollment}
         />
       </div>
       <Chart

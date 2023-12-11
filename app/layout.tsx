@@ -1,6 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from '@next/font/google'
+import { Inter } from 'next/font/google'
 import { ToasterProvider } from '@/components/providers/toaster-provider'
 import { ConfettiProvider } from '@/components/providers/confetti-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
