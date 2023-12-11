@@ -91,9 +91,9 @@ export const options: NextAuthOptions = {
   session: {
     strategy: 'jwt'
   },
-  // pages: {
-  //   signIn:'/auth/signin',
-  // }
+  pages: {
+    signIn:'/auth/signin',
+  }
 };
 
 export async function getSession() {
