@@ -60,7 +60,7 @@ const UserButton = (data: any) => {
                     {/* <AvatarFallback>CS</AvatarFallback> */}
                 </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 align-center">
+            <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>{data.user.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>{data.user.email}</DropdownMenuLabel>
@@ -111,28 +111,30 @@ const UserButton = (data: any) => {
                     <span>Support</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="flex items-center justify-center" asChild>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild >
-                            <Button variant="ghost" className="Button">
-                                <LogOut className="mr-2 h-4 w-4" />
-                                Sign Out
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Are you sure to sign out?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    You have to sign in again to continue using CourseX.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => signOut()}>Continue</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </DropdownMenuItem>
+                <DropdownMenuGroup className="flex items-center justify-center" >
+                    <DropdownMenuItem asChild>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild >
+                                <Button variant="ghost" className="Button">
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    Sign Out
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure to sign out?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        You have to sign in again to continue using CourseX.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => signOut()}>Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
     )
