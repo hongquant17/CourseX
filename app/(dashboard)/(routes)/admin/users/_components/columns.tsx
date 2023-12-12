@@ -1,6 +1,6 @@
 "use client"
 
-import { Users } from "@prisma/client"
+import { User } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { isTeacher } from "@/lib/teacher";
 import { useRouter } from "next/navigation";
 import { isAdmin } from "@/lib/admin";
 
-export const columns: ColumnDef<Users>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "userId",
     header: ({ column }) => {
@@ -93,25 +93,25 @@ export const columns: ColumnDef<Users>[] = [
       const userId = String(row.getValue("userId") || "");
       const isUserTeacher = isTeacher(userId);
 
-      const handleRoleChange = async () => {
-        try {
-          if (!isUserTeacher && prisma) {
-            await prisma.users.update({
-              where: { userId },
-              data: {
-                isTeacher: true
-              },
-            })
-          }
-          // const router = useRouter();
-          // router.reload();
-        } catch (error) {
-          console.error("Error updating role:", error);
-        }
-      }
+      // const handleRoleChange = async () => {
+      //   try {
+      //     if (!isUserTeacher && prisma) {
+      //       await prisma.users.update({
+      //         where: { userId },
+      //         data: {
+      //           isTeacher: true
+      //         },
+      //       })
+      //     }
+      //     // const router = useRouter();
+      //     // router.reload();
+      //   } catch (error) {
+      //     console.error("Error updating role:", error);
+      //   }
+      // }
       return (
             /* TODO */
-            <Button className="rounded-xl" variant="default" type="submit" onClick={handleRoleChange}>
+            <Button className="rounded-xl" variant="default" type="submit" onClick={()=>{}}>
               Change role
             </Button>
       );

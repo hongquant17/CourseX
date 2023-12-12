@@ -95,7 +95,7 @@ const CreatePage = () => {
                   Hủy bỏ
                 </Button>
               </Link>
-              <Button type="submit" disabled={!isValid || isSubmitting}>
+              <Button type="submit" disabled={!isValid || isSubmitting} variant='success'>
                 Tiếp tục
               </Button>
             </div>
