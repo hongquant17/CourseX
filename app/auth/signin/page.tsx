@@ -3,7 +3,7 @@ import LoginForm from './_components/form';
 import { getSession } from '@/lib/auth';
 
 
-export default async function RegisterPage() {
+export default async function LoginPage() {
   return (
     <>
       <LoginForm/>

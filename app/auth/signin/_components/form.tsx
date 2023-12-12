@@ -3,14 +3,19 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
-import GooglePic from "@/public/google.svg";
-import GithubPic from "@/public/github.svg";
 import Image from 'next/image';
+
+import { Button } from "@/components/ui/button";
+import { Github } from "lucide-react";
+import GooglePic from "@/public/google.svg"
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
 
 const LoginForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [formValues, setFormValues] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
@@ -23,22 +28,21 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      setFormValues({ email: "", password: "" });
+      setFormData({ email: "", password: "" });
 
       const res = await signIn("credentials", {
         redirect: false,
-        email: formValues.email,
-        password: formValues.password,
+        email: formData.email,
+        password: formData.password,
         callbackUrl,
       });
 
       setLoading(false);
 
-      console.log(res);
       if (!res?.error) {
         router.push(callbackUrl);
       } else {
-        setError("invalid email or password");
+        setError("Invalid email or password");
       }
     } catch (error: any) {
       setLoading(false);
@@ -48,80 +52,64 @@ const LoginForm = () => {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const input_style =
-    "form-control block w-full px-4 py-5 text-sm font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none";
-
   return (
-    <form onSubmit={onSubmit}>
-      {error && (
-        <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
-      )}
-      <div className="mb-6">
-        <input
-          required
-          type="email"
-          name="email"
-          value={formValues.email}
-          onChange={handleChange}
-          placeholder="Email address"
-          className={`${input_style}`}
-        />
+    <div className="container flex flex-col mx-auto rounded-lg pt-12 my-5">
+      <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
+        <div className="flex items-center justify-center w-full lg:p-12">
+          <div className="flex items-center xl:p-10">
+              <div className="flex flex-col w-full h-full pb-6 text-center">
+                <h3 className="mb-3 text-4xl font-extrabold">Sign In</h3>
+                <p className="mb-4 mb-6">to CourseX</p>
+                <Button
+                  className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl"
+                  onClick={() => signIn("github", {callbackUrl: "/"})}>
+                  <Github className="mr-2 h-4 w-4" /> Login with Github
+                </Button>
+                <Button
+                  className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl"
+                  onClick={() => signIn("google", {callbackUrl: "/"})}>
+                  <Image
+                    className="pr-2"
+                    src={GooglePic}
+                    alt=""
+                    style={{ height: "2.2rem" }}
+                    width={24}
+                    height={24}
+                  />
+                  Sign in with Google
+                </Button>
+                <div className="flex items-center mb-3">
+                  <hr className="h-0 border-b border-solid border-grey-500 grow"/>
+                  <p className="mx-4 text-grey-600">or</p>
+                  <hr className="h-0 border-b border-solid border-grey-500 grow"/>
+                </div>
+            <form className="flex flex-col w-full h-full pb-6 text-center rounded-3xl" onSubmit={onSubmit}>
+              {error && (
+                <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
+              )}
+              <label className="mb-2 text-sm text-start">Email*</label>
+              <Input id="email" type="email" name="email" placeholder="mail@courseX.com" value={formData.email} onChange={handleChange}
+                className="flex items-center w-full px-5 py-4 mr-2 text-sm font-medium outline-none mb-7 rounded-2xl" />
+              <label className="mb-2 text-sm text-start">Password*</label>
+              <Input id="password" type="password" name="password" placeholder="Enter a password" value={formData.password} onChange={handleChange}
+                className="flex items-center w-full px-5 py-4 mb-5 mr-2 text-sm font-medium outline-none rounded-2xl" />
+              <div className="flex flex-row justify-between mb-8 items-center">
+                <Checkbox id="terms" />
+                <Label htmlFor="terms" className="mr-4">Keep me sign in</Label>
+                <a href="/auth/forget" className="text-sm font-medium">Forget password?</a>
+              </div>
+              <Button className="mb-4 h-14">Sign In</Button>
+              <p className="text-sm leading-relaxed">Not registered yet? <a href="/auth/register"
+                  className="font-bold">Create an Account</a></p>
+            </form>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="mb-6">
-        <input
-          required
-          type="password"
-          name="password"
-          value={formValues.password}
-          onChange={handleChange}
-          placeholder="Password"
-          className={`${input_style}`}
-        />
-      </div>
-      <button
-        type="submit"
-        style={{ backgroundColor: `${loading ? "#ccc" : "#3446eb"}` }}
-        className="inline-block px-7 py-4 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
-        disabled={loading}
-      >
-        {loading ? "loading..." : "Sign In"}
-      </button>
-      <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-        <p className="text-center font-semibold mx-4 mb-0">OR</p>
-      </div>
-
-      <a
-        className="px-7 py-2 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center mb-3"
-        style={{ backgroundColor: "#3b5998" }}
-        onClick={() => signIn("google", {callbackUrl: "/"})}
-        role="button"
-      >
-        <Image
-          className="pr-2"
-          src={GooglePic}
-          alt=""
-          style={{ height: "2rem" }}
-        />
-        Continue with Google
-      </a>
-      <a
-        className="px-7 py-2 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full flex justify-center items-center"
-        style={{ backgroundColor: "#55acee" }}
-        onClick={() => signIn("github", {callbackUrl: "/"})}
-        role="button"
-      >
-        <Image
-          className="pr-2"
-          src={GithubPic}
-          alt=""
-          style={{ height: "2.2rem" }}
-        />
-        Continue with GitHub
-      </a>
-    </form>
+    </div>
   );
 };
 export default LoginForm;

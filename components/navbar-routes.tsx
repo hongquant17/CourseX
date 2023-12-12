@@ -1,12 +1,13 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { ModeToggle } from "./mode-toggle";
+import UserButton from "@/components/user-button";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -53,14 +54,9 @@ export const NavbarRoutes = () => {
         <div className="pr-4">
           <ModeToggle />
         </div>
-        {session ? (
-          <Link href="/api/auth/signout?callbackUrl=/">Logout</Link>
-        ) : (
-          <Link href="/api/auth/signin">Login</Link>
-        )}
-        {/* <UserButton
-          afterSignOutUrl="/"
-        /> */}
+        <div>
+            <UserButton {...session}></UserButton>
+        </div>
       </div>
     </>
   );

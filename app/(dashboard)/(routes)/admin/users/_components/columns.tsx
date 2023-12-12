@@ -96,7 +96,7 @@ export const columns: ColumnDef<Users>[] = [
       const handleRoleChange = async () => {
         try {
           if (!isUserTeacher && prisma) {
-            await prisma.users.update({
+            await prisma.user.update({
               where: { userId },
               data: {
                 isTeacher: true

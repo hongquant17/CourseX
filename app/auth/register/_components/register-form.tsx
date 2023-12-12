@@ -8,6 +8,7 @@ interface FormData {
     phone: string,
     username: string,
     password: string,
+    role: string,
 }
 const UserForm = () => {
     const router = useRouter();
@@ -17,6 +18,7 @@ const UserForm = () => {
         phone: '',
         username: '',
         password: '',
+        role: 'user',
     });
     const [errorMessage, setErrorMessage] = useState("");
 
