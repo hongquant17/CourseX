@@ -1,18 +1,17 @@
 "use client"
 
-import { Users } from "@prisma/client"
+import { User } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button";
 
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { isTeacher } from "@/lib/teacher";
-import { useRouter } from "next/navigation";
 import { isAdmin } from "@/lib/admin";
+import { db } from "@/lib/db";
 
-export const columns: ColumnDef<Users>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "userId",
     header: ({ column }) => {
@@ -91,15 +90,18 @@ export const columns: ColumnDef<Users>[] = [
     id: "actions",
     cell: ({ row }) => {
       const userId = String(row.getValue("userId") || "");
+      const isUserAdmin = isAdmin(userId);
       const isUserTeacher = isTeacher(userId);
+
 
       const handleRoleChange = async () => {
         try {
-          if (!isUserTeacher && prisma) {
-            await prisma.user.update({
-              where: { userId },
+          const newRole = isUserTeacher != true ? 'teacher' : 'user'; 
+          if ( db ) {
+            await db.user.update({
+              where: { id: userId },
               data: {
-                isTeacher: true
+                role: newRole,
               },
             })
           }
@@ -112,7 +114,7 @@ export const columns: ColumnDef<Users>[] = [
       return (
             /* TODO */
             <Button className="rounded-xl" variant="default" type="submit" onClick={handleRoleChange}>
-              Change role
+              Change role to {(isUserTeacher != true ) ? 'Teacher' : 'User'}
             </Button>
       );
     },

@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     try {
         const session = await getSession();
         const userId = session?.user.uid;
-        const role = session?.user.role
+        const role = session?.user.role;
 
         const { title } = await req.json();
         const isAuthorized = role == "admin" || role == "teacher";
