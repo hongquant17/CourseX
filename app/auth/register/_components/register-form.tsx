@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
 interface FormData {
     name: string,
     email: string,
     phone: string,
     username: string,
     password: string,
+    role: string,
 }
 const UserForm = () => {
     const router = useRouter();
@@ -17,6 +19,7 @@ const UserForm = () => {
         phone: '',
         username: '',
         password: '',
+        role: 'user',
     });
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -61,24 +64,24 @@ const UserForm = () => {
                 <form onSubmit={handleSubmit} method="POST">
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Full Name *</label>
-                        <input type="text" id="name" name="name" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required placeholder="Nguyen Van A" onChange={handleChange} value={formData.name}/>
+                        <Input type="text" id="name" name="name" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required placeholder="Nguyen Van A" onChange={handleChange} value={formData.name}/>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Email Address *</label>
-                        <input type="email" id="email" name="email" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required placeholder="abc@coursex.com" onChange={handleChange} value={formData.email}/>
+                        <Input type="email" id="email" name="email" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required placeholder="abc@coursex.com" onChange={handleChange} value={formData.email}/>
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Password *</label>
-                        <input type="password" id="password" name="password" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required onChange={handleChange} value={formData.password}/>
+                        <Input type="password" id="password" name="password" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" placeholder="Enter your password" required onChange={handleChange} value={formData.password}/>
                         <p className="text-gray-600 text-xs mt-1">Must contain 1 uppercase letter, 1 number, min. 8 characters.</p>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Phone *</label>
-                        <input type="tel" id="phone" name="phone" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required placeholder="0123456xxx" onChange={handleChange} value={formData.phone}/>
+                        <Input type="tel" id="phone" name="phone" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" required placeholder="0123456xxx" onChange={handleChange} value={formData.phone}/>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-semibold mb-2">Username </label>
-                        <input type="text" id="username" name="username" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" placeholder="vanished123" onChange={handleChange} value={formData.username}/>
+                        <Input type="text" id="username" name="username" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" placeholder="vanished123" onChange={handleChange} value={formData.username}/>
                     </div>
                     <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Register</button>
                     <p className="text-gray-600 text-xs text-center mt-4">

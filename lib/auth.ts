@@ -11,7 +11,7 @@ export const options: NextAuthOptions = {
   providers: [
     GitHubProvider({
       profile(profile) {
-        console.log(profile)
+        console.log(profile, "cccc")
         return {
           id: profile.id,
           email: profile.email,
@@ -59,7 +59,6 @@ export const options: NextAuthOptions = {
             },
           });
           if (foundUser) {
-            console.log("Already exists");
             if (foundUser?.password != null) {
               const match = await bcrypt.compare(credentials?.password!, foundUser.password);
               foundUser.password = "";
