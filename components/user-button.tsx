@@ -45,6 +45,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "./ui/button";
+import { PasswordDialog } from "./dialog-password";
 
 
 const UserButton = (data: any) => {
@@ -65,6 +66,7 @@ const UserButton = (data: any) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>{data.user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <PasswordDialog></PasswordDialog>
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
                         <User className="mr-2 h-4 w-4" />
