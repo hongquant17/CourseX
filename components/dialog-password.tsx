@@ -30,7 +30,7 @@ export function PasswordDialog() {
         now: '',
     });
 
-    const [errorMessage, setErrorMessage] = useState("");
+    const [statusMessage, setstatusMessage] = useState("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value;
@@ -44,26 +44,26 @@ export function PasswordDialog() {
     headers.append("Content-Type", "application/json");
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setErrorMessage("");
+        setstatusMessage("");
         const res = await fetch("/api/auth/change", {
             method: "POST",
             body: JSON.stringify({ formData }),
             headers,
         });
-        if (!res.ok) {
-            const response = await res.json();
-            setErrorMessage(response.message);
-        } else {
-            signOut();
-            router.refresh();
-            router.push("/");
-        }
+        const response = await res.json();
+        setstatusMessage(response.message);
+        if (res.ok) {
+          await new Promise(f => setTimeout(f, 500));
+          signOut();
+          router.refresh();
+          router.push("/");
+        };
     };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button variant="outline">Change Password</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -75,21 +75,24 @@ export function PasswordDialog() {
         <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+                <Label className="text-right">
                 Current
                 </Label>
-                <Input id="name" value={formData.current} className="col-span-3" required onChange={handleChange} placeholder="Your current password"/>
+                <Input value={formData.current} type="password" name="current" className="col-span-3" required onChange={handleChange} placeholder="Your current password"/>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
+                <Label className="text-right">
                 New
                 </Label>
-                <Input id="username" value={formData.now} className="col-span-3" required onChange={handleChange} placeholder="New password"/>
+                <Input value={formData.now} type="password" name="now" className="col-span-3" required onChange={handleChange} placeholder="New password"/>
             </div>
             </div>
+            {statusMessage && (
+                <p className="text-center py-4 mb-6 rounded">{statusMessage}</p>
+             )}
+             <Button type="submit">Save changes</Button>
         </form>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

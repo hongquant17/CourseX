@@ -22,9 +22,21 @@ export async function POST(req: Request) {
         }
         if (existUser.password != null) {
             const match = await bcrypt.compare(userData?.current!, existUser.password);
-            
-            return NextResponse.json({message: "Password changed."}, {status: 201});
+            if (match && userData.now != '') {
+                const newPass = await bcrypt.hash(userData.now, 10);
+                db.user.update({
+                    where:{ 
+                        email: userData.email,
+                    },
+                    data: {
+                        password: newPass,
+                      },
+                });
+                return NextResponse.json({message: "Password changed."}, {status: 201});
+            }
+            return NextResponse.json({message: "Current password don't match or new password is empty"}, {status: 400});
         }
+        return NextResponse.json({message: "User does not have password because you sign in with Github or Google"}, {status: 400});
 
     } catch (error) {
         console.log(error);

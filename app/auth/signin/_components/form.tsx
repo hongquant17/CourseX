@@ -62,7 +62,7 @@ const LoginForm = () => {
           <div className="flex items-center xl:p-10">
               <div className="flex flex-col w-full h-full pb-6 text-center">
                 <h3 className="mb-3 text-4xl font-extrabold">Sign In</h3>
-                <p className="mb-4 mb-6">to CourseX</p>
+                <p className="mb-6">to CourseX</p>
                 <Button
                   className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl"
                   onClick={() => signIn("github", {callbackUrl: "/"})}>
