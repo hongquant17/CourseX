@@ -17,7 +17,7 @@ export const NavbarRoutes = () => {
   const isTeacher = role == "teacher";
 
   const isTeacherPage = pathname?.startsWith("/teacher");
-  const isCoursePage = pathname?.includes("/courses") || pathname === "/";
+  const isCoursePage = pathname?.startsWith("/courses");
   const isSearchPage = pathname === "/search";
   const isAdminPage = pathname?.startsWith("/admin");
   /* TODO : remove teacher mode for admin */
@@ -29,20 +29,21 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-1 place-items-center ml-auto">
-        {isTeacherPage ? (
+        {isTeacherPage || isAdminPage || isCoursePage? (
           <Link href="/">
             <Button size="sm" variant="link">
               Exit
             </Button>
           </Link>
-        ) : isTeacher ? (
+        ) : null}
+        {(isTeacher || isAdmin) && !isTeacherPage && !isCoursePage? (
           <Link href="/teacher/courses">
             <Button size="sm" variant="link">
               Teacher mode
             </Button>
           </Link>
         ) : null}
-        {isAdmin && !isAdminPage ? (
+        {isAdmin && !isAdminPage && !isCoursePage? (
           <Link href="/admin/users">
             <Button size="sm" variant="link">
               Admin
