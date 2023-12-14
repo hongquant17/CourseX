@@ -15,17 +15,20 @@ import { ChapterForm } from "./_components/chapter-form";
 import { Banner } from "@/components/banner";
 import { Actions } from "./_components/actions";
 import Link from "next/link";
+import { getSession } from "@/lib/auth";
 
 const CourseIdPage = async ({
   params
 }: {
   params: { courseId: string }
 }) => {
-  const { userId } = auth();
+  const session = await getSession();
+    
+    if (!session) {
+        return redirect("/");
+    }
 
-  if (!userId) {
-    return redirect("/")
-  }
+    const userId = session.user.uid;
 
   const course = await db.course.findUnique({
     where: {

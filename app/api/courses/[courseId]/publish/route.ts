@@ -1,13 +1,15 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getSession } from "@/lib/auth";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string }}
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const session = await getSession();
+    const userId = session?.user.uid;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -31,7 +33,7 @@ export async function PATCH(
       return new NextResponse("Not found", { status: 404 });
     }
 
-    const hasPublishedChapters = course.chapters.some((chapter) => chapter.isPublished) ;
+    const hasPublishedChapters = course.chapters.some((chapter) => chapter.isPublished);
 
     if (!course.title || !course.description || !course.imageUrl || !course.categoryId || !hasPublishedChapters) {
       return new NextResponse("Missing required fields", { status: 401 });
@@ -49,7 +51,7 @@ export async function PATCH(
 
     return NextResponse.json(publishedCourse);
 
-  } catch(error) {
+  } catch (error) {
     console.log("[QLKHGV_ADD]", error);
     return new NextResponse("Internal error", { status: 500 });
   }

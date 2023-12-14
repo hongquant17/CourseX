@@ -108,7 +108,7 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button disabled={!isValid || isSubmitting} type="submit" variant={'success'}>
                 Lưu
               </Button>
             </div>

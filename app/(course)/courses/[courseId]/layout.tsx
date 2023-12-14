@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { getProgress } from "@/actions/get-progress";
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
+import { getSession } from "@/lib/auth";
 
 const CourseLayout = async ({
     children, 
@@ -13,11 +14,14 @@ const CourseLayout = async ({
     children: React.ReactNode
     params: { courseId: string  }; 
 }) => {
-    const { userId } = auth(); 
+
+    const session = await getSession();
     
-    if (!userId) {
-        return redirect("/")
+    if (!session) {
+        return redirect("/");
     }
+
+    const userId = session.user.uid;
 
     const course = await db.course.findUnique({
       where: {

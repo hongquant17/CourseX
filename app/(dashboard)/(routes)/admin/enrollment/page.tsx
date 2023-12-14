@@ -5,11 +5,16 @@ import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 import { Button } from "@/components/ui/button";
 
+import { getSession } from "@/lib/auth";
+  
 const UserPage = async () => {
-  const { userId } = auth();
-  if (!userId) {
-    return redirect("/");
-  }
+  const session = await getSession();
+    
+    if (!session) {
+        return redirect("/");
+    }
+
+    const userId = session.user.uid;
 
   const course = await db.course.findMany({
     where: {

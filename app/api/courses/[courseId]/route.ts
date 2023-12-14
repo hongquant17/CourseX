@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 import { db } from "@/lib/db";
-import { isTeacher } from '@/lib/teacher';
+import { getSession } from '@/lib/auth';
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -12,11 +12,13 @@ const { Video } = new Mux(
 
 export async function DELETE(
   req: Request,
-  { params }: {params: {courseId: string}}
+  { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
-    const isAuthorized = isTeacher(userId);
+    const session = await getSession();
+    const userId = session?.user.uid;
+    const role = session?.user.role;
+    const isAuthorized = role == "admin" || role == "teacher"
 
     if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -54,7 +56,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedCourse);
 
-  } catch(error) {
+  } catch (error) {
     console.log("[QLCHGV_DEL]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
@@ -65,10 +67,11 @@ export async function PATCH(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    const { userId } = auth();
-    const { courseId } = params;
+    const session = await getSession();
+    const userId = session?.user.uid;
+    const role = session?.user.role;
     const values = await req.json();
-    const isAuthorized = isTeacher(userId);
+    const isAuthorized = role == "admin" || role == "teacher"
 
     if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
