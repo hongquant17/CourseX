@@ -45,7 +45,7 @@ export function PasswordDialog() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setstatusMessage("");
-        const res = await fetch("/api/auth/change", {
+        const res = await fetch("/api/change/password", {
             method: "POST",
             body: JSON.stringify({ formData }),
             headers,
