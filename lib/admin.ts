@@ -1,19 +1,22 @@
-import { getSession } from "./auth";
+import { ROLES, PRIVILEGES } from "./constant";
+import { db } from "./db";
 
-interface Session {
-  user: {
-    name: string,
-    email: string,
-    image: string,
-    role: string,
-    uid: string,
-  }
-}
 
-export const isAdmin = (userId?: string | null, session?: Session) => {
-  if (session) {
-    return session.user.role === 'admin';
+export const isAdmin = async (sessionRole: string | null | undefined, userId?: string | undefined) => {
+  if (sessionRole) {
+    return sessionRole[PRIVILEGES["ADMIN"]] === String(ROLES["ADMIN"]);
   }
-  
-  return userId === process.env.NEXT_PUBLIC_ADMIN_ID;
+  if (userId) {
+    const existUser = await db.user.findUnique({
+      where:{ 
+          id: userId,
+      },
+    });
+    const role = existUser?.role;
+    if (role) {
+      return role[PRIVILEGES["ADMIN"]] === String(ROLES["ADMIN"]);
+    }
+  }
+  return false;
 };
+

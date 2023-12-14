@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { ROLES } from "@/lib/constant";
 interface FormData {
     name: string,
     email: string,
@@ -19,7 +20,7 @@ const UserForm = () => {
         phone: '',
         username: '',
         password: '',
-        role: 'user',
+        role: (ROLES["NOT_ADMIN"] + "," + ROLES["USER"]),
     });
     const [errorMessage, setErrorMessage] = useState("");
 
