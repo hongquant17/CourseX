@@ -10,14 +10,10 @@ const UserPage = async () => {
   if (!session) {
     return redirect("/");
   }
-
-  const userId = session.user.uid;
-
   const users = await db.user.findMany({
     where: {},
     distinct: ["id"],
   });
-
   return (
     <div>
       <DataTable columns={columns} data={users} />

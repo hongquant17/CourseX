@@ -5,15 +5,20 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button";
 
-import { cn } from "@/lib/utils";
+import { cn, getRole } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { isTeacher } from "@/lib/teacher";
 import { isAdmin } from "@/lib/admin";
 import { db } from "@/lib/db";
 
+interface FormData {
+  ids: [],
+  role: string,
+}
+
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "userId",
+    accessorKey: "id",
     header: ({ column }) => {
       return (
         <div className="pl-20">
@@ -28,7 +33,7 @@ export const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const userId = String(row.getValue("userId") || "");
+      const userId = String(row.getValue("id") || "");
       return (
         <div className="pl-2">
           {userId}
@@ -60,7 +65,8 @@ export const columns: ColumnDef<User>[] = [
   //   },
   // },
   {
-    accessorKey: "isAdmin",
+    accessorKey: "role",
+    accessorFn: row => getRole(row.role),
     header: ({ column }) => {
       return (
         <Button
@@ -73,14 +79,16 @@ export const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const userId = String(row.getValue("userId") || "");
-      const isUserAdmin = isAdmin(userId);
-      const isUserTeacher = isTeacher(userId);
+      const currentRole = String(row.getValue("role") || "");
+
 
       return (
         <div className="pl-8">
-          <Badge className={cn("bg-slate-500", isUserTeacher && "bg-sky-700" ,isUserAdmin && "bg-red-700")}>
-            {isUserAdmin ? "Admin" : isUserTeacher ? "Teacher" : "Student"}
+          {/* <Badge className={cn("bg-slate-500", true && "bg-sky-700" ,true && "bg-red-700")}>
+            {true ? "Admin" : true ? "Teacher" : "Student"}
+          </Badge> */}
+          <Badge>
+            {currentRole}
           </Badge>
         </div>
       );  
@@ -89,19 +97,19 @@ export const columns: ColumnDef<User>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const userId = String(row.getValue("userId") || "");
+      const userId = String(row.getValue("id") || "");
       const isUserAdmin = isAdmin(userId);
       const isUserTeacher = isTeacher(userId);
 
 
       const handleRoleChange = async () => {
         try {
-          const newRole = isUserTeacher != true ? 'teacher' : 'user'; 
+          // const newRole = isUserTeacher != true ? 'teacher' : 'user'; 
           if ( db ) {
             await db.user.update({
               where: { id: userId },
               data: {
-                role: newRole,
+                role: "newRole",
               },
             })
           }
@@ -114,7 +122,7 @@ export const columns: ColumnDef<User>[] = [
       return (
             /* TODO */
             <Button className="rounded-xl" variant="default" type="submit" onClick={handleRoleChange}>
-              Change role to {(isUserTeacher != true ) ? 'Teacher' : 'User'}
+              Change role to {true ? 'Teacher' : 'User'}
             </Button>
       );
     },
