@@ -1,6 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  output = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -22,7 +23,7 @@ model Course {
   category    Category?    @relation(fields: [categoryId], references: [id])
   chapters    Chapter[]
   attachments Attachment[]
-  purchases   Purchase[]
+  enrolls   Enroll[]
 
   @@index([categoryId])
   @@fulltext([title])
@@ -87,13 +88,13 @@ model UserProgress {
   @@index([chapterId])
 }
 
-model Purchase {
+model Enroll {
   id        String   @id @default(uuid())
   userId    String
   courseId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  isPaid    Boolean  @default(false)
+  isAccepted    Boolean  @default(false)
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])

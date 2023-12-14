@@ -13,7 +13,7 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
-    const purchase = await db.purchase.findUnique({
+    const enroll = await db.enroll.findUnique({
       where: {
         userId_courseId: {
           userId,
@@ -37,7 +37,7 @@ export const getChapter = async ({
     let attachments: Attachment[] = [];
     let nextChapter: Chapter | null = null;
 
-    if (purchase) {
+    if (enroll) {
       attachments = await db.attachment.findMany({
         where: {
           courseId: courseId
@@ -45,7 +45,7 @@ export const getChapter = async ({
       });
     }
 
-    if (chapter.isFree || purchase) {
+    if (chapter.isFree || enroll) {
       muxData = await db.muxData.findUnique({
         where: {
           chapterId: chapterId,
@@ -81,7 +81,7 @@ export const getChapter = async ({
       attachments,
       nextChapter,
       userProgress,
-      purchase,
+      enroll,
     };
   } catch (error) {
     console.log("[GET_CHAPTER]", error);
@@ -91,7 +91,7 @@ export const getChapter = async ({
       attachments: [],
       nextChapter: null,
       userProgress: null,
-      purchase: null,
+      enroll: null,
     }
   }
 }

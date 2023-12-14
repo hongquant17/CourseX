@@ -32,7 +32,7 @@ const ChapterIdPage = async ({
         attachments,
         nextChapter,
         userProgress,
-        purchase,
+        enroll,
     } = await getChapter({
         userId,
         chapterId: params.chapterId,
@@ -44,8 +44,8 @@ const ChapterIdPage = async ({
     return redirect("/");
   }
 
-  const isLocked = !chapter.isFree && !purchase;
-  const completeOnEnd = !!purchase && !userProgress?.isCompleted;
+  const isLocked = !chapter.isFree && !enroll;
+  const completeOnEnd = !!enroll && !userProgress?.isCompleted;
 
   return (
     <div>
@@ -83,13 +83,17 @@ const ChapterIdPage = async ({
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
             <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
-            {<CourseProgressButton
+            {enroll ? (<CourseProgressButton
                 chapterId={params.chapterId}
                 courseId={params.courseId}
                 nextChapterId={nextChapter?.id}
                 isCompleted={!!userProgress?.isCompleted}
               />
-            }
+            ) : (
+              <CourseEnrollButton
+                courseId={params.courseId}
+              />
+            )}
           </div>
           <Separator />
           <div>
