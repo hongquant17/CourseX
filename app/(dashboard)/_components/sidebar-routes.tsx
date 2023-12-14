@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart, Compass, Layout, List } from "lucide-react";
+import { BarChart, Compass, Layout, List, Shapes } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 import { usePathname } from "next/navigation";
 
@@ -28,6 +28,11 @@ const teacherRoutes = [
         label: "Analytics",
         href: "/teacher/analytics",
     },
+    {
+        icon: Shapes,
+        label: "Enrollment",
+        href: "/teacher/enrollment",
+    },
 ]
 
 const adminRoutes = [
@@ -35,11 +40,6 @@ const adminRoutes = [
         icon: List,
         label: "Users",
         href:"/admin/users",
-    },
-    {
-        icon: BarChart,
-        label: "Enrollment",
-        href: "/admin/enrollment",
     },
 ]
 
