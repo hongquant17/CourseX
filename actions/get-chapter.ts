@@ -22,16 +22,6 @@ export const getChapter = async ({
       }
     });
 
-    const course = await db.course.findUnique({
-      where: {
-        isPublished: true,
-        id: courseId,
-      },
-      select: {
-        price: true,
-      }
-    });
-
     const chapter = await db.chapter.findUnique({
       where: {
         id: chapterId,
@@ -39,7 +29,7 @@ export const getChapter = async ({
       }
     });
 
-    if (!chapter || !course) {
+    if (!chapter) {
       throw new Error("Không tìm thấy chương học");
     }
 
@@ -87,7 +77,6 @@ export const getChapter = async ({
 
     return {
       chapter,
-      course,
       muxData,
       attachments,
       nextChapter,
@@ -98,7 +87,6 @@ export const getChapter = async ({
     console.log("[GET_CHAPTER]", error);
     return {
       chapter: null,
-      course: null,
       muxData: null,
       attachments: [],
       nextChapter: null,

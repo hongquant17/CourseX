@@ -28,7 +28,6 @@ const ChapterIdPage = async ({
 
     const {
         chapter,
-        course,
         muxData,
         attachments,
         nextChapter,
@@ -41,7 +40,7 @@ const ChapterIdPage = async ({
     });
 
 
-  if (!chapter || !course) {
+  if (!chapter) {
     return redirect("/");
   }
 
@@ -84,19 +83,13 @@ const ChapterIdPage = async ({
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
             <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
-            {purchase ? (
-              <CourseProgressButton
+            {<CourseProgressButton
                 chapterId={params.chapterId}
                 courseId={params.courseId}
                 nextChapterId={nextChapter?.id}
                 isCompleted={!!userProgress?.isCompleted}
               />
-            ) : (
-              <CourseEnrollButton
-                courseId={params.courseId}
-                price={course.price!}
-              />
-            )}
+            }
           </div>
           <Separator />
           <div>
