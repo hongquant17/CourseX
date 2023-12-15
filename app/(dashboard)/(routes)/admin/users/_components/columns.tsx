@@ -37,29 +37,6 @@ export const columns: ColumnDef<User>[] = [
       );
     }
   },
-  // {
-  //   accessorKey: "price",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //       >
-  //         Username
-  //         <ArrowUpDown className="ml-2 h-4 w-4" />
-  //       </Button>
-  //     );
-  //   },
-  //   cell: ({ row }) => {
-  //     const price = parseFloat(row.getValue("price") || "0");
-  //     const formatted = new Intl.NumberFormat("vi-VN", {
-  //       style: "currency",
-  //       currency: "VND",
-  //     }).format(price);
-
-  //     return <div>{formatted}</div>;
-  //   },
-  // },
   {
     accessorKey: "isAdmin",
     header: ({ column }) => {
