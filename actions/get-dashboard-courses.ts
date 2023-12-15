@@ -17,7 +17,7 @@ type DashboardCourses = {
 
 export const getDashboardCourses = async (userId: string): Promise<DashboardCourses> => {
     try {
-        const purchasedCourses = await db.purchase.findMany({
+        const enrolledCourses = await db.enroll.findMany({
             where: {
                 userId: userId,
             },
@@ -35,7 +35,7 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
             }
         });
 
-        const courses = purchasedCourses.map((purchase) => purchase.course) as CourseWithProgressWithCategory[];
+        const courses = enrolledCourses.map((enroll) => enroll.course) as CourseWithProgressWithCategory[];
 
         for (let course of courses) {
             const progress = await getProgress(userId, course.id);

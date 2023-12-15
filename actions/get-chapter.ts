@@ -13,22 +13,12 @@ export const getChapter = async ({
   chapterId,
 }: GetChapterProps) => {
   try {
-    const purchase = await db.purchase.findUnique({
+    const enroll = await db.enroll.findUnique({
       where: {
         userId_courseId: {
           userId,
           courseId,
         }
-      }
-    });
-
-    const course = await db.course.findUnique({
-      where: {
-        isPublished: true,
-        id: courseId,
-      },
-      select: {
-        price: true,
       }
     });
 
@@ -39,7 +29,7 @@ export const getChapter = async ({
       }
     });
 
-    if (!chapter || !course) {
+    if (!chapter) {
       throw new Error("Không tìm thấy chương học");
     }
 
@@ -47,7 +37,7 @@ export const getChapter = async ({
     let attachments: Attachment[] = [];
     let nextChapter: Chapter | null = null;
 
-    if (purchase) {
+    if (enroll) {
       attachments = await db.attachment.findMany({
         where: {
           courseId: courseId
@@ -55,7 +45,7 @@ export const getChapter = async ({
       });
     }
 
-    if (chapter.isFree || purchase) {
+    if (chapter.isFree || enroll) {
       muxData = await db.muxData.findUnique({
         where: {
           chapterId: chapterId,
@@ -87,23 +77,21 @@ export const getChapter = async ({
 
     return {
       chapter,
-      course,
       muxData,
       attachments,
       nextChapter,
       userProgress,
-      purchase,
+      enroll,
     };
   } catch (error) {
     console.log("[GET_CHAPTER]", error);
     return {
       chapter: null,
-      course: null,
       muxData: null,
       attachments: [],
       nextChapter: null,
       userProgress: null,
-      purchase: null,
+      enroll: null,
     }
   }
 }
