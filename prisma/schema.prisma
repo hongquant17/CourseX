@@ -101,14 +101,6 @@ model Enroll {
   @@index([courseId])
 }
 
-model StripeCustomer {
-  id               String   @id @default(uuid())
-  userId           String   @unique
-  stripeCustomerId String   @unique
-  createAt         DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-}
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
