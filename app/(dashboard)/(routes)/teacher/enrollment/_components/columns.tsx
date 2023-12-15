@@ -1,6 +1,6 @@
 "use client"
 
-import { Course, StripeCustomer } from "@prisma/client"
+import { Enroll } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -16,19 +16,19 @@ import {
   DropdownMenuTrigger, 
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import { db } from "@/lib/db"
 
-export const columns: ColumnDef<Course>[] = [
+export const columns: ColumnDef<Enroll>[] = [
   {
     id: "actions", 
     cell: ({ row }) => {
       return (
-        /* TODO */
+        // TODO
         <Checkbox />
       );
     }
   }, 
   {
-    // TODO: Change to enrolled student's id
     accessorKey: 'userId', 
     header: ({ column }) => {
       return (
@@ -42,8 +42,9 @@ export const columns: ColumnDef<Course>[] = [
       )
     },
   }, 
-  {
-    accessorKey: 'title', 
+  { 
+    // TODO: Change to course title
+    accessorKey: 'course.title', 
     header: ({ column }) => {
       return (
         <Button
@@ -57,9 +58,10 @@ export const columns: ColumnDef<Course>[] = [
     },
   }, 
   {
-    accessorKey: 'id', 
+    accessorKey: 'courseId', 
     header: ({ column }) => {
       return (
+        
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}

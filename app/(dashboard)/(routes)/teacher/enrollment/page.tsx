@@ -16,7 +16,7 @@ const UserPage = async () => {
 
     const userId = session.user.uid;
 
-  const course = await db.course.findMany({
+  const enroll = await db.enroll.findMany({
     where: {
       // userId, 
     }, 
@@ -27,7 +27,7 @@ const UserPage = async () => {
 
   return (
     <div className="p-6">
-      <DataTable columns={columns} data={course} />
+      <DataTable columns={columns} data={enroll} />
     </div>
   );
 };

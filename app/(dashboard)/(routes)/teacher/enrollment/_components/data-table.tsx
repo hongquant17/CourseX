@@ -70,14 +70,21 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-
-        {/* Add user button (add route in link href) */}
-        <Link href=""> 
-          <Button>
-            <PlusCircle className="h-4 w-4 mr-2"/>
-            Add user
-          </Button>
+          {/* TODO: Handle button */}
+          <div className="flex space-x-2">
+            <Link href="">
+              <Button className="bg-green-500">
+                Accept
+              </Button>
+            </Link>
+            {/*Add user button (add route in link href) */}
+            <Link href=""> 
+              <Button>
+                <PlusCircle className="h-4 w-4 mr-2"/>
+                Add user
+              </Button>
         </Link>
+          </div>
       </div>
       <div className="rounded-md border">
         <Table>
