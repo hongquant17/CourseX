@@ -29,6 +29,20 @@ export const columns: ColumnDef<Enroll>[] = [
     }
   }, 
   {
+    accessorKey: 'userName', 
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          User Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  }, 
+  {
     accessorKey: 'userId', 
     header: ({ column }) => {
       return (
@@ -42,9 +56,8 @@ export const columns: ColumnDef<Enroll>[] = [
       )
     },
   }, 
-  { 
-    // TODO: Change to course title
-    accessorKey: 'course.title', 
+  {
+    accessorKey: 'courseTitle', 
     header: ({ column }) => {
       return (
         <Button
