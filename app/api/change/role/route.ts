@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { isAdmin } from "@/lib/admin";
+import { PRIVILEGES, ROLES, TYPE_CHANGE } from "@/lib/constant";
+import { setCharAt } from "@/lib/utils";
 
 
 export async function POST(req: Request) {
@@ -18,8 +20,25 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "YOU ARE NOT ADMINISTRATOR"}, {status: 403});
         }
 
-        const newRole = formData?.role;
+        var newRole = formData?.role;
+        if (formData?.type == TYPE_CHANGE["DELETE"]) {
+          const deleteUsers = await db.user.deleteMany({
+            where: {
+              id: {
+                in: formData?.ids,
+              },
+            }
+          });
+          if (deleteUsers) return NextResponse.json({message: "User(s) deleted"}, {status: 200});
+          else return NextResponse.json({message: "Delete operation failed"}, {status: 500});
+        }
 
+        if (formData?.type == (TYPE_CHANGE["ADMIN"])) {
+          if (formData?.ids.length >= 1) {
+            return NextResponse.json({message: "Please choose one user per admin privileges change."}, {status: 400})
+          }
+          newRole = setCharAt(newRole, PRIVILEGES["ADMIN"], newRole[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"] ? ROLES["NOT_ADMIN"] : ROLES["ADMIN"]);
+        }
         const updateUsers = await db.user.updateMany({
             where: {
               id: {
@@ -32,7 +51,7 @@ export async function POST(req: Request) {
           })
         
         if(!updateUsers) {
-            return NextResponse.json({message: "Some thing failed"}, {status: 500});
+            return NextResponse.json({message: "Something failed"}, {status: 500});
         }
         return NextResponse.json({message: "All user changed role"}, {status: 200});
 

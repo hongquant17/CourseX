@@ -20,3 +20,10 @@ export function getRole(role: string | null) {
   else role2 = 'User';
   return role1 + role2;
 }
+
+export function setCharAt(str: string | null,index: number,chr: string | null) {
+  if (str == null) return null;
+  if (chr == null) chr = "";
+  if(index > str.length-1) return str;
+  return str.substring(0,index) + chr + str.substring(index+1);
+}

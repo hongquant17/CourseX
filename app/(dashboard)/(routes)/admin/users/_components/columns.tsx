@@ -4,19 +4,48 @@ import { User } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox"
 
 import { cn, getRole } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { isTeacher } from "@/lib/teacher";
 import { isAdmin } from "@/lib/admin";
-import { db } from "@/lib/db";
+import UserActions from "./actions";
 
-interface FormData {
-  ids: [],
-  role: string,
-}
 
 export const columns: ColumnDef<User>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "id",
     header: ({ column }) => {
@@ -37,6 +66,30 @@ export const columns: ColumnDef<User>[] = [
       return (
         <div className="pl-2">
           {userId}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <div className="pl-20">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Name
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const name = String(row.getValue("name") || "");
+      return (
+        <div className="pl-2">
+          {name}
         </div>
       );
     }
@@ -91,40 +144,23 @@ export const columns: ColumnDef<User>[] = [
             {currentRole}
           </Badge>
         </div>
-      );  
+      );
     },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const userId = String(row.getValue("id") || "");
-      const isUserAdmin = isAdmin(userId);
-      const isUserTeacher = isTeacher(userId);
-
-
-      const handleRoleChange = async () => {
-        try {
-          // const newRole = isUserTeacher != true ? 'teacher' : 'user'; 
-          if ( db ) {
-            await db.user.update({
-              where: { id: userId },
-              data: {
-                role: "newRole",
-              },
-            })
-          }
-          // const router = useRouter();
-          // router.reload();
-        } catch (error) {
-          console.error("Error updating role:", error);
-        }
-      }
+    header: ({ column }) => {
       return (
-            /* TODO */
-            <Button className="rounded-xl" variant="default" type="submit" onClick={handleRoleChange}>
-              Change role to {true ? 'Teacher' : 'User'}
-            </Button>
+        <div>
+          Options
+        </div>
       );
     },
+    cell: ({ row }) => (
+       <UserActions
+       id = {row.original.id}
+       role = {row.original.role}
+       />
+    )
   },
 ];
