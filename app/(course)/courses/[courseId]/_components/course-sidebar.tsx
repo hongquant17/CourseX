@@ -26,7 +26,7 @@ export const CourseSidebar = async ({
 
     const userId = session.user.uid;
 
-    const purchase = await db.purchase.findUnique({
+    const enroll = await db.enroll.findUnique({
         where: {
             userId_courseId: {
                 userId, 
@@ -41,7 +41,7 @@ export const CourseSidebar = async ({
                 <h1 className="font-semibold">
                     {course.title}
                 </h1>
-                {purchase && (
+                {enroll && (
                     <div className="mt-10">
                         <CourseProgress
                             variant="success" 
@@ -58,7 +58,7 @@ export const CourseSidebar = async ({
                         label={chapter.title}
                         isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
                         courseId={course.id} 
-                        isLocked={!chapter.isFree && !purchase}
+                        isLocked={!chapter.isFree && !enroll}
                     /> 
                 ))}
             </div>

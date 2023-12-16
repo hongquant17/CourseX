@@ -102,14 +102,14 @@ export const CategoryForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox option={...option} {...field} />
+                    <Combobox option={option} {...field}/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button disabled={!isValid || isSubmitting} variant='success' type="submit">
                 Lưu
               </Button>
             </div>
