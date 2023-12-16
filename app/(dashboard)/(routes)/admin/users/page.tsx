@@ -7,18 +7,13 @@ import { columns } from "./_components/columns";
 
 const UserPage = async () => {
   const session = await getSession();
-
   if (!session) {
     return redirect("/");
   }
-
-  const userId = session.user.uid;
-
   const users = await db.user.findMany({
     where: {},
     distinct: ["id"],
   });
-
   return (
     <div>
       <DataTable columns={columns} data={users} />

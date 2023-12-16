@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 import { db } from "@/lib/db";
 import { getSession } from '@/lib/auth';
+import { isAdmin } from '@/lib/admin';
+import { isTeacher } from '@/lib/teacher';
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -18,7 +20,7 @@ export async function DELETE(
     const session = await getSession();
     const userId = session?.user.uid;
     const role = session?.user.role;
-    const isAuthorized = role == "admin" || role == "teacher"
+    const isAuthorized = isAdmin(role, userId) || isTeacher(role, userId);
 
     if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });

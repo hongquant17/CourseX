@@ -5,19 +5,19 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import bcrypt from "bcrypt"
+import { ROLES } from "./constant";
 
 export const options: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     GitHubProvider({
       profile(profile) {
-        console.log(profile, "cccc")
         return {
           id: profile.id,
           email: profile.email,
           name: profile.login,
           image: profile.avatar_url,
-          role: profile.role ?? "user",
+          role: profile.role ?? (ROLES["NOT_ADMIN"] + "," + ROLES["USER"]),
         };
       },
       clientId: process.env.GITHUB_ID ?? "",
@@ -25,13 +25,12 @@ export const options: NextAuthOptions = {
     }),
     GoogleProvider({
       profile(profile) {
-        console.log(profile)
         return {
           id: profile.sub,
           email: profile.email,
           name: profile.family_name + " " + profile.given_name,
           image: profile.picture,
-          role: profile.role ?? "user",
+          role: profile.role ?? (ROLES["NOT_ADMIN"] + "," + ROLES["USER"]),
         };
       },
       clientId: process.env.GOOGLE_ID ?? "",
