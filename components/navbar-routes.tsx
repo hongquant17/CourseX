@@ -8,14 +8,17 @@ import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { ModeToggle } from "./mode-toggle";
 import UserButton from "@/components/user-button";
+import { PRIVILEGES, ROLES } from "@/lib/constant";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
 
   const role = session?.user.role;
-  const isAdmin = role == "admin";
-  const isTeacher = role == "teacher";
+  var isAdmin = false;
+  var isTeacher = false;
+  if (role) isAdmin = role[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"];
+  if (role) isTeacher = role[PRIVILEGES["OTHERS"]] == ROLES["TEACHER"];
 
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.includes("/courses") || pathname === "/";

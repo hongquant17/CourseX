@@ -39,11 +39,7 @@ const UserActions = ({
           currentRole = setCharAt(currentRole, PRIVILEGES["OTHERS"], newRole);
           newRole = currentRole;
         }
-        if (typeAction == TYPE_CHANGE["ADMIN"]) {
-          var currentRole = role;
-          currentRole = setCharAt(currentRole, PRIVILEGES["ADMIN"], newRole);
 
-        }
         const formData: FormData = {
             ids : [id],
             type: typeAction,
