@@ -33,7 +33,7 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-1 place-items-center ml-auto">
-        {isTeacherPage ? (
+        {isTeacherPage || isAdminPage ? (
           <Link href="/">
             <Button size="sm" variant="link">
               Exit

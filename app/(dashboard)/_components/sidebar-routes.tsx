@@ -36,11 +36,6 @@ const adminRoutes = [
         label: "Users",
         href:"/admin/users",
     },
-    {
-        icon: BarChart,
-        label: "Enrollment",
-        href: "/admin/enrollment",
-    },
 ]
 
 export const SidebarRoutes = () => {
