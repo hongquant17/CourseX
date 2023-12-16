@@ -32,9 +32,8 @@ export async function POST(req: Request) {
           if (deleteUsers) return NextResponse.json({message: "User(s) deleted"}, {status: 200});
           else return NextResponse.json({message: "Delete operation failed"}, {status: 500});
         }
-
-        if (formData?.type == (TYPE_CHANGE["ADMIN"])) {
-          if (formData?.ids.length >= 1) {
+        if (formData?.type == TYPE_CHANGE["ADMIN"]) {
+          if (formData?.ids.length > 1) {
             return NextResponse.json({message: "Please choose one user per admin privileges change."}, {status: 400})
           }
           newRole = setCharAt(newRole, PRIVILEGES["ADMIN"], newRole[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"] ? ROLES["NOT_ADMIN"] : ROLES["ADMIN"]);
