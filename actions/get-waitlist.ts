@@ -1,14 +1,14 @@
 import { db } from "@/lib/db";
 
 type WaitlistItem = {
-    id: string; // Add this property
+    id: string; 
     userId: string;
     courseId: string;
-    createdAt: Date; // Add this property
-    updatedAt: Date; // Add this property
+    createdAt: Date; 
+    updatedAt: Date; 
     isAccepted: boolean;
-    userName: string; // Add this property
-    courseTitle: string; // Add this property
+    userName: string; 
+    courseTitle: string; 
 };
 
 type GetWaitlist = {

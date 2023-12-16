@@ -25,23 +25,35 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
+import axios from "axios";
+import toast from "react-hot-toast";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+type WaitlistItem = {
+  id: string; 
+  userId: string;
+  courseId: string;
+  createdAt: Date; 
+  updatedAt: Date; 
+  isAccepted: boolean;
+  userName: string; 
+  courseTitle: string; 
+};
+
+interface DataTableProps<TData extends WaitlistItem> {
+  columns: ColumnDef<TData>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends WaitlistItem>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
 
-  // const [isEditing, setIsEditing] = React.useState(false);
-  // const toggleEdit = () => setIsEditing((current) => !current);
+  const [selectedEnrollIds, setSelectedEnrollIds] = React.useState<string[]>([]);
 
   const table = useReactTable({
     data,
@@ -58,6 +70,33 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  React.useEffect(() => {
+    const selectedRows = table.getRowModel().flatRows.filter((row) => row.getIsSelected());
+    const selectedIds = selectedRows.map((row) => row.original.id);
+    setSelectedEnrollIds(selectedIds);
+  }, [table.getRowModel().flatRows]);
+  
+  const handleBatchAcceptClick = async () => {
+    try {
+      const selectedRows = table.getRowModel().flatRows.filter((row) => row.getIsSelected());
+      if (selectedRows.length === 0) {
+        toast.error("Please select at least one row");
+      } else {
+        for (const row of selectedRows) {
+          const enrollId = row.original.id;
+          const response = await axios.post(`/api/enroll/${enrollId}`);
+          console.log(`User ${enrollId} approved successfully:`, response.data);
+        }
+  
+        toast.success("Enrolls Approved");
+        selectedRows.forEach((row) => row.toggleSelected(false));
+        setSelectedEnrollIds([]);
+      }
+    } catch {
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <div>
        <div className="flex items-center py-4 justify-between">
@@ -73,7 +112,7 @@ export function DataTable<TData, TValue>({
           {/* TODO: Handle button */}
           <div className="flex space-x-2">
             <Link href="">
-              <Button className="bg-green-500">
+              <Button className="bg-green-500"  onClick={handleBatchAcceptClick}>
                 Accept
               </Button>
             </Link>
