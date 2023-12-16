@@ -20,7 +20,6 @@ export const CourseSidebar = async ({
     progressCount,
 }: CourseSidebarProps) => {
     const session = await getSession();
-    
     if (!session) {
         return redirect("/");
     }

@@ -25,18 +25,56 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
+import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
-
+interface FormData {
+  ids: Array<string>,
+  role: string,
+  type: string,
+}
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [formData, setFormData] = useState<FormData>({
+    ids: [],
+    role: '',
+    type: '',
+
+  });
+
+  const [statusMessage, setstatusMessage] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const value = e.target.value;
+      const name = e.target.name;
+      setFormData((prevState) => ({
+          ...prevState,
+          [name]: value,
+      }));
+  };
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setstatusMessage("");
+      const res = await fetch("/api/change/role", {
+          method: "POST",
+          body: JSON.stringify({ formData }),
+          headers,
+      });
+      const response = await res.json();
+      setstatusMessage(response.message);
+      if (res.ok) {
+      };
+  };
 
   const table = useReactTable({
     data,
@@ -47,9 +85,11 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
+      rowSelection,
     },
   })
 
@@ -58,9 +98,9 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Search for users..."
-          value={(table.getColumn("userId")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("userId")?.setFilterValue(event.target.value)
+            table.getColumn("id")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -115,9 +155,15 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+      <div className="mt-10 flex-1 text-sm text-muted-foreground">
+        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {/* {table.getFilteredSelectedRowModel().rows.map()} */}
+        {table.getFilteredRowModel().rows.length} user(s) selected.
+        {statusMessage}
+      </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
-          variant="outline"
+          variant="default"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -125,7 +171,7 @@ export function DataTable<TData, TValue>({
           Previous
         </Button>
         <Button
-          variant="outline"
+          variant="default"
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}

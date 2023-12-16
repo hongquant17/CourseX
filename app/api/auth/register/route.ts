@@ -6,7 +6,6 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const userData = body.formData;
-        console.log(userData);
         if (!userData?.email || !userData?.password) {
             return NextResponse.json({ message: "All field are required." }, { status: 400 });
         }
