@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatPrice } from "@/lib/format";
 import { format } from "path";
 
 interface DataCardProps {
@@ -22,7 +21,6 @@ export const DataCard = ({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold flex justify-center">
-          {/* {shouldFormat ? formatPrice(value) : value} */}
           {value}
         </div>
       </CardContent>

@@ -1,20 +1,24 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { ModeToggle } from "./mode-toggle";
+import UserButton from "@/components/user-button";
+import { PRIVILEGES, ROLES } from "@/lib/constant";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
 
   const role = session?.user.role;
-  const isAdmin = role == "admin";
-  const isTeacher = role == "teacher";
+  var isAdmin = false;
+  var isTeacher = false;
+  if (role) isAdmin = role[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"];
+  if (role) isTeacher = role[PRIVILEGES["OTHERS"]] == ROLES["TEACHER"];
 
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.startsWith("/courses");
@@ -29,7 +33,7 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-1 place-items-center ml-auto">
-        {isTeacherPage || isAdminPage || isCoursePage? (
+        {isTeacherPage || isAdminPage || isCoursePage ?(
           <Link href="/">
             <Button size="sm" variant="link">
               Exit
@@ -53,18 +57,9 @@ export const NavbarRoutes = () => {
         <div className="pr-4">
           <ModeToggle />
         </div>
-        {session ? (
-          <Link href="/api/auth/signout?callbackUrl=/">
-            <Button variant="destructive">
-              <LogOut className="h-4 w-4 mr-2" /> Logout
-            </Button>
-          </Link>
-        ) : (
-          <Link href="/api/auth/signin">Login</Link>
-        )}
-        {/* <UserButton
-          afterSignOutUrl="/"
-        /> */}
+        <div>
+            <UserButton {...session}></UserButton>
+        </div>
       </div>
     </>
   );

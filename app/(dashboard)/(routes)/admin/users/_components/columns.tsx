@@ -2,19 +2,52 @@
 
 import { User } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox"
 
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, getRole } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { isTeacher } from "@/lib/teacher";
-import { useRouter } from "next/navigation";
 import { isAdmin } from "@/lib/admin";
+import UserActions from "./actions";
+
 
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "userId",
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "id",
     header: ({ column }) => {
       return (
         <div className="pl-20">
@@ -29,10 +62,34 @@ export const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const userId = String(row.getValue("userId") || "");
+      const userId = String(row.getValue("id") || "");
       return (
         <div className="pl-2">
           {userId}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <div className="pl-20">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Name
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const name = String(row.getValue("name") || "");
+      return (
+        <div className="pl-2">
+          {name}
         </div>
       );
     }
@@ -61,7 +118,8 @@ export const columns: ColumnDef<User>[] = [
   //   },
   // },
   {
-    accessorKey: "isAdmin",
+    accessorKey: "role",
+    accessorFn: row => getRole(row.role),
     header: ({ column }) => {
       return (
         <Button
@@ -74,47 +132,35 @@ export const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const userId = String(row.getValue("userId") || "");
-      const isUserAdmin = isAdmin(userId);
-      const isUserTeacher = isTeacher(userId);
+      const currentRole = String(row.getValue("role") || "");
+
 
       return (
         <div className="pl-8">
-          <Badge className={cn("bg-slate-500", isUserTeacher && "bg-sky-700" ,isUserAdmin && "bg-red-700")}>
-            {isUserAdmin ? "Admin" : isUserTeacher ? "Teacher" : "Student"}
+          {/* <Badge className={cn("bg-slate-500", true && "bg-sky-700" ,true && "bg-red-700")}>
+            {true ? "Admin" : true ? "Teacher" : "Student"}
+          </Badge> */}
+          <Badge>
+            {currentRole}
           </Badge>
         </div>
-      );  
+      );
     },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const userId = String(row.getValue("userId") || "");
-      const isUserTeacher = isTeacher(userId);
-
-      // const handleRoleChange = async () => {
-      //   try {
-      //     if (!isUserTeacher && prisma) {
-      //       await prisma.users.update({
-      //         where: { userId },
-      //         data: {
-      //           isTeacher: true
-      //         },
-      //       })
-      //     }
-      //     // const router = useRouter();
-      //     // router.reload();
-      //   } catch (error) {
-      //     console.error("Error updating role:", error);
-      //   }
-      // }
+    header: ({ column }) => {
       return (
-            /* TODO */
-            <Button className="rounded-xl" variant="default" type="submit" onClick={()=>{}}>
-              Change role
-            </Button>
+        <div>
+          Options
+        </div>
       );
     },
+    cell: ({ row }) => (
+       <UserActions
+       id = {row.original.id}
+       role = {row.original.role}
+       />
+    )
   },
 ];

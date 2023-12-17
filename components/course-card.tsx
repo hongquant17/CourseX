@@ -3,7 +3,6 @@ import Link from "next/link";
 import { BookOpen } from "lucide-react";
 
 import { IconBadge } from "@/components/icon-badge";
-import { formatPrice } from "@/lib/format";
 import { CourseProgress } from "@/components/course-progress";
 
 interface CourseCardProps {
@@ -11,7 +10,6 @@ interface CourseCardProps {
   title: string;
   imageUrl: string;
   chaptersLength: number;
-  price: number;
   progress: number | null;
   category: string;
 };
@@ -21,12 +19,11 @@ export const CourseCard = ({
   title,
   imageUrl,
   chaptersLength,
-  price,
   progress,
   category
 }: CourseCardProps) => {
   return (
-    <Link href={`/search/courses/${id}`}>
+    <Link href={`/search/overview/${id}`}>
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
           <Image
@@ -58,7 +55,6 @@ export const CourseCard = ({
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">
-              {formatPrice(price)}
             </p>
           )}
         </div>

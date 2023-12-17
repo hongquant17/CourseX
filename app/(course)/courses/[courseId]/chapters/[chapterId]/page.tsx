@@ -28,12 +28,11 @@ const ChapterIdPage = async ({
 
     const {
         chapter,
-        course,
         muxData,
         attachments,
         nextChapter,
         userProgress,
-        purchase,
+        enroll,
     } = await getChapter({
         userId,
         chapterId: params.chapterId,
@@ -41,12 +40,12 @@ const ChapterIdPage = async ({
     });
 
 
-  if (!chapter || !course) {
+  if (!chapter) {
     return redirect("/");
   }
 
-  const isLocked = !chapter.isFree && !purchase;
-  const completeOnEnd = !!purchase && !userProgress?.isCompleted;
+  const isLocked = !chapter.isFree && !enroll;
+  const completeOnEnd = !!enroll && !userProgress?.isCompleted;
 
   return (
     <div>
@@ -67,7 +66,7 @@ const ChapterIdPage = async ({
                           transition"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to course browsing
+            Trở về tìm kiếm khóa học
           </Link>
         </div>
         <div className="p-4">
@@ -84,8 +83,7 @@ const ChapterIdPage = async ({
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
             <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
-            {purchase ? (
-              <CourseProgressButton
+            {enroll ? (<CourseProgressButton
                 chapterId={params.chapterId}
                 courseId={params.courseId}
                 nextChapterId={nextChapter?.id}
@@ -94,7 +92,6 @@ const ChapterIdPage = async ({
             ) : (
               <CourseEnrollButton
                 courseId={params.courseId}
-                price={course.price!}
               />
             )}
           </div>
