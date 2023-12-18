@@ -9,12 +9,9 @@ export async function POST(
     try{
         const session = await getSession();
         const userId = session?.user.uid;
-        const role = session?.user.role;
-        
-        const isAuthorized = role == "admin" || role == "teacher" || role == "user";
-
-        if (!userId || !isAuthorized) {
-            return new NextResponse("Unauthorized", { status: 401 });
+    
+        if (!userId) {
+        return new NextResponse("Unauthorized", { status: 401 });
         }
 
         const enrollResult = await db.enroll.create({

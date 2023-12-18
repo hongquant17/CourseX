@@ -23,7 +23,7 @@ export const ViewCourse = ({
                 <p className="text-sm text-neutral-200">
                     {isAccepted
                         ? "Bắt đầu học bằng cách nhấn nút bên dưới"
-                        : "Xem trước các nội dung miễn phí của khóa học bằng cách nhấn vào nút bên dưới."
+                        : "Xem trước một số nội dung của khóa học bằng cách nhấn vào nút bên dưới."
                     }
                 </p>
             </div>

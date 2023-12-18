@@ -86,9 +86,9 @@ export const ChapterAccessForm = ({
           )}
         >
           {initialData.isFree ? (
-            <>Chương này được miễn phí xem trước, trả phí để xem các chương sau.</>
+            <>Chương này có thể xem trước, tham gia khóa học để xem các chương sau.</>
           ) :
-            <>Trả phí để được xem chương này.</>
+            <>Tham gia khóa học để được xem chương này.</>
           }
         </p>
       )}
@@ -111,7 +111,7 @@ export const ChapterAccessForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormDescription>
-                      Tick vào ô nếu muốn chương này được miễn phí để xem trước
+                      Tick vào ô nếu muốn chương này có thể xem trước
                     </FormDescription>
                   </div>
                 </FormItem>
