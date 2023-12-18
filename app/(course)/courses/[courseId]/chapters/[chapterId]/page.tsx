@@ -66,7 +66,7 @@ const ChapterIdPage = async ({
                           transition"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to course browsing
+            Trở về tìm kiếm khóa học
           </Link>
         </div>
         <div className="p-4">

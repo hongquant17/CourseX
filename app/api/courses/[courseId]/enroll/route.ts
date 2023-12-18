@@ -10,6 +10,7 @@ export async function POST(
         const session = await getSession();
         const userId = session?.user.uid;
         const role = session?.user.role;
+        
         const isAuthorized = role == "admin" || role == "teacher" || role == "user";
 
         if (!userId || !isAuthorized) {
