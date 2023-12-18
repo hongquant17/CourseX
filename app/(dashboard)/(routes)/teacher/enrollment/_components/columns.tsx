@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 
-
+import {useRouter} from "next/navigation";
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -116,7 +116,7 @@ export const columns: ColumnDef<Enroll>[] = [
       const [isAcceptVisible, setIsAcceptVisible] = useState(false);
 
       const forceUpdate = useForceUpdate();
-
+      const router = useRouter();
       const handleAcceptClick = async () => {
         try {
           const response = await axios.post(`/api/enroll/${id}`);
@@ -124,6 +124,7 @@ export const columns: ColumnDef<Enroll>[] = [
           toast.success("Enroll Approved");
           setApproved(true);
           setIsAcceptVisible(false);
+          router.refresh();
 
         } catch {
           toast.error("Something went wrong");

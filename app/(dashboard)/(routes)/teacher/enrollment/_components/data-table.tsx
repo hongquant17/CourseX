@@ -27,6 +27,7 @@ import Link from "next/link"
 import { PlusCircle } from "lucide-react"
 import axios from "axios";
 import toast from "react-hot-toast";
+import {useRouter} from 'next/navigation'
 
 type WaitlistItem = {
   id: string; 
@@ -52,7 +53,7 @@ export function DataTable<TData extends WaitlistItem>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-
+  const router = useRouter();
   const [selectedEnrollIds, setSelectedEnrollIds] = React.useState<string[]>([]);
 
   const table = useReactTable({
@@ -91,6 +92,7 @@ export function DataTable<TData extends WaitlistItem>({
         toast.success("Enrolls Approved");
         selectedRows.forEach((row) => row.toggleSelected(false));
         setSelectedEnrollIds([]);
+        router.refresh();
       }
     } catch {
       toast.error("Something went wrong");
