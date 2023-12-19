@@ -19,12 +19,12 @@ export const NavbarRoutes = () => {
   var isTeacher = false;
   if (role) isAdmin = role[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"];
   if (role) isTeacher = role[PRIVILEGES["OTHERS"]] == ROLES["TEACHER"];
+  /* TODO : remove teacher mode for admin */
 
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.startsWith("/courses");
   const isSearchPage = pathname === "/search";
   const isAdminPage = pathname?.startsWith("/admin");
-  /* TODO : remove teacher mode for admin */
   return (
     <>
       {isSearchPage && (
@@ -33,21 +33,21 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-1 place-items-center ml-auto">
-        {isTeacherPage || isAdminPage || isCoursePage ?(
+        {isTeacherPage || isAdminPage || isCoursePage ? (
           <Link href="/">
             <Button size="sm" variant="link">
               Exit
             </Button>
           </Link>
         ) : null}
-        {(isTeacher || isAdmin) && !isTeacherPage && !isCoursePage? (
+        {isTeacher && !isTeacherPage && !isCoursePage ? (
           <Link href="/teacher/courses">
             <Button size="sm" variant="link">
               Teacher mode
             </Button>
           </Link>
         ) : null}
-        {isAdmin && !isAdminPage && !isCoursePage? (
+        {isAdmin && !isAdminPage && !isCoursePage ? (
           <Link href="/admin/users">
             <Button size="sm" variant="link">
               Admin
@@ -58,7 +58,7 @@ export const NavbarRoutes = () => {
           <ModeToggle />
         </div>
         <div>
-            <UserButton {...session}></UserButton>
+          <UserButton {...session}></UserButton>
         </div>
       </div>
     </>
