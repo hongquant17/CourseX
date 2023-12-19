@@ -43,7 +43,10 @@ const CourseIdOverview = async ({
         where: {}
       },
       enrolls: {
-        where: {}
+        where: {
+          userId: userId, 
+          courseId: params.courseId
+        }
       }
     }
   });
@@ -54,10 +57,12 @@ const CourseIdOverview = async ({
 
   console.log(course)
 
-
-
-  const isEnrolled = course.enrolls[0] ? true : false;
-  const isAccepted = isEnrolled ? course.enrolls[0].isAccepted : false;
+  const isEnrolled = course.enrolls.length > 0;
+  let isAccepted = false;
+  if (isEnrolled) {
+    // Nếu có thông tin enroll, lấy giá trị của trường isAccepted
+    isAccepted = course.enrolls[0].isAccepted;
+  }
   console.log(isAccepted)
   console.log(isEnrolled)
   const progressCount = await getProgress(userId, course.id)

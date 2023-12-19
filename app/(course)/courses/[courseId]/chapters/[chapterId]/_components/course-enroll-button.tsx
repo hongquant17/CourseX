@@ -32,7 +32,7 @@ export const CourseEnrollButton = ({
       onClick={onClick}
       disabled={isEnrolled}
     >
-      {isEnrolled ? 'Waiting for Approve' : 'Enroll'}
+      {isEnrolled ? 'Đang chờ phê duyệt' : 'Tham gia'}
     </Button>
   );
 };

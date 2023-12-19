@@ -97,7 +97,7 @@ export const ChaptersList = ({
                       <div className="ml-auto pr-2 flex items-center gap-x-2">
                         {chapter.isFree && (
                           <Badge>
-                            Miễn phí
+                            Xem trước
                           </Badge>
                         )}
                         <Badge
