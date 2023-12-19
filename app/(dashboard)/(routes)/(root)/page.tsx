@@ -13,7 +13,6 @@ export default async function Dashboard() {
   if (!session) {
     redirect("/");
   }
-  console.log(session);
   const userId = session.user.uid;
 
   const {

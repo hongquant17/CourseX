@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 import { db } from "@/lib/db";
 import { getSession } from '@/lib/auth';
-import { isAdmin } from '@/lib/admin';
-import { isTeacher } from '@/lib/teacher';
+import { isAdminDB, isAdminSession } from '@/lib/admin';
+import { isTeacherDB, isTeacherSession } from '@/lib/teacher';
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -20,7 +20,10 @@ export async function DELETE(
     const session = await getSession();
     const userId = session?.user.uid;
     const role = session?.user.role;
-    const isAuthorized = isAdmin(role, userId) || isTeacher(role, userId);
+    var isAuthorized = isAdminSession(role) || isTeacherSession(role);
+    if (!isAuthorized) {
+        isAuthorized = await isAdminDB(userId) || await isTeacherDB(userId);
+    }
 
     if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -73,7 +76,10 @@ export async function PATCH(
     const userId = session?.user.uid;
     const role = session?.user.role;
     const values = await req.json();
-    const isAuthorized = role == "admin" || role == "teacher"
+    var isAuthorized = isAdminSession(role) || isTeacherSession(role);
+    if (!isAuthorized) {
+        isAuthorized = await isAdminDB(userId) || await isTeacherDB(userId);
+    }
 
     if (!userId || !isAuthorized) {
       return new NextResponse("Unauthorized", { status: 401 });

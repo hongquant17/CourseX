@@ -9,17 +9,16 @@ import { SearchInput } from "./search-input";
 import { ModeToggle } from "./mode-toggle";
 import UserButton from "@/components/user-button";
 import { PRIVILEGES, ROLES } from "@/lib/constant";
+import { isAdminSession } from "@/lib/admin";
+import { isTeacherSession } from "@/lib/teacher";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
 
   const role = session?.user.role;
-  var isAdmin = false;
-  var isTeacher = false;
-  if (role) isAdmin = role[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"];
-  if (role) isTeacher = role[PRIVILEGES["OTHERS"]] == ROLES["TEACHER"];
-  /* TODO : remove teacher mode for admin */
+  var isAdmin = isAdminSession(role);
+  var isTeacher = isTeacherSession(role);
 
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.startsWith("/courses");

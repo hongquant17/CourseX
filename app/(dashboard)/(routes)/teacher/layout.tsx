@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { isAdmin } from "@/lib/admin";
-import { isTeacher } from "@/lib/teacher";
+import { isAdminSession } from "@/lib/admin";
+import { isTeacherSession } from "@/lib/teacher";
 
 const TeacherLayout = async ({
     children
@@ -11,7 +11,7 @@ const TeacherLayout = async ({
 }) => {
     const session = await getSession();
 
-    if (!isAdmin(session?.user.role) && !isTeacher(session?.user.role)) {
+    if (!isAdminSession(session?.user.role) && !isTeacherSession(session?.user.role)) {
         return redirect("/");
     }
     return <>{children}</>

@@ -2,10 +2,7 @@ import { ROLES, PRIVILEGES } from "./constant";
 import { db } from "./db";
 
 
-export const isAdmin = async (sessionRole: string | null | undefined, userId?: string | undefined) => {
-  if (sessionRole) {
-    return sessionRole[PRIVILEGES["ADMIN"]] === String(ROLES["ADMIN"]);
-  }
+export const isAdminDB = async (userId?: string | undefined) => {
   if (userId) {
     const existUser = await db.user.findUnique({
       where:{ 
@@ -19,4 +16,10 @@ export const isAdmin = async (sessionRole: string | null | undefined, userId?: s
   }
   return false;
 };
+export const isAdminSession = (sessionRole: string | null | undefined): boolean => {
+  if (sessionRole) {
+    return sessionRole[PRIVILEGES["ADMIN"]] === String(ROLES["ADMIN"]);
+  }
+  return false;
+}
 

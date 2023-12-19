@@ -1,6 +1,6 @@
-import { isAdmin } from "@/lib/admin";
+import { isAdminDB, isAdminSession } from "@/lib/admin";
 import { getSession } from "@/lib/auth";
-import { isTeacher } from "@/lib/teacher";
+import { isTeacherDB, isTeacherSession } from "@/lib/teacher";
 import { auth } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
  
@@ -10,7 +10,10 @@ const handleAuth = async () => {
     const session = await getSession();
     const userId = session?.user.uid;
     const role = session?.user.role;
-    const isAuthorized = isAdmin(role, userId) || isTeacher(role, userId);
+    var isAuthorized = isAdminSession(role) || isTeacherSession(role);
+    if (!isAuthorized) {
+        isAuthorized = await isAdminDB(userId) || await isTeacherDB(userId);
+    }
 
     if (!userId || !isAuthorized) throw new Error("Unauthorized");
     return { userId }; 
