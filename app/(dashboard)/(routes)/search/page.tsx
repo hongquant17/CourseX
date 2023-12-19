@@ -21,7 +21,7 @@ const SearchPage = async ({
 }: SearchPageProps) => {
     const session = await getServerSession(options);
     if (!session) {
-        redirect("/api/auth/signin?callbackUrl=/");
+        redirect("/");
     }
     const userId = session.user.uid;
     

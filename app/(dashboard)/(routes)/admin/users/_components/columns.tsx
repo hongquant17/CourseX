@@ -18,8 +18,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 
 import { cn, getRole } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { isTeacher } from "@/lib/teacher";
-import { isAdmin } from "@/lib/admin";
 import UserActions from "./actions";
 
 

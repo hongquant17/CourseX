@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-import { isAdmin } from "@/lib/admin";
+import { isAdminSession } from "@/lib/admin";
 import { PRIVILEGES, ROLES, TYPE_CHANGE } from "@/lib/constant";
 import { setCharAt } from "@/lib/utils";
 
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         if (!formData?.ids || formData?.ids.length === 0) {
             return NextResponse.json({ message: "Select an user to change." }, { status: 400 });
         }
-        if (!isAdmin(session?.user.role)) {
+        if (!isAdminSession(session?.user.role)) {
             return NextResponse.json({message: "YOU ARE NOT ADMINISTRATOR"}, {status: 403});
         }
 
