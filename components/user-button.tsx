@@ -74,43 +74,17 @@ const UserButton = (data: any) => {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <Users className="mr-2 h-4 w-4" />
-                        <span>Team</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            <span>Invite users</span>
-                        </DropdownMenuSubTrigger>
-                        <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                                <DropdownMenuItem>
-                                    <Mail className="mr-2 h-4 w-4" />
-                                    <span>Email</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <MessageSquare className="mr-2 h-4 w-4" />
-                                    <span>Message</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <PlusCircle className="mr-2 h-4 w-4" />
-                                    <span>More...</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                        </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Github className="mr-2 h-4 w-4" />
-                    <span>GitHub</span>
+                <Github className="mr-2 h-4 w-4" />
+                    <a href="https://github.com/hongquant17/CourseX" target="_blank">
+                        <span>GitHub</span>
+                    </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                     <LifeBuoy className="mr-2 h-4 w-4" />
-                    <span>Support</span>
+                    <a href="https://github.com/hongquant17/CourseX" target="_blank">
+                        <span>Support</span>
+                    </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup className="flex items-center justify-center" >
