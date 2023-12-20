@@ -10,7 +10,7 @@ import { CourseProgress } from "@/components/course-progress";
 import { getProgress } from "@/actions/get-progress";
 import { getSession } from "@/lib/auth";
 import { ViewCourse } from "./_components/view";
-import { Forum } from "./_components/forum";
+import { Forum } from "./_components/forum-button";
 
 const CourseIdOverview = async ({
   params

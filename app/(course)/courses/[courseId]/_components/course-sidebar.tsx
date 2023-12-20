@@ -40,14 +40,14 @@ export const CourseSidebar = async ({
                 <h1 className="font-semibold">
                     {course.title}
                 </h1>
-                {enroll && (
+                {enroll && ( progressCount >= 0 ? (
                     <div className="mt-10">
                         <CourseProgress
                             variant="success" 
                             value={progressCount}
                         /> 
                     </div>
-                )}
+                ): null)}
             </div>
             <div className="flex flex-col w-full">
                 {course.chapters.map((chapter) => (
