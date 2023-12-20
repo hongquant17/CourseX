@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { isAdminSession } from "@/lib/admin";

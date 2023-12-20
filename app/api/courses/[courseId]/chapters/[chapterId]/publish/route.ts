@@ -1,6 +1,5 @@
 import { getSession } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
