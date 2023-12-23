@@ -1,5 +1,4 @@
 import { MuxData } from '@prisma/client';
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
 import { db } from "@/lib/db";

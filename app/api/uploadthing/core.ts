@@ -1,7 +1,6 @@
 import { isAdminDB, isAdminSession } from "@/lib/admin";
 import { getSession } from "@/lib/auth";
 import { isTeacherDB, isTeacherSession } from "@/lib/teacher";
-import { auth } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
  
 const f = createUploadthing();
