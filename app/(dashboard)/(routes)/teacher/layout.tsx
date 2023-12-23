@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { isAdminSession } from "@/lib/admin";
 import { isTeacherSession } from "@/lib/teacher";
 
 const TeacherLayout = async ({
@@ -10,7 +9,7 @@ const TeacherLayout = async ({
 }) => {
     const session = await getSession();
 
-    if (!isAdminSession(session?.user.role) && !isTeacherSession(session?.user.role)) {
+    if (!isTeacherSession(session?.user.role)) {
         return redirect("/");
     }
     return <>{children}</>
