@@ -59,14 +59,14 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Tên khóa học
+        Course title
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Hủy bỏ</>
+            <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Chỉnh sửa
+              Edit
             </>
           )}
         </Button>
@@ -86,7 +86,7 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="Ví dụ: Phát triển ứng dụng Web"
+                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
@@ -95,8 +95,8 @@ export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} variant='success' type="submit">
-                Lưu
+              <Button disabled={!isValid || isSubmitting}  type="submit">
+                Save
               </Button>
             </div>
           </form>

@@ -18,12 +18,12 @@ export const ViewCourse = ({
         <div className="border rounded-md p-6 text-secondary bg-sky-900">
             <div className="mb-7">
                 <h4 className="font-semibold text-lg mb-4">
-                    {isAccepted ? "Xem khóa học" : "Xem trước khóa học"}
+                    {isAccepted ? "Continue your learning" : "Preview the course"}
                 </h4>
                 <p className="text-sm text-neutral-200">
                     {isAccepted
-                        ? "Bắt đầu học bằng cách nhấn nút bên dưới"
-                        : "Xem trước một số nội dung của khóa học bằng cách nhấn vào nút bên dưới."
+                        ? "Watch from your last completed chapters."
+                        : "Preview contents of the course."
                     }
                 </p>
             </div>
@@ -32,7 +32,7 @@ export const ViewCourse = ({
                     className="text-sm bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 rounded-md w-full"
 
                 >
-                    {isAccepted ? "Vào khóa học" : "Xem trước khóa học"}
+                    {isAccepted ? "Continue watching" : "Enroll"}
                 </Button>
             </Link>
 

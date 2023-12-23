@@ -51,11 +51,11 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters`, values);
-      toast.success("Đã thêm chương học");
+      toast.success("Chapter created");
       toggleCreating();
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     }
   };
 
@@ -66,10 +66,10 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
         list: updateData,
       });
-      toast.success("Đã sắp xếp các chương");
+      toast.success("Chapters reordered");
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     } finally {
       setIsUpdating(false);
     }
@@ -87,14 +87,14 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Các chương học
+       Chapters
         <Button onClick={toggleCreating} variant="ghost">
           {isCreating ? (
-            <>Hủy bỏ</>
+            <>Cancel</>
           ) : (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Thêm chương học
+              Add a chapter
             </>
           )}
         </Button>
@@ -121,7 +121,7 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
                 </FormItem>
               )}
             />
-            <Button disabled={!isValid || isSubmitting} variant='success' type="submit">
+            <Button disabled={!isValid || isSubmitting}  type="submit">
               Tạo mới
             </Button>
           </form>
@@ -144,7 +144,7 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       )}
       {!isCreating && (
         <p className="text-xs text-muted-foreground mt-4">
-          Kéo thả để thay đổi thứ tự các chương
+          Drag to reorder chapters
         </p>
       )}
     </div>

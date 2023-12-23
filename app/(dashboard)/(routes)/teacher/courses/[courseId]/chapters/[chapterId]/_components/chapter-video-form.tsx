@@ -49,19 +49,19 @@ export const ChapterVideoForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Video chương học
+        Chapter video
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Hủy bỏ</>}
+          {isEditing && <>Cancel</>}
           {!isEditing && !initialData.videoUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Thêm video
+              Add video
             </>
           )}
           {!isEditing && initialData.videoUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Chỉnh sửa
+              Edit
             </>
           )}
         </Button>
@@ -73,7 +73,7 @@ export const ChapterVideoForm = ({
           </div>
         ) : (
           <div className="relative aspect-video mt-2 text-slate-500 italic">
-            Đã tải lên video
+            Video uploaded
             <MuxPlayer
               className="mt-3"
               playbackId={initialData?.muxData?.playbackId || ""}
@@ -91,14 +91,13 @@ export const ChapterVideoForm = ({
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Tải lên video cho chương này
+            Upload a video for this chapter
           </div>
         </div>
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Sẽ tốn vài phút để tải lên video. Tải lại trang nếu video chưa được
-          cập nhật
+          It might take a few minutes for the video to be processed. Reload the tab to view changes
         </div>
       )}
     </div>

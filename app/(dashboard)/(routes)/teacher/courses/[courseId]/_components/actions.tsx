@@ -31,16 +31,16 @@ export const Actions = ({
 
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/unpublish`);
-        toast.success("Đã ẩn khóa học");
+        toast.success("Course unpublished");
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
-        toast.success("Đã đăng khóa học");
+        toast.success("Course published");
         confetti.onOpen();
       }
 
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -52,11 +52,11 @@ export const Actions = ({
 
       await axios.delete(`/api/courses/${courseId}`);
 
-      toast.success("Đã xóa khóa học");
+      toast.success("Course deleted");
       router.refresh();
       router.push(`/teacher/courses`);
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +70,7 @@ export const Actions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Hủy đăng" : "Đăng tải"}
+        {isPublished ? "Unpublish" : "Publish"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button size="sm" disabled={isLoading}>

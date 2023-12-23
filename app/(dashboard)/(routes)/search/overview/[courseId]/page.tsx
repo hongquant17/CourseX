@@ -76,7 +76,7 @@ const CourseIdOverview = async ({
                           transition mb-6"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Trở về tìm kiếm khóa học
+        Back to course browsing
       </Link>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="order-1 col-span-1 lg:col-span-3 flex flex-col space-y-6">

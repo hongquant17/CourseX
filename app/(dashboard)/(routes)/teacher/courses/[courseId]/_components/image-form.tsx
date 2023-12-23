@@ -19,7 +19,7 @@ interface ImageFormProps {
 
 const formSchema = z.object({
   imageUrl: z.string().min(1, {
-    message: "Ảnh là bắt buộc",
+    message: "An image is mandatory",
   }),
 });
 
@@ -43,19 +43,19 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Ảnh khóa học
+        Course image
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Hủy bỏ</>}
+          {isEditing && <>Cancel</>}
           {!isEditing && !initialData.imageUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Thêm ảnh
+              Add image
             </>
           )}
           {!isEditing && initialData.imageUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Chỉnh sửa
+              Edit
             </>
           )}
         </Button>
@@ -86,7 +86,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Khuyến khích dùng tỉ lệ 16:9
+            Recommended ratio: 16:9
           </div>
         </div>
       )}

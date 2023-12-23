@@ -30,7 +30,7 @@ export const getChapter = async ({
     });
 
     if (!chapter) {
-      throw new Error("Không tìm thấy chương học");
+      throw new Error("Chapter not found");
     }
 
     let muxData = null;

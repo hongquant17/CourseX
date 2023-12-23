@@ -28,7 +28,7 @@ interface DescriptionFormProps {
 
 const formSchema = z.object({
   description: z.string().min(1, {
-    message: "Mô tả là bắt buộc",
+    message: "A description is mandatory",
   }),
 });
 
@@ -64,14 +64,14 @@ export const DescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Mô tả khóa học
+        Course description
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Hủy bỏ</>
+            <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Chỉnh sửa
+              Edit
             </>
           )}
         </Button>
@@ -83,7 +83,7 @@ export const DescriptionForm = ({
             !initialData.description && "text-slate-500 italic"
           )}
         >
-          {initialData.description || "Chưa có mô tả"}
+          {initialData.description || "No description"}
         </p>
       )}
       {isEditing && (
@@ -100,7 +100,7 @@ export const DescriptionForm = ({
                   <FormControl>
                     <Textarea
                       disabled={isSubmitting}
-                      placeholder="Ví dụ: Khóa học này bao gồm kiến thức về ..."
+                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
@@ -109,8 +109,8 @@ export const DescriptionForm = ({
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit" variant='success'>
-                Lưu
+              <Button disabled={!isValid || isSubmitting} type="submit" >
+                Save
               </Button>
             </div>
           </form>

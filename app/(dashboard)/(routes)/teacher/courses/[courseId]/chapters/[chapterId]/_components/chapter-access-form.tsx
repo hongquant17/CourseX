@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ChapterAccessFormProps {
   initialData: Chapter;
@@ -54,7 +54,9 @@ export const ChapterAccessForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId}`, values);
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        values
+      );
       toast.success("Chapter updated");
       toggleEdit();
       router.refresh();
@@ -66,30 +68,25 @@ export const ChapterAccessForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Quyền truy cập
+        Chapter Access
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Hủy bỏ</>
+            <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Chỉnh sửa
+              Edit
             </>
           )}
         </Button>
       </div>
       {!isEditing && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.isFree && "text-slate-500 italic"
-          )}
-        >
+        <p className="text-sm mt-2 text-slate-500 italic">
           {initialData.isFree ? (
-            <>Chương này có thể xem trước, tham gia khóa học để xem các chương sau.</>
-          ) :
-            <>Tham gia khóa học để được xem chương này.</>
-          }
+            <>This chapter is a preview. Enroll to view other chapters</>
+          ) : (
+            <> Enroll to view other chapters</>
+          )}
         </p>
       )}
       {isEditing && (
@@ -111,15 +108,15 @@ export const ChapterAccessForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormDescription>
-                      Tick vào ô nếu muốn chương này có thể xem trước
+                      Tick the box for this chapter to be a preview
                     </FormDescription>
                   </div>
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} variant='success' type="submit">
-                Lưu
+              <Button disabled={!isValid || isSubmitting} type="submit">
+                Save
               </Button>
             </div>
           </form>

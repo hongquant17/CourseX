@@ -58,19 +58,19 @@ export const AttachmentForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Tài liệu
+        Attachments
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Hủy bỏ</>}
+          {isEditing && <>Cancel</>}
           {!isEditing && !initialData.imageUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Thêm tài liệu
+              Add attachment
             </>
           )}
           {!isEditing && initialData.imageUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Thêm tài liệu
+              Add attachment
             </>
           )}
         </Button>
@@ -79,7 +79,7 @@ export const AttachmentForm = ({
         <>
           {initialData.attachments.length === 0 && (
             <p className="text-sm mt-2 text-slate-500 italic">
-              Chưa có tài liệu được thêm
+              No attachments
             </p>
           )}
           {initialData.attachments.length > 0 && (
@@ -121,7 +121,7 @@ export const AttachmentForm = ({
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Thêm ảnh, video hay các tài nguyên các cho học viên
+            Attach images, videos, PDFs, or other documents to your course.
           </div>
         </div>
       )}
