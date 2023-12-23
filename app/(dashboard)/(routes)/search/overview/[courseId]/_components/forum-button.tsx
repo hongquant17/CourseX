@@ -10,7 +10,6 @@ interface ForumProps {
 
 export const Forum = ({
     courseId,
-    isAccepted,
 }: ForumProps) => {
 
 

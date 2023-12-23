@@ -16,23 +16,37 @@ interface CourseMobileSidebarProps {
     })[];
   };
   progressCount: number;
+  isForum: boolean;
 };
 
 export const CourseMobileSidebar = ({ 
   course,
   progressCount,
+  isForum,
 }: CourseMobileSidebarProps) => {
   return (
-    <Sheet>
-      <SheetTrigger className="pr-4 hover:opacity-75 transition">
-        <Menu />
-      </SheetTrigger>
-      <SheetContent side="left" className="p-0 bg-white w-72">
-        <CourseSidebar
-          course={course}
-          progressCount={progressCount}
-        />
-      </SheetContent>
-    </Sheet>
+      <Sheet>
+        {isForum && (
+        <>
+        <SheetTrigger className="pr-4 hover:opacity-75 transition">
+          <Menu />
+        </SheetTrigger>
+        <SheetContent side="left" className="p-0 bg-white w-72">
+          <CourseSidebar
+            course={course}
+            progressCount={progressCount}
+          />
+        </SheetContent>
+        </>)}
+        <SheetTrigger className="md:hidden pr-4 hover:opacity-75 transition">
+          <Menu />
+        </SheetTrigger>
+        <SheetContent side="left" className="p-0 bg-white w-72">
+          <CourseSidebar
+            course={course}
+            progressCount={progressCount}
+          />
+        </SheetContent>
+      </Sheet>
   )
 }

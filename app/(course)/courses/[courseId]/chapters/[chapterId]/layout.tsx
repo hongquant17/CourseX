@@ -57,6 +57,7 @@ const CourseLayout = async ({
                 <CourseNavbar
                     course={course} 
                     progressCount={progressCount}
+                    isForum={false}
                 />
             </div>
             <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
