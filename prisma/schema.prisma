@@ -24,6 +24,7 @@ model Course {
   chapters    Chapter[]
   attachments Attachment[]
   enrolls   Enroll[]
+  comments Comment[]
 
   @@index([categoryId])
   @@fulltext([title])
@@ -64,6 +65,21 @@ model Chapter {
   course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
   userProgress UserProgress[]
 
+  @@index([courseId])
+}
+
+model Comment {
+  id        String            @id @default(uuid())
+  content   String
+  parentId  String?
+  courseId  String
+  userId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  likeNumber Int
+  course    Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
   @@index([courseId])
 }
 
