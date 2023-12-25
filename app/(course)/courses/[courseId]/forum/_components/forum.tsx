@@ -1,6 +1,7 @@
 'use client'
 import { Comment, Like } from "@prisma/client";
 import { CommentCard } from "./comment-card";
+import { useMemo } from "react";
 
 type CommentItem = Comment & {
     id: string; 
@@ -25,13 +26,33 @@ interface ForumProps{
 export default function Forum({
     items,
 }: ForumProps) {
+
+    const commentsByParentId = useMemo<{ [key: string]: CommentItem[] }>(
+        () => {
+          const group: { [key: string]: CommentItem[] } = {};
+      
+          items.forEach((item: CommentItem) => {
+            const parentId = item.parentId ?? ''; // Use nullish coalescing operator
+            group[parentId] = group[parentId] || [];
+            group[parentId].push(item);
+          });
+      
+          return group;
+        },
+        [items]
+      );
+    
+    function getReplies(parentId: string) {
+        return commentsByParentId[parentId];
+    }
+
     return (
     <div>
-    {items.map((item) => (
+    {commentsByParentId[''].map((item) => (
         <CommentCard key={item.id}
         {...item}
+        childComments={getReplies(item.id)}
         >
-
         </CommentCard>
     ))}
     </div>
