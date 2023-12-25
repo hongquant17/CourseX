@@ -1,7 +1,6 @@
 'use client'
-
-import { usePathname } from "next/navigation";
-import { Comment } from "@prisma/client";
+import { Comment, Like } from "@prisma/client";
+import { CommentCard } from "./comment-card";
 
 type CommentItem = Comment & {
     id: string; 
@@ -12,7 +11,10 @@ type CommentItem = Comment & {
     createdAt: Date; 
     updatedAt: Date; 
     isDeleted: boolean;
-    likeNumber: number; 
+    likes: Like[];
+    userName: string | null;
+    userAvatar: string | null;
+    userRole: string | null;
 };
 
 interface ForumProps{
@@ -26,9 +28,11 @@ export default function Forum({
     return (
     <div>
     {items.map((item) => (
-        <div key={item.id}>
-            {item.content}
-        </div>
+        <CommentCard key={item.id}
+        {...item}
+        >
+
+        </CommentCard>
     ))}
     </div>
     )
