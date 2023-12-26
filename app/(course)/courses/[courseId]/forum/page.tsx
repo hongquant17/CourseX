@@ -1,5 +1,3 @@
-import { getSession } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import Forum from "./_components/forum";
 import { headers } from 'next/headers';
 import { getComment } from "@/actions/get-comment";

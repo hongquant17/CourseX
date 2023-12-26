@@ -1,5 +1,4 @@
 'use client'
-import { Comment, Like } from "@prisma/client";
 import { CommentCard } from "./comment-card";
 import { CommentItem } from "@/lib/constant";
 
@@ -11,7 +10,7 @@ export default function CommentList({
     items,
 }: CommentListProps) {
     return (
-    <div className="mb-10">
+    <div className="mb-10 w-max">
     {items.map((item) => (
         <CommentCard key={item.id}
         {...item}

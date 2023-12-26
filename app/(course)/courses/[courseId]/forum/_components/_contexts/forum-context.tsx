@@ -9,7 +9,7 @@ export interface ForumContext {
 
 const initialContextValue: ForumContext = {
     rootComments: [],
-    getReplies: (parentId: string) => ([]), // Adjust the return type if needed
+    getReplies: (parentId: string) => ([]),
 };
 
 const Context = React.createContext(initialContextValue);
