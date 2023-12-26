@@ -8,6 +8,7 @@ import { IconBtn } from "./icon-btn";
 import { useForum } from "./_contexts/forum-context";
 import CommentList from "./comment-list";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: "short",
@@ -30,7 +31,6 @@ interface CommentProps {
     userRole: string | null;
 }
 
-
 export const CommentCard = ({
     id,
     content,
@@ -49,9 +49,30 @@ export const CommentCard = ({
     const { theme, setTheme } = useTheme();
     const isDarkMode = theme === 'dark';
     const userSrc = isDarkMode ? '/light-no-ava.png' : '/no-avatar.svg';
+
     const [areChildrenHidden, setChildrenHidden] = useState(true);
+    const [isReplying, setIsReplying] = useState(false);
+    const [isLiked, setLiked] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
     const forumContext = useForum();
     const childComments = forumContext.getReplies(id);
+
+    const router = useRouter();
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    const handleLikeSubmit = async () => {
+        const res = await fetch(`/api/courses/${forumContext.courseId}/comment/like`, {
+            method: "POST",
+            body: JSON.stringify({ userId: forumContext.userId, commentId: id }),
+            headers,
+        });
+        if (!res.ok) {
+            const response = await res.json();
+        } else {
+            router.refresh();
+        }
+    };
     return (
         <>
             <div className="border-2 rounded-2xl">
@@ -72,15 +93,15 @@ export const CommentCard = ({
                         {content}
                     </span>
                     <div className="flex">
-                        <IconBtn Icon={Heart} isActive={true} width={24}>
+                        <IconBtn Icon={Heart} isActive={true} width={24} onClick={() => handleLikeSubmit()}>
                             {likes.length}
                         </IconBtn>
-                        <IconBtn Icon={Reply} isActive={true} width={24}>
+                        <IconBtn Icon={Reply} isActive={true} width={24} onClick = {() => setIsReplying(true)}>
                             {null}
                         </IconBtn>
-                        <IconBtn Icon={FileEdit} isActive={true} width={20}>
+                        {/* <IconBtn Icon={FileEdit} isActive={true} width={20}>
                             {null}
-                        </IconBtn>
+                        </IconBtn> */}
                     </div>
                 </div>
             </div>
