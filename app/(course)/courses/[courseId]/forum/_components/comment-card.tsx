@@ -1,10 +1,14 @@
 "use client";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Heart } from "lucide-react";
+import { FileEdit, Heart, Pencil, Reply } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Comment, Like } from "@prisma/client";
 import { CommentItem } from "@/lib/constant";
+import { IconBtn } from "./icon-btn";
+import { useForum } from "./_contexts/forum-context";
+import CommentList from "./comment-list";
+import { useState } from "react";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: "short",
@@ -29,6 +33,7 @@ interface CommentProps{
 
 
 export const CommentCard = ({
+    id,
     content,
     parentId,
     userId,
@@ -45,10 +50,13 @@ export const CommentCard = ({
     const { theme, setTheme } = useTheme();
     const isDarkMode = theme === 'dark';
     const userSrc = isDarkMode ? '/light-no-ava.png' : '/no-avatar.svg';
-    var areChildrenHidden = false;
+    const [areChildrenHidden, setChildrenHidden] = useState(true);
+    const  forumContext = useForum();
+    const childComments = forumContext.getReplies(id);
     return (
         <>
-        <div className="flex items-center">
+        <div className="border-2 w-2/3 rounded-2xl">
+        <div className="flex items-center m-2">
             <Avatar className="cursor-pointer transform transition-transform hover:scale-110 mr-4">
                     <AvatarImage src={(userAvatar) ? userAvatar: userSrc} />
             </Avatar>
@@ -60,35 +68,39 @@ export const CommentCard = ({
             </div>
         </div>
         
-        <div className="mb-10">
-            <span>
+        <div className="">
+            <span className="ml-10 mb-10">
             {content}
             </span>
-            <div className="flex items-center">
-                <Heart className="mr-1"/>
-                {likes.length}
-            </div>
-            
+            <div className="flex">
+                <IconBtn Icon={Heart} isActive={true} width={24}>
+                    {likes.length}
+                </IconBtn> 
+                <IconBtn Icon={Reply} isActive={true} width={24}>
+                    {null}
+                </IconBtn>
+                <IconBtn Icon={FileEdit} isActive={true} width={20}>
+                    {null}
+                </IconBtn>    
+            </div>  
+        </div>
         </div>
 
-        {/* {childComments?.length && childComments?.length > 0 && (
+        {childComments?.length && childComments?.length > 0 && (
             <>
                 <div className={`${areChildrenHidden ? "hidden" : ""}`}>
-                    <button aria-label="Hide Replies">
-                    </button>
+                <button onClick={() => setChildrenHidden(true)}>
+                    Hide Replies
+                </button>
                     <div className="ml-10">
-                    {childComments?.map((item) => (
-                        <CommentCard key={item.id}
-                        {...item}
-                        childComments={null}
-                        >
-                        </CommentCard>
-                    ))}
+                    <CommentList items={childComments}></CommentList>
                     </div>
                 </div>
+                <button onClick={() => setChildrenHidden(false)}>
+                    Show Replies
+                </button>
             </>
-        )}  */}
-
+        )}
         </>
     )
 }
