@@ -44,10 +44,12 @@ const CommentForm = () => {
         <form onSubmit={handleSubmit} method="POST" className="w-2/3">
             <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-semibold mb-2">Comment</label>
-                <Input type="text" id="comment" name="comment" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500" 
-                       required placeholder="Nguyen Van A" onChange={handleChange} value={formData.comment} autoFocus/>
+                <div className="flex">
+                    <Input type="text" id="comment" name="comment" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500 mr-2" 
+                        required placeholder="Nguyen Van A" onChange={handleChange} value={formData.comment} autoFocus/>
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Submit</button>
+                </div>
             </div>
-            <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Submit</button>
         </form>
     </>);
 };

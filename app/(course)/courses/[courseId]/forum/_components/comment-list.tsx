@@ -10,7 +10,7 @@ export default function CommentList({
     items,
 }: CommentListProps) {
     return (
-    <div className="mb-10 w-max">
+    <div className="mb-10">
     {items.map((item) => (
         <CommentCard key={item.id}
         {...item}
