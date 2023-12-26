@@ -4,6 +4,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Heart } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Comment, Like } from "@prisma/client";
+import { CommentItem } from "@/lib/constant";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: "short",
@@ -11,20 +12,6 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
     hour12: true,
 })
 
-type CommentItem = Comment & {
-    id: string; 
-    content: string;
-    parentId: string | null;
-    userId: string;
-    courseId: string;
-    createdAt: Date; 
-    updatedAt: Date; 
-    isDeleted: boolean;
-    likes: Like[];
-    userName: string | null;
-    userAvatar: string | null;
-    userRole: string | null;
-};
 interface CommentProps{
     id: string; 
     content: string;
@@ -38,7 +25,6 @@ interface CommentProps{
     userName: string | null;
     userAvatar: string | null;
     userRole: string | null;
-    childComments: CommentItem[] | null;
 }
 
 
@@ -54,7 +40,6 @@ export const CommentCard = ({
     updatedAt,
     isDeleted,
     likes,
-    childComments,
 }: CommentProps) => {
 
     const { theme, setTheme } = useTheme();
@@ -86,7 +71,7 @@ export const CommentCard = ({
             
         </div>
 
-        {childComments?.length && childComments?.length > 0 && (
+        {/* {childComments?.length && childComments?.length > 0 && (
             <>
                 <div className={`${areChildrenHidden ? "hidden" : ""}`}>
                     <button aria-label="Hide Replies">
@@ -102,7 +87,7 @@ export const CommentCard = ({
                     </div>
                 </div>
             </>
-        )} 
+        )}  */}
 
         </>
     )

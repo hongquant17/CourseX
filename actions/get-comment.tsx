@@ -1,20 +1,7 @@
+import { CommentItem } from "@/lib/constant";
 import { db } from "@/lib/db";
 import { Comment, Like } from "@prisma/client";
 
-type CommentItem = Comment & {
-    id: string; 
-    content: string;
-    parentId: string | null;
-    userId: string;
-    courseId: string;
-    createdAt: Date; 
-    updatedAt: Date; 
-    isDeleted: boolean;
-    likes: Like[];
-    userName: string | null;
-    userAvatar: string | null;
-    userRole: string | null;
-};
 
 type GetComment = {
   courseId: string;

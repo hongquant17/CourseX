@@ -26,6 +26,11 @@ export const CourseNavbar = ({
         progressCount={progressCount}
         isForum={isForum}
       />
+     {isForum ? (
+        <div>
+          Discussion Forum
+        </div>
+      ) : null}
       <NavbarRoutes />      
     </div>
   )
