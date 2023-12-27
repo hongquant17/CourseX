@@ -62,6 +62,7 @@ export const CommentCard = ({
     const router = useRouter();
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
+
     const handleLikeSubmit = async () => {
         const res = await fetch(`/api/courses/${forumContext.courseId}/comment/like`, {
             method: "POST",
@@ -74,6 +75,27 @@ export const CommentCard = ({
             router.refresh();
         }
     };
+
+    const [contentValue, setContent] = useState<string>(content);
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+        const value = e.target.value;
+        setContent((value));
+    };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const res = await fetch(`/api/courses/${forumContext.courseId}/comment`, {
+            method: "PATCH",
+            body: JSON.stringify({ userId: forumContext.userId, commentId: id, content:  contentValue}),
+            headers,
+        });
+        if (!res.ok) {
+            const response = await res.json();
+        } else {
+            setIsEditing(false);
+            router.refresh();
+        }
+    }
     return (
         <>
             <div className="border-2 rounded-2xl">
@@ -90,9 +112,20 @@ export const CommentCard = ({
                 </div>
 
                 <div className="">
-                    <span className="ml-10 mb-10">
-                        {content}
-                    </span>
+                    {isEditing ? (
+                        <div>
+                            <form onSubmit={handleSubmit}>
+                            <textarea value={contentValue} onChange={handleChange}>
+                                {content}
+                            </textarea>
+                            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Submit</button>
+                            </form>
+                        </div>
+                    ) : (
+                        <span className="ml-10 mb-10">
+                            {content}
+                        </span>
+                    )}
                     <div className="flex">
                         <IconBtn Icon={Heart} isActive={false} width={24} onClick={() => handleLikeSubmit()}>
                             {likes.length}
@@ -100,9 +133,9 @@ export const CommentCard = ({
                         <IconBtn Icon={Reply} isActive={isReplying} width={24} onClick = {() => setIsReplying(prev => !prev)}>
                             {null}
                         </IconBtn>
-                        {/* <IconBtn Icon={FileEdit} isActive={true} width={20}>
+                        <IconBtn Icon={FileEdit} isActive={true} width={20} onClick={() => setIsEditing(prev => !prev)}>
                             {null}
-                        </IconBtn> */}
+                        </IconBtn>
                     </div>
                 </div>
             </div>
