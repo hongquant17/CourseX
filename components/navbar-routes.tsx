@@ -7,7 +7,7 @@ import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { ModeToggle } from "./mode-toggle";
-import UserButton from "@/components/user-button";
+import { UserButton } from "@/components/user-button";
 import { PRIVILEGES, ROLES } from "@/lib/constant";
 import { isAdminSession } from "@/lib/admin";
 import { isTeacherSession } from "@/lib/teacher";

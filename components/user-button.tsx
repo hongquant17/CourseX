@@ -43,7 +43,7 @@ import {
 import { Button } from "./ui/button";
 import { PasswordDialog } from "./dialog-password";
 
-const UserButton = (data: any) => {
+export const UserButton = (data: any) => {
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === "dark";
   var userSrc = isDarkMode ? "/light-no-ava.png" : "/no-avatar.svg";
@@ -95,6 +95,7 @@ const UserButton = (data: any) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="flex items-center justify-center">
           <DropdownMenuItem asChild>
+            <div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" className="Button">
@@ -117,10 +118,10 @@ const UserButton = (data: any) => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
-export default UserButton;
