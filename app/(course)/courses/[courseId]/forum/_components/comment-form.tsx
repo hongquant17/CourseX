@@ -10,13 +10,16 @@ interface FormData {
     userId: string | undefined,
     parentId:string | null,
 }
-const CommentForm = () => {
+interface ParentIdProps {
+    parentId: string | null,
+}
+const CommentForm = ({parentId}: ParentIdProps) => {
     const router = useRouter();
     const forumContext = useForum();
     const [formData, setFormData] = useState<FormData>({
         comment: '',
         userId: forumContext.userId,
-        parentId: null,
+        parentId: parentId,
     });
     const [errorMessage, setErrorMessage] = useState("");
     

@@ -12,7 +12,7 @@ export interface IconProps {
 
 export function IconBtn({Icon, isActive, children,onClick, ...props}: IconProps) {
     return (
-        <button className="flex items-center mr-4" onClick={onClick}>
+        <button className={`flex items-center mr-4 ${isActive ? "scale-150" : ""}`} onClick={onClick}>
             <Icon className="mr-1" width={props.width}/>
             {children}
         </button>

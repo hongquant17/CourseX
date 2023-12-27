@@ -9,6 +9,7 @@ import { useForum } from "./_contexts/forum-context";
 import CommentList from "./comment-list";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import CommentForm from "./comment-form";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: "short",
@@ -52,7 +53,7 @@ export const CommentCard = ({
 
     const [areChildrenHidden, setChildrenHidden] = useState(true);
     const [isReplying, setIsReplying] = useState(false);
-    const [isLiked, setLiked] = useState(false);
+    const [isLiked, setLiked] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
 
     const forumContext = useForum();
@@ -93,10 +94,10 @@ export const CommentCard = ({
                         {content}
                     </span>
                     <div className="flex">
-                        <IconBtn Icon={Heart} isActive={true} width={24} onClick={() => handleLikeSubmit()}>
+                        <IconBtn Icon={Heart} isActive={false} width={24} onClick={() => handleLikeSubmit()}>
                             {likes.length}
                         </IconBtn>
-                        <IconBtn Icon={Reply} isActive={true} width={24} onClick = {() => setIsReplying(true)}>
+                        <IconBtn Icon={Reply} isActive={isReplying} width={24} onClick = {() => setIsReplying(prev => !prev)}>
                             {null}
                         </IconBtn>
                         {/* <IconBtn Icon={FileEdit} isActive={true} width={20}>
@@ -105,6 +106,11 @@ export const CommentCard = ({
                     </div>
                 </div>
             </div>
+            {isReplying && (
+                <div className="mt-1 ml-10">
+                    <CommentForm parentId={id}/>
+                </div>
+            )}
 
             {childComments?.length && childComments?.length > 0 && (
                 <>

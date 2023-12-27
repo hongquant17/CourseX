@@ -1,10 +1,11 @@
 'use client'
 import { CommentItem } from "@/lib/constant";
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 export interface ForumContext {
     rootComments: CommentItem[];
     getReplies: (parentId: string) => CommentItem[];
+    createLocalComment: (comment: CommentItem) => void;
     courseId: string;
     userId: string | undefined;
 }
@@ -12,6 +13,7 @@ export interface ForumContext {
 const initialContextValue: ForumContext = {
     rootComments: [],
     getReplies: (parentId: string) => ([]),
+    createLocalComment: (comment: CommentItem) => ([]),
     courseId: '',
     userId: undefined,
 };
@@ -28,8 +30,9 @@ export function useForum() {
 }
 
 export function ForumProvider({items, children, courseId, userId} : {items: CommentItem[],children: React.ReactNode, courseId: string, userId: string | undefined}) {
-    const commentsByParentId = useMemo<{ [key: string]: CommentItem[] }>(
-        () => {      
+    const [comments, setComments] = useState<CommentItem[]>([]);
+
+    const commentsByParentId = useMemo<{ [key: string]: CommentItem[] }>(() => {      
           const group: { [key: string]: CommentItem[] } = {};
           items.forEach((item: CommentItem) => {
             const parentId = item.parentId ?? ''; // Use nullish coalescing operator
@@ -41,12 +44,25 @@ export function ForumProvider({items, children, courseId, userId} : {items: Comm
         },
         [items]
       );
+    
+    useEffect(() => {
+        if (items == null) return;
+        setComments(items);
+    }, [items])
+
+    function createLocalComment(comment: CommentItem) {
+        setComments(prevComments => {
+            return [comment, ...prevComments];
+        })
+    }
+
     function getReplies(parentId: string) {
         return commentsByParentId[parentId];
     }
     return <Context.Provider value={{
         getReplies,
         rootComments: commentsByParentId[''],
+        createLocalComment,
         courseId,
         userId,
     }}>

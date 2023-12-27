@@ -8,8 +8,7 @@ export default function Forum() {
     var rootComments = forumContext.rootComments;
     return (
     <div className="flex flex-col items-center h-screen">
-        <CommentForm>
-        </CommentForm>
+        <CommentForm  parentId={null}/>
         {rootComments != null && rootComments.length > 0 && (
             <div>
                 <CommentList items={rootComments}></CommentList>

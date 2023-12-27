@@ -20,7 +20,8 @@ export async function POST(
             data: {
                 userId: userId,
                 content: commentData.comment,
-                courseId: params.courseId
+                courseId: params.courseId,
+                parentId: commentData.parentId,
             }
           });
 
