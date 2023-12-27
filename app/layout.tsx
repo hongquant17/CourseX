@@ -26,7 +26,7 @@ export default async function RootLayout({
     <SessionProvider session={session} >
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <ConfettiProvider />
             <ToasterProvider />
             {children}
