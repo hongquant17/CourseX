@@ -18,7 +18,8 @@ export const getChapter = async ({
         userId_courseId: {
           userId,
           courseId,
-        }
+        },
+        isAccepted: true,
       }
     });
 

@@ -23,6 +23,7 @@ export const getAnalytics = async (userId: string) => {
   try {
     const enrolls = await db.enroll.findMany({
       where: {
+        isAccepted: true,
         course: {
           userId: userId,
         }

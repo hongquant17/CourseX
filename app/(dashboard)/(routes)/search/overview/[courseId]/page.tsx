@@ -64,6 +64,7 @@ const CourseIdOverview = async ({
     // Nếu có thông tin enroll, lấy giá trị của trường isAccepted
     isAccepted = course.enrolls[0].isAccepted;
   }
+  console.log('Course moi enroll duoc chap nhan chua')
   console.log(isAccepted)
   console.log(isEnrolled)
   const progressCount = await getProgress(userId, course.id)

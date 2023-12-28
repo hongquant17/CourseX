@@ -10,45 +10,41 @@ import { getServerSession } from "next-auth";
 import { options } from "@/lib/auth";
 
 interface SearchPageProps {
-    searchParams: {
-        title: string;
-        categoryId: string;
-    }
-};
-
-const SearchPage = async ({
-    searchParams
-}: SearchPageProps) => {
-    const session = await getServerSession(options);
-    if (!session) {
-        redirect("/");
-    }
-    const userId = session.user.uid;
-    
-    const categories = await db.category.findMany({
-        orderBy: {
-            name: "asc"
-        }
-    });
-
-    const courses = await getCourses({
-        userId,
-        ...searchParams,
-    });
-
-    return (
-        <>
-            <div className="px-6 pt-6 md:hidden md:mb-0 block">
-                <SearchInput />
-            </div>
-            <div className="p-6 space-y-4">
-                <Categories
-                    items={categories}
-                />
-                <CoursesList items={courses} />
-            </div>
-        </>
-    );
+  searchParams: {
+    title: string;
+    categoryId: string;
+  };
 }
+
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
+  const session = await getServerSession(options);
+  if (!session) {
+    redirect("/");
+  }
+  const userId = session.user.uid;
+
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  const courses = await getCourses({
+    userId,
+    ...searchParams,
+  });
+
+  return (
+    <>
+      <div className="px-6 pt-6 md:hidden md:mb-0 block">
+        <SearchInput />
+      </div>
+      <div className="p-6 space-y-4">
+        <Categories items={categories} />
+        <CoursesList items={courses} />
+      </div>
+    </>
+  );
+};
 
 export default SearchPage;
