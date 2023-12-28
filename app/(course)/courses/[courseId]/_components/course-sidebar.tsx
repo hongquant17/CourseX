@@ -20,7 +20,7 @@ export const CourseSidebar = async ({
 }: CourseSidebarProps) => {
     const session = await getSession();
     if (!session) {
-        return redirect("/");
+        return redirect("/auth/signin");
     }
 
     const userId = session.user.uid;

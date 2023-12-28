@@ -11,7 +11,7 @@ export default async function Dashboard() {
   const session = await getSession();
 
   if (!session) {
-    redirect("/");
+    redirect("/auth/signin");
   }
   const userId = session.user.uid;
 

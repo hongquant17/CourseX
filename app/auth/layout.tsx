@@ -10,8 +10,8 @@ const AuthLayout = async ({
 
     const session = await getSession();
     
-    if (session) {
-        return redirect("/");
+    if (!session) {
+        return redirect("/auth/signin");
     }
 
     return ( 
