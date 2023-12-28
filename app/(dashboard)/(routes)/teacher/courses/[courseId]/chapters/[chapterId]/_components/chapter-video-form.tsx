@@ -84,7 +84,7 @@ export const ChapterVideoForm = ({
         <div>
           <FileUpload
             endpoint="chapterVideo"
-            onChange={(url) => {
+            onChange={(url, fileKey) => {
               if (url) {
                 onSubmit({ videoUrl: url });
               }

@@ -45,7 +45,7 @@ export function PasswordDialog() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setstatusMessage("");
-        const res = await fetch("/api/change/password", {
+        const res = await fetch("/api/users/change/password", {
             method: "POST",
             body: JSON.stringify({ formData }),
             headers,
@@ -53,7 +53,7 @@ export function PasswordDialog() {
         const response = await res.json();
         setstatusMessage(response.message);
         if (res.ok) {
-          await new Promise(f => setTimeout(f, 500));
+          await new Promise(f => setTimeout(f, 300));
           signOut();
           router.refresh();
           router.push("/");
