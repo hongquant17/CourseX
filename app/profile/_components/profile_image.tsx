@@ -71,7 +71,7 @@ export const UserImageForm = ({ initialData }: ImageFormProps) => {
       <div className={`${isHover ? "blur-sm" : ""}`}>
         {!isEditing &&
           (!initialData.image ? (
-            <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+            <div className="flex items-center justify-center bg-slate-200 rounded-md h-40 w-40">
               <ImageIcon className="h-10 w-10 text-slate-500" />
             </div>
           ) : (
@@ -99,7 +99,7 @@ export const UserImageForm = ({ initialData }: ImageFormProps) => {
             {!isEditing && !initialData.image && (
               <>
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Add image
+                Image
               </>
             )}
             {!isEditing && initialData.image && (
