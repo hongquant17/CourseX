@@ -22,6 +22,7 @@ const formSchema = z.object({
   imageUrl: z.string().min(1, {
     message: "An image is mandatory",
   }),
+  preKey: z.string().min(0),
 });
 
 export const UserImageForm = ({ initialData }: ImageFormProps) => {
@@ -114,9 +115,9 @@ export const UserImageForm = ({ initialData }: ImageFormProps) => {
         <div>
           <FileUpload
             endpoint="userImage"
-            onChange={(url) => {
+            onChange={(url, fileKey) => {
               if (url) {
-                onSubmit({ imageUrl: url });
+                onSubmit({ imageUrl: url, preKey: fileKey ? fileKey : ""});
               }
             }}
           />

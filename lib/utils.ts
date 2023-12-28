@@ -1,6 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { PRIVILEGES, ROLES } from "./constant";
+import { UTApi } from "uploadthing/server";
+ 
+export const utapi = new UTApi();
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
