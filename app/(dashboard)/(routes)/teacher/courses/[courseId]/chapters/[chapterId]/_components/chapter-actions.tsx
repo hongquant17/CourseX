@@ -30,15 +30,15 @@ export const ChapterActions = ({
 
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/unpublish`);
-        toast.success("Đã ẩn chương");
+        toast.success("Chapter unpublished");
       } else {
         await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/publish`);
-        toast.success("Đã đăng chương");
+        toast.success("Chapter published");
       }
 
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -50,11 +50,11 @@ export const ChapterActions = ({
 
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
 
-      toast.success("Đã xóa chương");
+      toast.success("Chapter deleted");
       router.refresh();
       router.push(`/teacher/courses/${courseId}`);
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +68,7 @@ export const ChapterActions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Hủy đăng" : "Đăng tải"}
+        {isPublished ? "Unpublish" : "Publish"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button size="sm" disabled={isLoading}>

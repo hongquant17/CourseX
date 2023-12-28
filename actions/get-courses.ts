@@ -42,6 +42,7 @@ export const getCourses = async ({
         enrolls: {
           where: {
             userId,
+            isAccepted: true,
           }
         }
       },

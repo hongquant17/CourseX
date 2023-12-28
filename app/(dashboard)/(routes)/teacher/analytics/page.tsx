@@ -3,6 +3,11 @@ import { getAnalytics } from "@/actions/get-analytic";
 import { DataCard } from "./_components/data-card";
 import { Chart } from "./_components/chart";
 import { getSession } from "@/lib/auth";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Teacher Analytics | CourseX",
+};
 
 const AnalyticPage = async () => {
   const session = await getSession();

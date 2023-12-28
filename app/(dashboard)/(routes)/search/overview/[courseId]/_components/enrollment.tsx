@@ -31,9 +31,9 @@ export const Enrollment = ({
     return (
         <div className="border rounded-md p-6 text-secondary bg-sky-900">
             <div className="mb-7">
-                <h4 className="font-semibold text-lg mb-4"> Tham gia khóa học</h4>
+                <h4 className="font-semibold text-lg mb-4">Join learning now</h4>
                 <p className="text-sm text-neutral-200"> 
-                {isRequestEnrolled ? "Yêu cầu tham gia khóa học đã được gửi đi, vui lòng chờ được duyệt để vào khóa học." : "Nhấn nút bên dưới để yêu cầu tham gia khóa học"}
+                {isRequestEnrolled ? "Enroll request has been sent. Wait for being approved." : "Press the button below to send an enroll request."}
                 
                 </p>
             </div>
@@ -43,7 +43,7 @@ export const Enrollment = ({
                 onClick={onClick}
                 disabled={isRequestEnrolled}
             >
-                {isRequestEnrolled ? "Đang chờ phê duyệt" : "Tham gia"}
+                {isRequestEnrolled ? "Waiting for approval" : "Enroll"}
             </Button>
         </div>
     )

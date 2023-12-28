@@ -23,14 +23,14 @@ export const ConfirmModal = ({ children, onConfirm }: ConfirmModalProps) => {
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xác nhận xóa?</AlertDialogTitle>
+          <AlertDialogTitle>Confirm deleting?</AlertDialogTitle>
           <AlertDialogDescription>
-            Sẽ không thể quay lại nếu đã hoàn thành hành động
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Tiếp tục</AlertDialogAction>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

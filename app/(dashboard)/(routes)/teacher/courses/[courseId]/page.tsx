@@ -14,6 +14,42 @@ import { Banner } from "@/components/banner";
 import { Actions } from "./_components/actions";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  let courseName = "";
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc",
+        },
+      },
+      category: {
+        select: {
+          name: true,
+        },
+        where: {},
+      },
+    },
+  });
+  if (course) {
+    courseName = course.title;
+  }
+  return {
+    title: `${courseName} - Creation | CourseX`,
+  };
+}
 
 const CourseIdPage = async ({
   params
@@ -76,7 +112,7 @@ const CourseIdPage = async ({
     <>
       {!course.isPublished && (
         <Banner
-          label="Khóa học này vẫn đang là bản nháp, sẽ không hiển thị với học viên."
+          label="This course is unpublished. It will not be visible to students"
         />
       )}
       <div className="p-6">
@@ -92,9 +128,9 @@ const CourseIdPage = async ({
             </Link>
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-y-2">
-                <h1 className="text-2xl font-medium">Thiết lập khóa học</h1>
+                <h1 className="text-2xl font-medium">Course Setup</h1>
                 <span className="text-sm text-slate-700">
-                  Hoàn thành các mục {completionText}
+                  Complete all fields {completionText}
                 </span>
               </div>
               <Actions
@@ -110,7 +146,7 @@ const CourseIdPage = async ({
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboard} />
               <h2 className="text-xl">
-                Thông tin chung
+                Customization
               </h2>
             </div>
             <TitleForm
@@ -139,7 +175,7 @@ const CourseIdPage = async ({
                 <div className="flex items-center gap-x-2">
                   <IconBadge icon={ListChecks} />
                   <h2 className="text-xl">
-                    Các chương học
+                    Chapters
                   </h2>
                 </div>
                 <ChapterForm
@@ -151,7 +187,7 @@ const CourseIdPage = async ({
                 <div className="flex items-center gap-x-2">
                   <IconBadge icon={File} />
                   <h2 className="text-xl">
-                    Tài liệu
+                    Attachments
                   </h2>
                 </div>
                 <AttachmentForm

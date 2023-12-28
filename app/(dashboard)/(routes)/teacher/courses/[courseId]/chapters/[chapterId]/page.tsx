@@ -11,6 +11,28 @@ import { Banner } from "@/components/banner";
 import { ChapterActions } from "./_components/chapter-actions";
 import { getSession } from "@/lib/auth";
 
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { chapterId: string, courseId: string };
+}) {
+  let chapterTitle = "";
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: params.chapterId,
+      courseId: params.courseId,
+    },
+  });
+  if (chapter) {
+    chapterTitle = chapter.title;
+  }
+  return {
+    title: `${chapterTitle} - Chapter Creation | CourseX`,
+  };
+}
+
 const ChapterIdPage = async ({
   params,
 }: {
@@ -52,7 +74,7 @@ const ChapterIdPage = async ({
       {!chapter.isPublished && (
         <Banner
           variant="warning"
-          label="Chương này vẫn đang là bản nháp, sẽ không hiển thị trong khóa học"
+          label="This chapter is not published yet. It will not be visible to students."
         />
       )}
       <div className="p-6">
@@ -64,13 +86,13 @@ const ChapterIdPage = async ({
                           transition mb-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Quay về thiết lập khóa học
+              Back to Course Setup
             </Link>
             <div className="flex items-center justify-between w-full">
               <div className="flex flex-col gap-y-2">
-                <h1 className="text-2xl font-medium">Thêm Chương Học</h1>
+                <h1 className="text-2xl font-medium">Chapter Creation</h1>
                 <span className="text-sm text-slate-700">
-                  Điền đầy đủ các mục {completionFields}
+                  Complete all fields {completionFields}
                 </span>
               </div>
               <ChapterActions
@@ -87,7 +109,7 @@ const ChapterIdPage = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
-                <h2 className="text-xl">Thông tin chung</h2>
+                <h2 className="text-xl">Customization</h2>
               </div>
               <ChapterTitleForm
                 initialData={chapter}
@@ -103,7 +125,7 @@ const ChapterIdPage = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={Eye} />
-                <h2 className="text-xl">Cài đặt truy cập</h2>
+                <h2 className="text-xl">Access Settings</h2>
               </div>
               <ChapterAccessForm
                 initialData={chapter}
@@ -115,13 +137,12 @@ const ChapterIdPage = async ({
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={Video} />
-              <h2 className="text-xl">Thêm video bài giảng</h2>
+              <h2 className="text-xl">Add a video</h2>
             </div>
             <ChapterVideoForm
               initialData={chapter}
               courseId={params.courseId}
               chapterId={params.chapterId}
-
             />
           </div>
         </div>

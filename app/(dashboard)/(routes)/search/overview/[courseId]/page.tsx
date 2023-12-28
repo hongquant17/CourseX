@@ -11,11 +11,43 @@ import { getProgress } from "@/actions/get-progress";
 import { getSession } from "@/lib/auth";
 import { ViewCourse } from "./_components/view";
 import { Forum } from "./_components/forum-button";
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: { courseId: string } }) {
+  let courseName = ''
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc"
+        }
+      },
+      category: {
+        select: {
+          name: true,
+        },
+        where: {}
+      },
+    }
+  })
+  if (course) {
+    courseName = course.title
+  }
+  return {
+    title: `${courseName} - Overview | CourseX`,
+  };
+}
 
 const CourseIdOverview = async ({
   params
 }: {
-  params: { courseId: string; }
+  params: { courseId: string, courseTitle: string; }
 }) => {
   const session = await getSession();
 
@@ -64,6 +96,7 @@ const CourseIdOverview = async ({
     // Nếu có thông tin enroll, lấy giá trị của trường isAccepted
     isAccepted = course.enrolls[0].isAccepted;
   }
+  console.log('Course moi enroll duoc chap nhan chua')
   console.log(isAccepted)
   console.log(isEnrolled)
   const progressCount = await getProgress(userId, course.id)
@@ -76,7 +109,7 @@ const CourseIdOverview = async ({
                           transition mb-6"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Trở về tìm kiếm khóa học
+        Back to course browsing
       </Link>
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="order-1 col-span-1 lg:col-span-3 flex flex-col space-y-6">
