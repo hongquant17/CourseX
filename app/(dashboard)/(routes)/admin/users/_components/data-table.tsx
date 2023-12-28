@@ -23,9 +23,6 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import Link from "next/link";
-import { PlusCircle } from "lucide-react";
-import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -43,38 +40,6 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
-  const [formData, setFormData] = useState<FormData>({
-    ids: [],
-    role: '',
-    type: '',
-
-  });
-
-  const [statusMessage, setstatusMessage] = useState("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      const value = e.target.value;
-      const name = e.target.name;
-      setFormData((prevState) => ({
-          ...prevState,
-          [name]: value,
-      }));
-  };
-  const headers = new Headers();
-  headers.append("Content-Type", "application/json");
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setstatusMessage("");
-      const res = await fetch("/api/users/change/role", {
-          method: "POST",
-          body: JSON.stringify({ formData }),
-          headers,
-      });
-      const response = await res.json();
-      setstatusMessage(response.message);
-      if (res.ok) {
-      };
-  };
 
   const table = useReactTable({
     data,
@@ -159,7 +124,6 @@ export function DataTable<TData, TValue>({
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {/* {table.getFilteredSelectedRowModel().rows.map()} */}
         {table.getFilteredRowModel().rows.length} user(s) selected.
-        {statusMessage}
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

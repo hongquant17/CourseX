@@ -11,10 +11,11 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useTheme } from "next-themes";
 
 interface ImageFormProps {
   initialData: User;
-  courseId: string;
 }
 
 const formSchema = z.object({
@@ -23,62 +24,96 @@ const formSchema = z.object({
   }),
 });
 
-export const UserImageForm = ({ initialData, courseId }: ImageFormProps) => {
+export const UserImageForm = ({ initialData }: ImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
 
+  const [isHover, setIsHover] = useState(false);
+  const toggleHover = () => {
+    setIsHover(!isHover);
+  };
+
   const router = useRouter();
+
+  const { theme, setTheme } = useTheme();
+  const isDarkMode = theme === "dark";
+  var userSrc = isDarkMode ? "/light-no-ava.png" : "/no-avatar.svg";
+  if (theme == "system") {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      userSrc = "/light-no-ava.png";
+    } else {
+      userSrc = "/no-avatar.svg";
+    }
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Đã cập nhật khóa học");
+      await axios.patch(`/api/users/change/image`, values).then((response) => {
+        toast.success("User image changed");
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Cannot change user image");
     }
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
-        Course image
-        <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Cancel</>}
-          {!isEditing && !initialData.image && (
-            <>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add image
-            </>
-          )}
-          {!isEditing && initialData.image && (
-            <>
-              <Pencil className="h-4 w-4 mr-2" />
-              Edit
-            </>
-          )}
-        </Button>
+    <div
+      className="mt-6 rounded-md p-4 relative"
+      onMouseEnter={toggleHover}
+      onMouseLeave={toggleHover}
+    >
+      <div className={`${isHover ? "blur-sm" : ""}`}>
+        {!isEditing &&
+          (!initialData.image ? (
+            <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+              <ImageIcon className="h-10 w-10 text-slate-500" />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <Avatar
+                className={`cursor-pointer transform transition-transform w-2/3 h-auto`}
+              >
+                <AvatarImage
+                  src={initialData.image ? initialData.image : userSrc}
+                />
+              </Avatar>
+            </div>
+          ))}
       </div>
-      {!isEditing &&
-        (!initialData.image ? (
-          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <ImageIcon className="h-10 w-10 text-slate-500" />
-          </div>
-        ) : (
-          <div className="relative aspect-video mt-2">
-            <Image
-              alt="Upload"
-              fill
-              className="object-cover rounded-md"
-              src={initialData.image}
-            />
-          </div>
-        ))}
+      <div
+        className={`font-medium ${
+          !isEditing
+            ? "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            : ""
+        }`}
+      >
+        {(isHover || isEditing) && (
+          <Button onClick={toggleEdit} variant="default">
+            {isEditing && <>Cancel</>}
+            {!isEditing && !initialData.image && (
+              <>
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Add image
+              </>
+            )}
+            {!isEditing && initialData.image && (
+              <>
+                <Pencil className="h-4 w-4 mr-2" />
+                Edit
+              </>
+            )}
+          </Button>
+        )}
+      </div>
       {isEditing && (
         <div>
           <FileUpload
-            endpoint="courseImage"
+            endpoint="userImage"
             onChange={(url) => {
               if (url) {
                 onSubmit({ imageUrl: url });

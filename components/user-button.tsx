@@ -96,7 +96,6 @@ export const UserButton = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="flex items-center justify-center">
           <DropdownMenuItem asChild>
-            <div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" className="Button">
@@ -119,7 +118,6 @@ export const UserButton = () => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
