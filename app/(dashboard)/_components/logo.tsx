@@ -21,10 +21,12 @@ export const Logo = () => {
   return (
     <Link href="/">
       <Image
-        height={50}
-        width={50}
+        height={0}
+        width={0}
         alt="logo"
         src={logoSrc}
+        priority={true}
+        style={{ width: 'auto', height: '50px' }}
       />
     </Link>
   );

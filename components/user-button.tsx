@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +43,8 @@ import {
 import { Button } from "./ui/button";
 import { PasswordDialog } from "./dialog-password";
 
-export const UserButton = (data: any) => {
+export const UserButton = () => {
+  const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
   const isDarkMode = theme === "dark";
   var userSrc = isDarkMode ? "/light-no-ava.png" : "/no-avatar.svg";
@@ -61,14 +62,14 @@ export const UserButton = (data: any) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer transform transition-transform hover:scale-110">
-          <AvatarImage src={data.user.image ? data.user.image : userSrc} />
+          <AvatarImage src={session?.user.image ? session?.user.image : userSrc} />
           {/* <AvatarFallback>CS</AvatarFallback> */}
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>{data.user.name}</DropdownMenuLabel>
+        <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>{data.user.email}</DropdownMenuLabel>
+        <DropdownMenuLabel>{session?.user.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <PasswordDialog></PasswordDialog>
         <DropdownMenuGroup>

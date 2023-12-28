@@ -51,7 +51,7 @@ const UserActions = ({
       headers.append("Content-Type", "application/json");
       const handleSubmit = async (formData: FormData) => {
           setstatusMessage("");
-          const res = await fetch("/api/change/role", {
+          const res = await fetch("/api/users/change/role", {
               method: "POST",
               body: JSON.stringify({ formData }),
               headers,

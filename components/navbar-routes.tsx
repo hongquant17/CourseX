@@ -57,7 +57,7 @@ export const NavbarRoutes = () => {
           <ModeToggle />
         </div>
         <div>
-          <UserButton {...session}></UserButton>
+          <UserButton></UserButton>
         </div>
       </div>
     </>

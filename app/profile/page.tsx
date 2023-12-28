@@ -1,19 +1,24 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { Profile } from "./_components/profile";
+import toast from "react-hot-toast";
+import { db } from "@/lib/db";
 
-export default async function Dashboard() {
+export default async function ProfilePage() {
   const session = await getSession();
 
   if (!session) {
     redirect("/");
   }
   const userId = session.user.uid;
-
-
+  const userInfo = await db.user.findFirst({
+    where: {
+        id: userId,
+    }
+});
   return (
-    <div className="p-6 space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      </div>
+    <div className="flex justify-center items-center p-10">
+      <Profile userData={userInfo} />
     </div>
-  )
+  );
 }

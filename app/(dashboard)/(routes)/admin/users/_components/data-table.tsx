@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setstatusMessage("");
-      const res = await fetch("/api/change/role", {
+      const res = await fetch("/api/users/change/role", {
           method: "POST",
           body: JSON.stringify({ formData }),
           headers,

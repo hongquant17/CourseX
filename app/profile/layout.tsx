@@ -6,7 +6,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="h-[80px] fixed w-full">
         <Navbar />
       </div>
-      <main className="md:pl-56 pt-[80px] h-full">{children}</main>
+      <main className="pt-[80px] h-full">{children}</main>
     </div>
   );
 };

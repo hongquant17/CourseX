@@ -6,7 +6,6 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         const userData = body.formData;
-        console.log(userData);
         if (!userData?.email || !userData?.current || !userData?.now) {
             return NextResponse.json({ message: "All field are required." }, { status: 400 });
         }
@@ -24,7 +23,8 @@ export async function POST(req: Request) {
             const match = await bcrypt.compare(userData?.current!, existUser.password);
             if (match && userData.now != '') {
                 const newPass = await bcrypt.hash(userData.now, 10);
-                db.user.update({
+                console.log(newPass);
+                const setNewPass = await db.user.update({
                     where:{ 
                         email: userData.email,
                     },
@@ -32,7 +32,8 @@ export async function POST(req: Request) {
                         password: newPass,
                       },
                 });
-                return NextResponse.json({message: "Password changed."}, {status: 201});
+                if (setNewPass) return NextResponse.json({message: "Password changed."}, {status: 201});
+                return NextResponse.json({message: "Can not change password"}, {status: 500});
             }
             return NextResponse.json({message: "Current password don't match or new password is empty"}, {status: 400});
         }
