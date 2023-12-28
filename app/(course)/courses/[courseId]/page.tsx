@@ -1,5 +1,10 @@
 import { db } from "@/lib/db";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "??? | CourseX",
+};
 
 const CourseIdPage = async ({
   params

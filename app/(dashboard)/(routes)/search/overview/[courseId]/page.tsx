@@ -11,11 +11,43 @@ import { getProgress } from "@/actions/get-progress";
 import { getSession } from "@/lib/auth";
 import { ViewCourse } from "./_components/view";
 import { Forum } from "./_components/forum-button";
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: { courseId: string } }) {
+  let courseName = ''
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc"
+        }
+      },
+      category: {
+        select: {
+          name: true,
+        },
+        where: {}
+      },
+    }
+  })
+  if (course) {
+    courseName = course.title
+  }
+  return {
+    title: `${courseName} - Overview | CourseX`,
+  };
+}
 
 const CourseIdOverview = async ({
   params
 }: {
-  params: { courseId: string; }
+  params: { courseId: string, courseTitle: string; }
 }) => {
   const session = await getSession();
 

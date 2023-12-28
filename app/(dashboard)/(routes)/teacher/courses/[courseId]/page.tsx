@@ -14,6 +14,42 @@ import { Banner } from "@/components/banner";
 import { Actions } from "./_components/actions";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  let courseName = "";
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc",
+        },
+      },
+      category: {
+        select: {
+          name: true,
+        },
+        where: {},
+      },
+    },
+  });
+  if (course) {
+    courseName = course.title;
+  }
+  return {
+    title: `${courseName} - Creation | CourseX`,
+  };
+}
 
 const CourseIdPage = async ({
   params

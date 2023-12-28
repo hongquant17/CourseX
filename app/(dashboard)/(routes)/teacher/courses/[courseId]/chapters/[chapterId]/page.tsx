@@ -11,6 +11,28 @@ import { Banner } from "@/components/banner";
 import { ChapterActions } from "./_components/chapter-actions";
 import { getSession } from "@/lib/auth";
 
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { chapterId: string, courseId: string };
+}) {
+  let chapterTitle = "";
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: params.chapterId,
+      courseId: params.courseId,
+    },
+  });
+  if (chapter) {
+    chapterTitle = chapter.title;
+  }
+  return {
+    title: `${chapterTitle} - Chapter Creation | CourseX`,
+  };
+}
+
 const ChapterIdPage = async ({
   params,
 }: {

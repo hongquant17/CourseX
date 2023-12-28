@@ -8,6 +8,11 @@ import { CoursesList } from "@/components/courses-list";
 import { Categories } from "./_components/categories";
 import { getServerSession } from "next-auth";
 import { options } from "@/lib/auth";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Browse | CourseX",
+};
 
 interface SearchPageProps {
   searchParams: {

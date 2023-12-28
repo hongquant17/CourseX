@@ -3,6 +3,11 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User Authorization | CourseX",
+};
 
 const UserPage = async () => {
   const session = await getSession();

@@ -11,6 +11,43 @@ import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { getSession } from "@/lib/auth";
 import Link from "next/link";
+import { Metadata } from "next";
+import { db } from "@/lib/db";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { courseId: string };
+}) {
+  let courseName = "";
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    },
+    include: {
+      chapters: {
+        where: {
+          isPublished: true,
+        },
+        orderBy: {
+          position: "asc",
+        },
+      },
+      category: {
+        select: {
+          name: true,
+        },
+        where: {},
+      },
+    },
+  });
+  if (course) {
+    courseName = course.title;
+  }
+  return {
+    title: `${courseName} - Details | CourseX`,
+  };
+}
 
 const ChapterIdPage = async ({
   params,

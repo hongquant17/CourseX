@@ -6,6 +6,11 @@ import { Button } from "@/components/ui/button";
 
 import { getSession } from "@/lib/auth";
 import { getWaitlist } from "@/actions/get-waitlist"; 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Course Approval | CourseX",
+};
 
 const UserPage = async () => {
   const session = await getSession();
