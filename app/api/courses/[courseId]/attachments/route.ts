@@ -13,7 +13,7 @@ export async function POST(
         const session = await getSession();
         const userId = session?.user.uid;
         const role = session?.user.role;
-        const { url } = await req.json();
+        const { url, name } = await req.json();
         var isAuthorized = isAdminSession(role) || isTeacherSession(role);
         if (!isAuthorized) {
             isAuthorized = await isAdminDB(userId) || await isTeacherDB(userId);
@@ -37,7 +37,7 @@ export async function POST(
         const attachment = await db.attachment.create({
             data: {
                 url, 
-                name: url.split("/").pop(),
+                name: name, 
                 courseId: params.courseId,
             }
         })
