@@ -26,7 +26,18 @@ export const useForceUpdate = () => {
   return () => setValue(value => ++value);
 };
 
-export const columns: ColumnDef<Enroll>[] = [
+type WaitlistItem = {
+  id: string; 
+  userId: string;
+  courseId: string;
+  createdAt: Date; 
+  updatedAt: Date; 
+  isAccepted: boolean;
+  userName: string; 
+  courseTitle: string; 
+};
+
+export const columns: ColumnDef<WaitlistItem>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
