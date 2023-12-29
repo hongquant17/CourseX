@@ -1,6 +1,9 @@
+import { Category } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 import { IconBadge } from "@/components/icon-badge";
 import { CourseProgress } from "@/components/course-progress";
@@ -11,7 +14,7 @@ interface CourseCardProps {
   imageUrl: string;
   chaptersLength: number;
   progress: number | null;
-  category: string;
+  categories: Category[];
 };
 
 export const CourseCard = ({
@@ -20,7 +23,7 @@ export const CourseCard = ({
   imageUrl,
   chaptersLength,
   progress,
-  category
+  categories
 }: CourseCardProps) => {
   return (
     <Link href={`/search/overview/${id}`}>
@@ -36,9 +39,14 @@ export const CourseCard = ({
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
             {title}
           </div>
-          <p className="text-xs text-muted-foreground">
-            {category}
-          </p>
+          <div className="text-xs text-muted-foreground">
+            {categories.map(category => (
+              
+              <Link key={category.id} href={`/search?category=${category.id}`}>
+                <Badge className={cn("bg-white text-black-500")}>{category.name}</Badge>
+              </Link>
+            ))}
+          </div>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />

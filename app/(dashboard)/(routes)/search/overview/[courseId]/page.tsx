@@ -28,11 +28,10 @@ export async function generateMetadata({ params }: { params: { courseId: string 
           position: "asc"
         }
       },
-      category: {
+      categories: {
         select: {
-          name: true,
-        },
-        where: {}
+          category: true,
+        }
       },
     }
   })
@@ -69,11 +68,10 @@ const CourseIdOverview = async ({
           position: "asc"
         }
       },
-      category: {
+      categories: {
         select: {
-          name: true,
-        },
-        where: {}
+          category: true,
+        }
       },
       enrolls: {
         where: {
@@ -121,6 +119,7 @@ const CourseIdOverview = async ({
             numChapter={course.chapters.length}
             description={course.description ?? "No Description"}
             progressCount={progressCount}
+            categories={course.categories.map((category) => category.category)}
           />
         </div>
 

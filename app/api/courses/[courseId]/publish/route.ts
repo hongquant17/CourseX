@@ -24,8 +24,12 @@ export async function PATCH(
           include: {
             muxData: true,
           }
-        }
-      }
+        }, 
+        categories: {
+          include: {
+            category: true,
+          }
+      }}
     });
 
     if (!course) {
@@ -33,8 +37,9 @@ export async function PATCH(
     }
 
     const hasPublishedChapters = course.chapters.some((chapter) => chapter.isPublished);
+    const hasCategories = (course.categories.length > 0);
 
-    if (!course.title || !course.description || !course.imageUrl || !course.categoryId || !hasPublishedChapters) {
+    if (!course.title || !course.description || !course.imageUrl || !hasPublishedChapters || !hasCategories) {
       return new NextResponse("Missing required fields", { status: 401 });
     }
 

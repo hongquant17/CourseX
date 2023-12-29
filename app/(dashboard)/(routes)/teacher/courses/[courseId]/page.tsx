@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { IconBadge } from "@/components/icon-badge";
 import { ArrowLeft, CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
 
+import { Tag } from "@/components/ui/tag-input";
 import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
@@ -15,6 +16,8 @@ import { Actions } from "./_components/actions";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { Metadata } from "next";
+import { Category } from "@prisma/client";
+import { text } from "stream/consumers";
 
 export async function generateMetadata({
   params,
@@ -35,11 +38,14 @@ export async function generateMetadata({
           position: "asc",
         },
       },
-      category: {
-        select: {
-          name: true,
+      categories: {
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
         },
-        where: {},
       },
     },
   });
@@ -80,8 +86,19 @@ const CourseIdPage = async ({
           createdAt: "desc",
         },
       },
+      categories: {
+        include: {
+          category: {
+          },
+        },
+      },
     },
   });
+
+  const courseCategoryTags: Tag[] = (course?.categories || []).map((item) => ({
+    id: item.category.id,
+    text: item.category.name
+  }));
 
   const categories = await db.category.findMany({
     orderBy: {
@@ -97,7 +114,7 @@ const CourseIdPage = async ({
     course.title,
     course.description,
     course.imageUrl,
-    course.categoryId,
+    courseCategoryTags,
     course.chapters.some(chapter => chapter.isPublished),
   ];
 
@@ -162,11 +179,11 @@ const CourseIdPage = async ({
               courseId={course.id}
             />
             <CategoryForm
-              initialData={course}
+              courseCategoryTags={courseCategoryTags}
               courseId={course.id}
-              option={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
+              option={categories.map((category)=> ({
+                id: category.id,
+                text: category.name,
               }))}
             />
           </div>

@@ -23,6 +23,7 @@ interface SearchPageProps {
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const session = await getServerSession(options);
+  
   if (!session) {
     redirect("/");
   }

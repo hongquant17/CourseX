@@ -100,5 +100,3 @@ export async function PATCH(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
-
-
