@@ -23,6 +23,11 @@ export const getComment = async ({
             role: true,
           }
         },
+        course: {
+          select: {
+            userId: true,
+          }
+        },
         likes: true,
       },
       orderBy: {
@@ -44,6 +49,7 @@ export const getComment = async ({
         userName: comment.user.name || null,
         userAvatar: comment.user.image || null,
         userRole: comment.user.role || null,
+        courseOwner: comment.course.userId,
       }));
 
     return comment;

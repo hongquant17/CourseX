@@ -8,6 +8,7 @@ export interface IconProps {
   children: React.ReactNode | null;
   onClick: () => void;
   width: number;
+  isFill: boolean;
 }
 
 export function IconBtn({
@@ -20,10 +21,10 @@ export function IconBtn({
 }: IconProps) {
   return (
     <button
-      className={`flex items-center mr-4 ${isActive ? "scale-150" : ""} ${isHidden ? "hidden": ""}`}
+      className={`flex items-center mr-4 ${isHidden ? "hidden": ""}`}
       onClick={onClick}
     >
-      <Icon className="mr-1" width={props.width} />
+      <Icon className={`${props.isFill ? "fill-current" : ""} mr-1 ${isActive ? "scale-150" : ""}`} width={props.width}/>
       {children}
     </button>
   );

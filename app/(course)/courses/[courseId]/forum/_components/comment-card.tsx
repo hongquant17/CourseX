@@ -11,11 +11,27 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CommentForm from "./comment-form";
 import toast from "react-hot-toast";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { isAdminDB } from "@/lib/admin";
+import { isTeacherDB } from "@/lib/teacher";
+import { getRole } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
   timeStyle: "short",
-  hour12: true,
+  // hour12: true,
 });
 
 interface CommentProps {
@@ -31,6 +47,7 @@ interface CommentProps {
   userName: string | null;
   userAvatar: string | null;
   userRole: string | null;
+  courseOwner: string;
 }
 
 export const CommentCard = ({
@@ -45,6 +62,7 @@ export const CommentCard = ({
   createdAt,
   updatedAt,
   isDeleted,
+  courseOwner,
   likes,
 }: CommentProps) => {
   const { theme, setTheme } = useTheme();
@@ -53,11 +71,15 @@ export const CommentCard = ({
 
   const [areChildrenHidden, setChildrenHidden] = useState(true);
   const [isReplying, setIsReplying] = useState(false);
-  const [isLiked, setLiked] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
+  const roleUser = getRole(userRole);
+  const ownCourse = courseOwner == userId;
   const forumContext = useForum();
   const childComments = forumContext.getReplies(id);
+  const likedComment = likes.filter(
+    (obj) => obj.userId === forumContext.userId
+  );
 
   const router = useRouter();
   const headers = new Headers();
@@ -105,41 +127,61 @@ export const CommentCard = ({
       setIsEditing(false);
     } else {
       setIsEditing(false);
+      setContent("");
       toast.success(response.message);
       router.refresh();
     }
   };
   return (
     <>
-      <div className="border-2 rounded-2xl">
-        <div className="flex items-center m-2">
-          <Avatar className="cursor-pointer transform transition-transform hover:scale-110 mr-4">
-            <AvatarImage src={userAvatar ? userAvatar : userSrc} />
-          </Avatar>
-          <div className="flex justify-between">
-            <span className="mr-10"> {userName} </span>
-            <span>{dateFormatter.format(createdAt)}</span>
-          </div>
-        </div>
-
-        <div className="">
+      <Card className="w-[900px] mb-1 border-4">
+        <CardHeader>
+          <CardTitle className="flex justify-start items-center">
+            <Avatar className="cursor-pointer transform transition-transform hover:scale-110 mr-4">
+              <AvatarImage src={userAvatar ? userAvatar : userSrc} />
+            </Avatar>
+            <div className="justify-between flex-col">
+              <div className="flex justify-center items-center mb-2">
+                <span className="mr-10"> {userName} </span>
+                <span>{dateFormatter.format(createdAt)}</span>
+              </div>
+              {!ownCourse && (
+                <span
+                  className={`text-xs ${
+                    roleUser == "ADMIN" ? "text-red-500" : "text-yellow-400"
+                  }`}
+                >
+                  {roleUser}
+                </span>
+              )}
+              {ownCourse && (
+                <span className={`text-xs text-lime-500`}>
+                  Course&apos;s teacher
+                </span>
+              )}
+            </div>
+          </CardTitle>
+          <CardDescription></CardDescription>
+        </CardHeader>
+        <CardContent>
           {isEditing ? (
             <div>
               <form onSubmit={handleSubmit}>
-                <textarea value={contentValue} onChange={handleChange}>
-                  {content}
-                </textarea>
-                <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                <Textarea
+                  value={contentValue}
+                  onChange={handleChange}
+                  className="mb-4"
                 >
-                  Submit
-                </button>
+                  {content}
+                </Textarea>
+                <Button type="submit">Submit</Button>
               </form>
             </div>
           ) : (
             <span className="ml-10 mb-10">{content}</span>
           )}
+        </CardContent>
+        <CardFooter className="flex justify-between">
           <div className="flex">
             <IconBtn
               Icon={Heart}
@@ -147,6 +189,7 @@ export const CommentCard = ({
               isHidden={false}
               width={24}
               onClick={() => handleLikeSubmit()}
+              isFill={likedComment.length != 0}
             >
               {likes.length}
             </IconBtn>
@@ -156,21 +199,24 @@ export const CommentCard = ({
               isHidden={false}
               width={24}
               onClick={() => setIsReplying((prev) => !prev)}
+              isFill={false}
             >
               {null}
             </IconBtn>
             <IconBtn
               Icon={FileEdit}
-              isActive={false}
+              isActive={isEditing}
               isHidden={userId != forumContext.userId}
               width={20}
               onClick={() => setIsEditing((prev) => !prev)}
+              isFill={false}
             >
               {null}
             </IconBtn>
           </div>
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
+
       {isReplying && (
         <div className="mt-1 ml-10">
           <CommentForm parentId={id} />
@@ -180,15 +226,15 @@ export const CommentCard = ({
       {childComments?.length && childComments?.length > 0 && (
         <>
           <div className={`${areChildrenHidden ? "hidden" : ""}`}>
-            <button onClick={() => setChildrenHidden(true)}>
+            <button onClick={() => setChildrenHidden(true)} className="mb-2 text-sm underline">
               Hide Replies
             </button>
-            <div className="ml-10">
+            <div className="pl-10 border-l-2">
               <CommentList items={childComments}></CommentList>
             </div>
           </div>
           {areChildrenHidden && (
-            <button onClick={() => setChildrenHidden(false)}>
+            <button onClick={() => setChildrenHidden(false)} className="mb-4 text-sm ml-4">
               Show Replies
             </button>
           )}

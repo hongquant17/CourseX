@@ -11,11 +11,12 @@ export default function CommentList({
 }: CommentListProps) {
     return (
     <div className="mb-10">
-    {items.map((item) => (
-        <CommentCard key={item.id}
-        {...item}
+    {items.slice().reverse().map((item) => (
+        <div key={item.id} className="mb-4">
+        <CommentCard {...item}
         >
         </CommentCard>
+        </div>
     ))}
     </div>
     )

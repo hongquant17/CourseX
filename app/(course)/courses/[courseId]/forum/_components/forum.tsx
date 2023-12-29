@@ -10,9 +10,9 @@ export default function Forum() {
     <div className="flex flex-col items-center h-screen">
         <CommentForm  parentId={null}/>
         {rootComments != null && rootComments.length > 0 && (
-            <div>
+            <>
                 <CommentList items={rootComments}></CommentList>
-            </div>
+            </>
         )}
     </div>
     )

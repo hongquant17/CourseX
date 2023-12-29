@@ -31,4 +31,5 @@ export const ROLES: { [key: string]: string } = {
     userName: string | null;
     userAvatar: string | null;
     userRole: string | null;
+    courseOwner: string;
 };
