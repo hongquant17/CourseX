@@ -113,15 +113,6 @@ const ChapterIdPage = async ({
             Discussion Forum 
             <ArrowRight className="h-4 w-4 ml-2" />            
           </Link>
-
-          <Link
-            href={`/courses/${params.courseId}/forum`}
-            className="flex items-center text-sm hover:opacity-75
-                          transition"
-          >
-            Discussion Forum 
-            <ArrowRight className="h-4 w-4 ml-2" />            
-          </Link>
         </div>
         <div className="p-4">
           <VideoPlayer
