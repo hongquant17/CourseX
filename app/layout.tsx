@@ -13,7 +13,6 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'CourseX',
-  // description: 'Learners and educators gather!',
 }
 
 export default async function RootLayout({

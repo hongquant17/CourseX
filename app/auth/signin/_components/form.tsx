@@ -57,13 +57,13 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="p-8 px-8 w-full container flex flex-col mx-auto items-center rounded-lg pt-12 my-5">
+    <div className="p-8 px-8 w-full container flex flex-col mx-auto items-center rounded-lg pt-12 my-5 round-3xl">
       <div className="flex justify-center w-full h-full my-auto xl:gap-14 lg:justify-normal md:gap-5 draggable">
         <div className="flex items-center justify-center w-full lg:p-12">
           <div className="bg-white opacity-90 rounded-lg justify-center shadow-lg flex items-center p-4 sm:p-4 md:p-6 xl:p-10">
             <div className="flex flex-col w-full h-full pb-6 text-center">
               <Logo />
-              <p className="mb-6">Sign in</p>
+              <p className="my-3 font-bold text-xl">Sign in</p>
               <Button
                 className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl"
                 onClick={() => signIn("github", { callbackUrl: "/" })}

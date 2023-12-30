@@ -55,7 +55,7 @@ const UserForm = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center h-screen pt-8">
+      <div className="flex items-center justify-center h-screen pt-8 round-3xl">
         <div className="opacity-90 bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
           <div className="items-center justify-center h-full pb-4">
             <Link
