@@ -24,6 +24,7 @@ model Course {
   chapters    Chapter[]
   attachments Attachment[]
   enrolls   Enroll[]
+  comments Comment[]
 
   @@index([categoryId])
   @@fulltext([title])
@@ -65,6 +66,36 @@ model Chapter {
   userProgress UserProgress[]
 
   @@index([courseId])
+}
+
+model Comment {
+  id        String            @id @default(uuid())
+  content   String
+  parentId  String?
+  courseId  String
+  userId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  course    Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes   Like[]
+  
+  @@index([userId])
+  @@index([courseId])
+}
+
+model Like {
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+
+  @@index([userId])
+  @@index([commentId])
+  @@id([userId, commentId])
+
 }
 
 model MuxData {
@@ -144,6 +175,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   enrolls       Enroll[]
+  comments      Comment[]
+  likes         Like[]
 }
 
 model VerificationToken {

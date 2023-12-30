@@ -1,4 +1,4 @@
-import { ArrowLeft, File } from "lucide-react";
+import { ArrowLeft, ArrowRight, File } from "lucide-react";
 
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
@@ -57,7 +57,7 @@ const ChapterIdPage = async ({
     const session = await getSession();
     
     if (!session) {
-        return redirect("/");
+        return redirect("/auth/signin");
     }
 
     const userId = session.user.uid;
@@ -95,14 +95,23 @@ const ChapterIdPage = async ({
         />
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
-        <div className="md:items-center md:justify-center h-full px-3 pt-4">
+        <div className=" justify-between flex h-full px-3 pt-4">
           <Link
             href={`/search/overview/${params.courseId}`}
-            className="w-fit flex items-center text-sm hover:opacity-75
+            className="flex items-center text-sm hover:opacity-75
                           transition"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to course overview
+          </Link>
+
+          <Link
+            href={`/courses/${params.courseId}/forum`}
+            className="flex items-center text-sm hover:opacity-75
+                          transition"
+          >
+            Discussion Forum 
+            <ArrowRight className="h-4 w-4 ml-2" />            
           </Link>
         </div>
         <div className="p-4">

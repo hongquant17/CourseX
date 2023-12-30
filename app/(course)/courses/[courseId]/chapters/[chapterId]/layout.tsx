@@ -17,7 +17,7 @@ const CourseLayout = async ({
     const session = await getSession();
     
     if (!session) {
-        return redirect("/");
+        return redirect("/auth/signin");
     }
 
     const userId = session.user.uid;
@@ -57,6 +57,7 @@ const CourseLayout = async ({
                 <CourseNavbar
                     course={course} 
                     progressCount={progressCount}
+                    isForum={false}
                 />
             </div>
             <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">

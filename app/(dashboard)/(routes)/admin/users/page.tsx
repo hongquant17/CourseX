@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const UserPage = async () => {
   const session = await getSession();
   if (!session) {
-    return redirect("/");
+    return redirect("/auth/signin");
   }
   const users = await db.user.findMany({
     where: {},
