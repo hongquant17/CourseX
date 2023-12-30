@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Logo } from "./logo";
 
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
@@ -18,7 +17,7 @@ export const Navbar = () => {
       )}
     >
       <div className="md:max-w-screen-2xl mx-auto flex items-center w-full justify-between">
-        <Logo />
+        <div></div>
 
         <div className="flex items-center space-x-4 md:w-auto w-full">
           <div className="flex items-center space-x-4 md:space-x-20">
