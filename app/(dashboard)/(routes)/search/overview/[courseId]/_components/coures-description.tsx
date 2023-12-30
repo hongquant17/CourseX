@@ -35,7 +35,7 @@ export const CourseDescription = ({
       </h3>
       <div>
           {categories.map(category => (
-            <Link key={category.id} href={`/search?category=${category.id}`} passHref>
+            <Link key={category.id} href={`/search?categoryId=${category.id}`} passHref>
               <Badge className={cn("bg-blue-50 text-black-500")}>{category.name}</Badge>
             </Link>
           ))}
