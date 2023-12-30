@@ -77,11 +77,11 @@ export const CategoryForm = ({
   const Submit = async () => {
     try {
       await axios.patch(`/api/courses/${courseId}/categories`, { categories: tags });
-      toast.success("Đã cập nhật khóa học");
+      toast.success("Course updated");
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     }
   };
 

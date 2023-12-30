@@ -32,11 +32,11 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Đã cập nhật khóa học");
+      toast.success("Course updated khóa học");
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     }
   };
 
