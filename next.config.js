@@ -5,7 +5,11 @@ const nextConfig = {
             "utfs.io",
             "avatars.githubusercontent.com"
         ]
-    }
+    },
+    reactStrictMode: true, 
+    eslint: { 
+      ignoreDuringBuilds: true, 
+    }, 
 }
 
 module.exports = nextConfig

@@ -4,7 +4,7 @@ import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
 
 type CourseWithProgressWithCategory = Course & {
-  category: Category | null;
+  categories: Category[];
   chapters: { id: string }[];
   progress: number | null;
 };
@@ -12,66 +12,160 @@ type CourseWithProgressWithCategory = Course & {
 type GetCourses = {
   userId: string;
   title?: string;
-  categoryId?: string;
+  categoryId: string;
 };
 
 export const getCourses = async ({
   userId,
-  title,
+  title, 
   categoryId
 }: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
   try {
-    const courses = await db.course.findMany({
-      where: {
-        isPublished: true,
-        title: {
-          contains: title,
-        },
-        categoryId,
-      },
-      include: {
-        category: true,
-        chapters: {
+    if (categoryId === undefined) {
+        const courses = await db.course.findMany({
           where: {
             isPublished: true,
+            title: {
+              contains: title,
+            },
           },
-          select: {
-            id: true,
+          include: {
+            categories: {
+              select: {
+                category: true,
+              }
+            },
+            chapters: {
+              where: {
+                isPublished: true,
+              },
+              select: {
+                id: true,
+              }
+            },
+            enrolls: {
+              where: {
+                userId,
+                isAccepted: true,
+              }
+            }, 
+          },
+          orderBy: {
+            createdAt: "desc",
           }
-        },
-        enrolls: {
+        });
+
+        const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
+          courses.map(async course => {
+            if (course.enrolls.length === 0) {
+              return {
+                ...course,
+                progress: null,
+                categories: course.categories.map(category => category.category),
+              }
+            }
+
+            const progressPercentage = await getProgress(userId, course.id);
+
+            const formattedCategories: Category[] = course.categories.map(courseCategory => ({
+              id: courseCategory.category.id,
+              name: courseCategory.category.name,
+              createdAt: courseCategory.category.createdAt,
+              updatedAt: courseCategory.category.updatedAt,
+            }));
+
+            return {
+              ...course,
+              progress: progressPercentage,
+              categories: formattedCategories
+            };
+          })
+        );
+
+        return coursesWithProgress;
+      } else {
+        const category = await db.category.findUnique({
           where: {
-            userId,
-            isAccepted: true,
+            id: categoryId,
+          }, include: {
+            Courses: {
+              select:{
+                course: true,
+              }
+            }
           }
-        }
-      },
-      orderBy: {
-        createdAt: "desc",
+        });
+
+        const courseList: Course[] = category?.Courses?.map(course => course.course) || [];
+
+        const coursesWithProgress: (CourseWithProgressWithCategory | null)[] = await Promise.all(
+          courseList.map(async (course) => {
+            if (!course || course.isPublished === false) return null;
+        
+            const courseData = await db.course.findUnique({
+              where: {
+                id: course.id,
+              },
+              include: {
+                categories: {
+                  select: {
+                    category: true,
+                  },
+                },
+                chapters: {
+                  where: {
+                    isPublished: true,
+                  },
+                  select: {
+                    id: true,
+                  },
+                },
+                enrolls: {
+                  where: {
+                    userId,
+                    isAccepted: true,
+                  },
+                },
+              },
+            });
+        
+            if (!courseData) return null;
+        
+            if (courseData.enrolls.length === 0) {
+              return {
+                ...courseData,
+                progress: null,
+                categories: courseData.categories.map((courseCategory) => courseCategory.category),
+              };
+            }
+        
+            const progressPercentage = await getProgress(userId, course.id);
+        
+            const formattedCategories: Category[] = courseData.categories.map((courseCategory) => ({
+              id: courseCategory.category.id,
+              name: courseCategory.category.name,
+              createdAt: courseCategory.category.createdAt,
+              updatedAt: courseCategory.category.updatedAt,
+            }));
+        
+            return {
+              ...courseData,
+              progress: progressPercentage,
+              categories: formattedCategories,
+            } as CourseWithProgressWithCategory; // Ensure the correct type here
+          })
+        );
+        
+        // Filter out null values
+        const filteredCoursesWithProgress = coursesWithProgress.filter(
+          (course): course is CourseWithProgressWithCategory => course !== null
+        );
+        
+        return filteredCoursesWithProgress;
+
       }
-    });
-
-    const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
-      courses.map(async course => {
-        if (course.enrolls.length === 0) {
-          return {
-            ...course,
-            progress: null,
-          }
-        }
-
-        const progressPercentage = await getProgress(userId, course.id);
-
-        return {
-          ...course,
-          progress: progressPercentage,
-        };
-      })
-    );
-
-    return coursesWithProgress;
-  } catch (error) {
-    console.log("[GET_COURSES]", error);
-    return [];
-  }
+    } catch (error) {
+      console.log("[GET_COURSES]", error);
+      return [];
+    }
 }

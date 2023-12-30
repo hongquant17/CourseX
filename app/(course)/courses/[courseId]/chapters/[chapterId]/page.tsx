@@ -33,11 +33,10 @@ export async function generateMetadata({
           position: "asc",
         },
       },
-      category: {
+      categories: {
         select: {
-          name: true,
-        },
-        where: {},
+          category: true,
+        }
       },
     },
   });

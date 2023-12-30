@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextIndex", "fullTextSearch"]
-  output = "../node_modules/.prisma/client"
+  output          = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -11,31 +11,40 @@ datasource db {
 }
 
 model Course {
-  id          String       @id @default(uuid())
+  id          String           @id @default(uuid())
   userId      String
-  title       String       @db.Text
-  description String?      @db.Text
-  imageUrl    String?      @db.Text
-  isPublished Boolean      @default(false)
-  categoryId  String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  category    Category?    @relation(fields: [categoryId], references: [id])
+  title       String           @db.Text
+  description String?          @db.Text
+  imageUrl    String?          @db.Text
+  isPublished Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   chapters    Chapter[]
   attachments Attachment[]
-  enrolls   Enroll[]
+  enrolls     Enroll[]
+  categories  CourseCategory[]
   comments Comment[]
 
-  @@index([categoryId])
   @@fulltext([title])
 }
 
 model Category {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  courses   Course[]
+  id        String           @id @default(uuid())
+  name      String           @unique
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  Courses   CourseCategory[]
+}
+
+model CourseCategory {
+  id         String   @id @default(uuid())
+  courseId   String
+  categoryId String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([categoryId])
 }
 
 model Attachment {
@@ -120,14 +129,14 @@ model UserProgress {
 }
 
 model Enroll {
-  id        String   @id @default(uuid())
-  userId    String
-  courseId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isAccepted    Boolean  @default(false)
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  userId     String
+  courseId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isAccepted Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
   @@index([courseId])

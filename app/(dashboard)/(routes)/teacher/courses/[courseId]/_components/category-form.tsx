@@ -5,44 +5,68 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Course } from "@prisma/client";
-
+import { Course, Category } from "@prisma/client";
+import { TagList } from "@/components/ui/tag-list";
+import { Tag, TagInput } from "@/components/ui/tag-input";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/components/ui/form"
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Combobox } from "@/components/ui/combobox";
 
 interface CategoryFormProps {
-  initialData: Course;
+  courseCategoryTags: Tag[];
   courseId: string;
-  option: { label: string; value: string }[];
+  option: Tag[];
 }
 
-const formSchema = z.object({
-  categoryId: z.string().min(1),
+const FormSchema = z.object({
+  categories: z.array(z.object({
+      id: z.string(),
+      text: z.string()
+  })),
 });
 
 export const CategoryForm = ({
-  initialData,
+  courseCategoryTags,
   courseId,
-  option,
+  option
 }: CategoryFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const toggleEdit = () => setIsEditing((current) => !current);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [editedTags, setEditedTags] = useState<Tag[]>([]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const toggleEdit = () => {
+    setIsEditing((current) => !current);
+    setEditedTags(tags);
+  }
+
+  const updateTag = () => {
+    setTags(editedTags);
+  }
+
+  useEffect(() => {
+    initializeTags();
+  }, []);
+
+  const initializeTags = () => {
+    setTags(courseCategoryTags);
+  };
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || "",
+      categories: tags,
     },
   });
 
@@ -50,20 +74,16 @@ export const CategoryForm = ({
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const Submit = async () => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Đã cập nhật khóa học");
+      await axios.patch(`/api/courses/${courseId}/categories`, { categories: tags });
+      toast.success("Course updated");
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Đã xảy ra lỗi");
+      toast.error("Something went wrong");
     }
   };
-
-  const selectedOption = option.find(
-    (option) => option.value === initialData.categoryId
-  );
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -80,42 +100,39 @@ export const CategoryForm = ({
           )}
         </Button>
       </div>
+      
       {!isEditing && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.categoryId && "text-slate-500 italic"
-          )}
-        >
-          {selectedOption?.label || "No category"}
+        <p className={`text-sm mt-2 ${tags && "text-slate-500 italic"}`}>
+        {tags.map((tag) => (tag.text)).join(", ")}
         </p>
       )}
       {isEditing && (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4"
-          >
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Combobox option={option} {...field}/>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting}  type="submit">
-                Save
-              </Button>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(Submit)} className="space-y-4 mt-4">
+          <FormItem>
+            <FormControl>
+            <div className="mt-4">
+              <TagInput
+                tags={editedTags}
+                setTags={setEditedTags}
+                placeholder="Select categories..."
+                enableAutocomplete = {true}
+                autocompleteOptions={option}
+                draggable
+              />
             </div>
-          </form>
-        </Form>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+          <div className="flex items-center gap-x-2">
+            <Button onClick={updateTag} disabled={!isValid || isSubmitting} type="submit">
+              Save
+            </Button>
+          </div>
+        </form>
+      </Form>
       )}
+
     </div>
   );
 };
