@@ -42,7 +42,7 @@ export const CourseCard = ({
           <div className="text-xs text-muted-foreground">
             {categories.map(category => (
               
-              <Link key={category.id} href={`/search?category=${category.id}`}>
+              <Link key={category.id} href={`/search?categoryId=${category.id}`}>
                 <Badge className={cn("bg-white text-black-500")}>{category.name}</Badge>
               </Link>
             ))}
