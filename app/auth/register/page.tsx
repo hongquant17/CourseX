@@ -2,6 +2,7 @@ import UserForm from "./_components/register-form";
 import { Navbar } from "../_components/navbar";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
+import backgroundImage from '@/public/img/background.jpg'
 
 const headingFont = localFont({
   src: "../../../public/fonts/font.woff2",
@@ -12,8 +13,7 @@ export default async function LandingPage() {
     <div
       className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full"
       style={{
-        backgroundImage:
-          "url('https://wallpapers.com/images/hd/wolf-study-4k-a7ni7gskm6rd4hy8.jpg')",
+        backgroundImage: `url(${backgroundImage.src})`,
       }}
     >
       <Navbar />
