@@ -1,3 +1,5 @@
+import { Comment, Like } from "@prisma/client";
+
 export const ROLES: { [key: string]: string } = {
     TEACHER: "3",
     USER: "2",
@@ -15,3 +17,19 @@ export const ROLES: { [key: string]: string } = {
     ADMIN: 2,
     DELETE: 3,
   }
+
+  export type CommentItem = Comment & {
+    id: string; 
+    content: string;
+    parentId: string | null;
+    userId: string;
+    courseId: string;
+    createdAt: Date; 
+    updatedAt: Date; 
+    isDeleted: boolean;
+    likes: Like[];
+    userName: string | null;
+    userAvatar: string | null;
+    userRole: string | null;
+    courseOwner: string;
+};

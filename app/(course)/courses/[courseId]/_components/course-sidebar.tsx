@@ -18,10 +18,10 @@ export const CourseSidebar = async ({
   course,
   progressCount,
 }: CourseSidebarProps) => {
-  const session = await getSession();
-  if (!session) {
-    return redirect("/");
-  }
+    const session = await getSession();
+    if (!session) {
+        return redirect("/auth/signin");
+    }
 
   const userId = session.user.uid;
 
