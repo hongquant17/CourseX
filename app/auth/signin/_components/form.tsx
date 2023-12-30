@@ -32,7 +32,7 @@ const LoginForm = () => {
       setFormData({ email: "", password: "" });
 
       const res = await signIn("credentials", {
-        redirect: false,
+        redirect: true,
         email: formData.email,
         password: formData.password,
         callbackUrl,
