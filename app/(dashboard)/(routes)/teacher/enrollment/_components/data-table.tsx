@@ -119,11 +119,6 @@ export function DataTable<TData extends WaitlistItem>({
             </Button>
           </Link>
           {/*Add user button (add route in link href) */}
-          <Link href="">
-            <Button className="bg-red-500" onClick={handleBatchAcceptClick}>
-              Remove
-            </Button>
-          </Link>
         </div>
       </div>
       <div className="rounded-md border">
