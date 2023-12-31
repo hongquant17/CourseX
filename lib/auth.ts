@@ -22,6 +22,9 @@ export const options: NextAuthOptions = {
       },
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     GoogleProvider({
       profile(profile) {
@@ -35,6 +38,9 @@ export const options: NextAuthOptions = {
       },
       clientId: process.env.GOOGLE_ID ?? "",
       clientSecret: process.env.GOOGLE_SECRET ?? "",
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     CredentialsProvider({
       name: "Credentials",
