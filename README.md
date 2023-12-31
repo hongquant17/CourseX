@@ -1,5 +1,14 @@
 # CourseX: Nền tảng giáo dục của tương lai
 
+
+## Cách chạy server trên platform
+### Yêu cầu
+Bản build của server cùng NodeJs18 được tải sẵn lên platform, các tham số môi trường đã đặt sẵn trong `./CourseX/.env`
+### Chạy server
+Tại thư mục home trên platform của nhóm (VD:`jovyan@jupyter-fall2324w3g2:~$`), tiến hành bật tmux lên và chạy bash script `start.sh`,
+```shell
+jovyan@jupyter-fall2324w3g2:~$ bash start.sh
+```
 ## Cách cài đặt và chạy trên local
 ### Yêu cầu
 Phiên bản Node JS: `18.x.x`
@@ -45,13 +54,5 @@ npm run build
 Sau đó chạy lệnh sau để khởi động server:
 ```shell
 npm run start
-```
-## Cách chạy server trên platform
-### Yêu cầu
-Bản build của server cùng NodeJs18 được tải sẵn lên platform, các tham số môi trường đã đặt sẵn trong `./CourseX/.env`
-### Chạy server
-Tại thư mục home trên platform của nhóm (VD:`jovyan@jupyter-fall2324w3g2:~$`), tiến hành bật tmux lên và chạy bash script `start.sh`,
-```shell
-jovyan@jupyter-fall2324w3g2:~$ bash start.sh
 ```
 
