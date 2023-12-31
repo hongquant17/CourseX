@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "??? | CourseX",
+  title: "CourseX",
 };
 
 const CourseIdPage = async ({

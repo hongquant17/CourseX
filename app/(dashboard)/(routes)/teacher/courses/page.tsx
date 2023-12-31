@@ -5,6 +5,11 @@ import { columns } from "./_components/columns";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Teacher Dashboard | CourseX",
+}
 
 
 const CoursesPage = async() =>{
