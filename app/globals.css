@@ -26,19 +26,13 @@ body {
   animation: fadeIn 0.75s ease-in-out;
 }
 
-@media (min-height: 357px) and (max-height: 624px) {
+@media (max-height: 400px) {
   .round-3xl {
-    transform: scale(0.5);
+    transform: scale(0.8);
   }
 }
 
-@media (min-height: 625px) and (max-height: 800px) {
-  .round-3xl {
-    transform: scale(0.7);
-  }
-}
-
-@media (min-height: 801px) and (max-height: 900px) {
+@media (min-height: 401px) and (max-height: 600px) {
   .round-3xl {
     transform: scale(0.9);
   }
