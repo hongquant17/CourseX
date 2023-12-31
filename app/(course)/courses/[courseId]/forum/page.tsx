@@ -3,11 +3,21 @@ import { headers } from 'next/headers';
 import { getComment } from "@/actions/get-comment";
 import { ForumProvider } from "./_components/_contexts/forum-context";
 import { getSession } from "@/lib/auth";
+import { Metadata } from "next";
+import { db } from "@/lib/db";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-
-
+export async function generateMetadata({ params }: { params: { courseId: string } }) {
+  const course = await db.course.findUnique({
+    where: {
+      id: params.courseId,
+    }
+  })
+  return {
+    title: `${course?.title} - Forum | CourseX`
+  }
+}
 
 export default async function ForumPage() {
   const headersList = headers();
