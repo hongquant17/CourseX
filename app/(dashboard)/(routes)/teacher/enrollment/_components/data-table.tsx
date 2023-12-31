@@ -101,7 +101,7 @@ export function DataTable<TData extends WaitlistItem>({
 
   return (
     <div>
-       <div className="flex items-center py-4 justify-between">
+      <div className="flex items-center py-4 justify-between">
         {/* Filter user id */}
         <Input
           placeholder="Filter User ID..."
@@ -111,21 +111,20 @@ export function DataTable<TData extends WaitlistItem>({
           }
           className="max-w-sm"
         />
-          {/* TODO: Handle button */}
-          <div className="flex space-x-2">
-            <Link href="">
-              <Button className="bg-green-500"  onClick={handleBatchAcceptClick}>
-                Accept
-              </Button>
-            </Link>
-            {/*Add user button (add route in link href) */}
-            <Link href=""> 
-              <Button>
-                <PlusCircle className="h-4 w-4 mr-2"/>
-                Add user
-              </Button>
-        </Link>
-          </div>
+        {/* TODO: Handle button */}
+        <div className="flex space-x-2">
+          <Link href="">
+            <Button className="bg-green-500" onClick={handleBatchAcceptClick}>
+              Accept
+            </Button>
+          </Link>
+          {/*Add user button (add route in link href) */}
+          <Link href="">
+            <Button className="bg-red-500" onClick={handleBatchAcceptClick}>
+              Remove
+            </Button>
+          </Link>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -142,7 +141,7 @@ export function DataTable<TData extends WaitlistItem>({
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -156,14 +155,20 @@ export function DataTable<TData extends WaitlistItem>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -171,7 +176,7 @@ export function DataTable<TData extends WaitlistItem>({
           </TableBody>
         </Table>
       </div>
-      
+
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
@@ -191,5 +196,5 @@ export function DataTable<TData extends WaitlistItem>({
         </Button>
       </div>
     </div>
-  )
+  );
 }

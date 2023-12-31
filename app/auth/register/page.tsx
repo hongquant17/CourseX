@@ -23,20 +23,18 @@ export default async function LandingPage() {
     >
       <Navbar />
 
-      <div className="hidden pl-32 sm:flex flex-col items-center justify-center bg-cover bg-center animate-fade-in">
+      <div className="hidden md:pl-32 sm:flex flex-col items-center justify-center bg-cover bg-center animate-fade-in ">
         <div
           className={cn(
-            "flex flex-col items-center justify-center space-y-2 h-full text-white transition-transform md:pr-10",
+            "flex flex-col items-center justify-center space-y-2 h-full text-white transition-transform sm:pl-4 md:pr-16 font-bold text-center",
             headingFont.className
           )}
         >
-          <div className="font-bold text-2xl sm:text-4xl lg:text-6xl text-center">
+          <div className="text-4xl sm:text-5xl lg:text-6xl">
             The Education Platform
           </div>
-          <div className="font-bold text-2xl sm:text-4xl lg:text-6xl text-center">
-            For The Future
-          </div>
-          <div className="font-bold bg-gradient-to-r from-fuchsia-600 to-pink-600 px-4 p-2 rounded-md pb-2 w-fit text-2xl sm:text-xl lg:text-3xl text-center">
+          <div className="text-4xl sm:text-5xl lg:text-6xl">For The Future</div>
+          <div className="bg-gradient-to-r from-fuchsia-600 to-pink-600 px-4 p-2 rounded-md pb-2 w-fit text-xl sm:text-2xl lg:text-3xl">
             Join Right Now
           </div>
         </div>

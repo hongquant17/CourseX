@@ -129,17 +129,23 @@ export const Profile = (userData: any) => {
               <p className="text-sm text-gray-600 mb-2">Username</p>
               <Input type="text" id="username" name="username" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500 font-medium" onChange={handleChange} value={formData.username}/>
             </div>
-
-            <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+      
+            <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 pt-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600 mb-2">Old password</p>
               <Input type="password" id="oldpassword" name="old_pass" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500 font-medium" onChange={handleChange} value={formData.old_pass}/>
             </div>
 
-            <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+            <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 pt-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600 mb-2">New password</p>
               <Input type="password" id="newpassword" name="new_pass" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700 focus:ring-blue-500 font-medium" onChange={handleChange} value={formData.new_pass}/>
             </div>
-
+            <span className="text-xs ml-4">
+              If you don&apos;t want to change your password, leave it empty.
+            </span>
+            <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600 mb-2"></p>
+              <p className="text-base font-medium"></p>
+            </div>
             <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600 mb-2">Role</p>
               <p className="text-base font-medium">{getRole(userData.role)}</p>
