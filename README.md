@@ -5,10 +5,16 @@
 ### Yêu cầu
 Bản build của server cùng NodeJs18 được tải sẵn lên platform, các tham số môi trường đã đặt sẵn trong `./CourseX/.env`
 ### Chạy server
-Tại thư mục home trên platform của nhóm (VD:`jovyan@jupyter-fall2324w3g2:~$`), tiến hành bật tmux lên và chạy bash script `start.sh`,
-```shell
-jovyan@jupyter-fall2324w3g2:~$ bash start.sh
-```
+- Tại thư mục home trên platform của nhóm (VD:`jovyan@jupyter-fall2324w3g2:~$`), tiến hành bật tmux lên và chạy bash script `start.sh`,
+  ```shell
+  jovyan@jupyter-fall2324w3g2:~$ bash start.sh
+  ```
+- Chi tiết file `start.sh`
+  - `cd CourseX`: Di chuyển vào folder CourseX
+  - `/etc/jupyter/bin/expose 8000`: Mở cổng 8000
+  - `export PATH=$HOME/node-v18.18.2-linux-x64/bin:$PATH`: Thêm PATH ENVIRONMENT của Node 18
+  - `npm run start`: Chạy ứng dụng
+
 ## Cách cài đặt và chạy trên local
 ### Yêu cầu
 Phiên bản Node JS: `18.x.x`
