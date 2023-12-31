@@ -47,6 +47,35 @@ export async function PATCH(req: Request) {
     if (!existUser) {
       return NextResponse.json({ message: "User not exist" }, { status: 409 });
     }
+
+    const duplicateUsername = await db.user.findFirst({
+      where: {
+        username: newData.username,
+      },
+    });
+
+    const duplicatePhone = await db.user.findFirst({
+      where: {
+        phone: newData.phone,
+      },
+    });
+
+    if (duplicatePhone) {
+      if (duplicatePhone.id != userId)
+        return NextResponse.json(
+          { message: "Phone number already in use" },
+          { status: 500 }
+        );
+    }
+
+    if (duplicateUsername) {
+      if (duplicateUsername.id != userId)
+        return NextResponse.json(
+          { message: "Username already in use" },
+          { status: 500 }
+        );
+    }
+
     const changeUser = await db.user.update({
       where: {
         id: userId,
@@ -59,8 +88,23 @@ export async function PATCH(req: Request) {
       },
     });
     var changedPass = false;
-    if (existUser.password != null && newData?.old_pass != '') {
-      const match = await bcrypt.compare(newData?.old_pass!, existUser.password);
+    if (existUser.password == null && newData?.old_pass === "") {
+      const newPass = await bcrypt.hash(newData.new_pass, 10);
+      const setNewPass = await db.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password: newPass,
+        },
+      });
+      if (setNewPass) changedPass = true;
+    }
+    if (existUser.password != null && newData?.old_pass != "") {
+      const match = await bcrypt.compare(
+        newData?.old_pass!,
+        existUser.password
+      );
       if (match && newData.new_pass != "") {
         const newPass = await bcrypt.hash(newData.new_pass, 10);
         const setNewPass = await db.user.update({
@@ -79,21 +123,40 @@ export async function PATCH(req: Request) {
         { message: "Can not change user information" },
         { status: 500 }
       );
-    
+
     if (!changedPass && newData?.old_pass != "") {
+      if (changeUser) {
+        return NextResponse.json(
+          { message: "Changed user information but not user password" },
+          { status: 500 }
+        );
+      }
       return NextResponse.json(
         { message: "Can not change user password" },
         { status: 500 }
       );
     }
-    if (newData?.new_pass == '' && newData?.old_pass != '') {
+    if (newData?.new_pass == "" && newData?.old_pass != "") {
       return NextResponse.json(
         { message: "New password must not be empty" },
         { status: 400 }
       );
     }
-    if (existUser.password == null && newData.old_pass != '') {
-      return NextResponse.json({message: "User does not have password because you sign in with Github or Google"}, {status: 400});
+    if (existUser.password == null && newData.old_pass != "") {
+      return NextResponse.json(
+        {
+          message:
+            "You signed in with Github or Google, leave the old password empty",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (changedPass) {
+      return NextResponse.json(
+        { message: "Password and information changed" },
+        { status: 200 }
+      );
     }
     return NextResponse.json(
       { message: "Infomation changed" },
