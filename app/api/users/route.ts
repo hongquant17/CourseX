@@ -86,13 +86,13 @@ export async function PATCH(req: Request) {
         { status: 500 }
       );
     }
-    if (newData?.new_pass == '') {
+    if (newData?.new_pass == '' && newData?.old_pass != '') {
       return NextResponse.json(
         { message: "New password must not be empty" },
         { status: 400 }
       );
     }
-    if (existUser.password == null) {
+    if (existUser.password == null && newData.old_pass != '') {
       return NextResponse.json({message: "User does not have password because you sign in with Github or Google"}, {status: 400});
     }
     return NextResponse.json(
