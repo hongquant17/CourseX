@@ -15,7 +15,7 @@ import { Logo } from "../../_components/logo";
 
 const LoginForm = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState("Sign In");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,28 +25,45 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
+  const signInOAuth = async (provider: string) => {
+    try {
+      setLoading("...");
+      const res = await signIn(provider, { callbackUrl: callbackUrl });
+
+      if (!res?.error) {
+        router.push(callbackUrl);
+      } else  {
+        setError("Invalid email or password");
+      }
+      setLoading("Sign In");
+    }
+    catch (error: any) {
+      setLoading("Sign In");
+      setError(error);
+    }
+
+  }
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      setLoading("...");
       setFormData({ email: "", password: "" });
 
       const res = await signIn("credentials", {
-        redirect: true,
+        redirect: false,
         email: formData.email,
         password: formData.password,
         callbackUrl,
       });
 
-      setLoading(false);
-
+      setLoading("Sign In");
       if (!res?.error) {
         router.push(callbackUrl);
-      } else {
+      } else  {
         setError("Invalid email or password");
       }
     } catch (error: any) {
-      setLoading(false);
+      setLoading("Sign In");
       setError(error);
     }
   };
@@ -66,13 +83,13 @@ const LoginForm = () => {
               <p className="my-3 font-bold text-xl">Sign in</p>
               <Button
                 className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl"
-                onClick={() => signIn("github", { callbackUrl: "/" })}
+                onClick={() => signInOAuth("github")}
               >
                 <Github className="mr-2 h-4 w-4" /> Login with Github
               </Button>
               <Button
                 className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl"
-                onClick={() => signIn("google", { callbackUrl: "/" })}
+                onClick={() => signInOAuth("google")}
               >
                 <Image
                   className="pr-2"
@@ -127,7 +144,7 @@ const LoginForm = () => {
                     Forgot password?
                   </a>
                 </div>
-                <Button className="mb-3 md:mb-2 h-14">Sign In</Button>
+                <Button className="mb-3 md:mb-2 h-14">{loading}</Button>
                 <p className="text-sm leading-relaxed">
                   Not registered yet?{" "}
                   <a href="/auth/register" className="font-bold">
