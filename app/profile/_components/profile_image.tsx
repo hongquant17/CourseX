@@ -11,7 +11,7 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 
 interface ImageFormProps {
@@ -36,19 +36,6 @@ export const UserImageForm = ({ initialData }: ImageFormProps) => {
 
   const router = useRouter();
 
-  const { theme, setTheme } = useTheme();
-  const isDarkMode = theme === "dark";
-  var userSrc = isDarkMode ? "/light-no-ava.png" : "/no-avatar.svg";
-  if (theme == "system") {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      userSrc = "/light-no-ava.png";
-    } else {
-      userSrc = "/no-avatar.svg";
-    }
-  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -80,8 +67,9 @@ export const UserImageForm = ({ initialData }: ImageFormProps) => {
                 className={`cursor-pointer transform transition-transform w-2/3 h-auto`}
               >
                 <AvatarImage
-                  src={initialData.image ? initialData.image : userSrc}
+                  src={initialData.image ? initialData.image : undefined}
                 />
+                <AvatarFallback>X</AvatarFallback>
               </Avatar>
             </div>
           ))}

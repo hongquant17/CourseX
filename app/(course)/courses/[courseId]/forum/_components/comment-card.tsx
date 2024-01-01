@@ -1,8 +1,7 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FileEdit, Heart, Reply } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Like } from "@prisma/client";
 import { IconBtn } from "./icon-btn";
 import { useForum } from "./_contexts/forum-context";
@@ -65,9 +64,6 @@ export const CommentCard = ({
   courseOwner,
   likes,
 }: CommentProps) => {
-  const { theme, setTheme } = useTheme();
-  const isDarkMode = theme === "dark";
-  const userSrc = isDarkMode ? "/light-no-ava.png" : "/no-avatar.svg";
 
   const [areChildrenHidden, setChildrenHidden] = useState(true);
   const [isReplying, setIsReplying] = useState(false);
@@ -138,7 +134,8 @@ export const CommentCard = ({
         <CardHeader>
           <CardTitle className="flex justify-start items-center">
             <Avatar className="cursor-pointer transform transition-transform hover:scale-110 mr-4">
-              <AvatarImage src={userAvatar ? userAvatar : userSrc} />
+              <AvatarImage src={userAvatar ? userAvatar : undefined} />
+              <AvatarFallback>X</AvatarFallback>
             </Avatar>
             <div className="justify-between flex-col">
               <div className="flex justify-center items-center mb-2">

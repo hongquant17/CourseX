@@ -45,25 +45,12 @@ import { PasswordDialog } from "./dialog-password";
 
 export const UserButton = () => {
   const { data: session } = useSession();
-  const { theme, setTheme } = useTheme();
-  const isDarkMode = theme === "dark";
-  var userSrc = isDarkMode ? "/light-no-ava.png" : "/no-avatar.svg";
-  if (theme == "system") {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      userSrc = "/light-no-ava.png";
-    } else {
-      userSrc = "/no-avatar.svg";
-    }
-  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer transform transition-transform hover:scale-110">
-          <AvatarImage src={session?.user.image ? session?.user.image : userSrc} />
-          {/* <AvatarFallback>CS</AvatarFallback> */}
+          <AvatarImage src={session?.user.image ? session?.user.image : undefined} />
+          <AvatarFallback>X</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -71,7 +58,7 @@ export const UserButton = () => {
         <DropdownMenuSeparator />
         <DropdownMenuLabel>{session?.user.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <PasswordDialog></PasswordDialog>
+        {/* <PasswordDialog></PasswordDialog> */}
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
