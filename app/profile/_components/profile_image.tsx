@@ -13,9 +13,11 @@ import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
+import { FormData } from "./profile";
+
 
 interface ImageFormProps {
-  initialData: User;
+  initialData: FormData;
 }
 
 const formSchema = z.object({
@@ -42,6 +44,7 @@ export const UserImageForm = ({ initialData }: ImageFormProps) => {
       await axios.patch(`/api/users/change/image`, values).then((response) => {
         toast.success("User image changed");
       });
+      initialData.image = values.imageUrl;
       toggleEdit();
       router.refresh();
     } catch {

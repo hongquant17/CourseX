@@ -10,24 +10,10 @@ export default async function ProfilePage() {
   if (!session) {
     redirect("/");
   }
-  const userId = session.user.uid;
-  const userInfo = await db.user.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      id: true,
-      name: true,
-      username: true,
-      phone: true,
-      email: true,
-      image: true,
-      role: true,
-    },
-  });
+  
   return (
     <div className="flex justify-center items-center p-10">
-      <Profile userData={userInfo} />
+      <Profile />
     </div>
   );
 }

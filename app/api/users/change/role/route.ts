@@ -10,52 +10,72 @@ import { setCharAt } from "@/lib/utils";
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const formData = body.formData;
         const session = await getSession();
-        console.log(formData);
-        if (!formData?.ids || formData?.ids.length === 0) {
+        if (!body?.ids || body?.ids.length === 0) {
             return NextResponse.json({ message: "Select an user to change." }, { status: 400 });
         }
         if (!isAdminSession(session?.user.role)) {
             return NextResponse.json({message: "YOU ARE NOT ADMINISTRATOR"}, {status: 403});
         }
-
-        var newRole = formData?.role;
-        if (formData?.type == TYPE_CHANGE["DELETE"]) {
+        if (body?.type == TYPE_CHANGE["DELETE"]) {
           const deleteUsers = await db.user.deleteMany({
             where: {
               id: {
-                in: formData?.ids,
+                in: body?.ids,
               },
             }
           });
           if (deleteUsers) return NextResponse.json({message: "User(s) deleted"}, {status: 200});
           else return NextResponse.json({message: "Delete operation failed"}, {status: 500});
         }
-        if (formData?.type == TYPE_CHANGE["ADMIN"]) {
-          if (formData?.ids.length > 1) {
+        const selectedUsers = await db.user.findMany({
+          where: {
+            id: {
+              in: body?.ids,
+            }
+          },
+          select: {
+            id: true,
+            role: true,
+          }
+        })
+        
+        if (body?.type == TYPE_CHANGE["ADMIN"]) {
+          if (body?.ids.length > 1) {
             return NextResponse.json({message: "Please choose one user per admin privileges change."}, {status: 400})
           }
-          newRole = setCharAt(newRole, PRIVILEGES["ADMIN"], newRole[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"] ? ROLES["NOT_ADMIN"] : ROLES["ADMIN"]);
-        }
-        const updateUsers = await db.user.updateMany({
-            where: {
-              id: {
-                in: formData?.ids,
+          selectedUsers.forEach(async user => {
+            var newRole = "0,2";
+            if (user.role) newRole = setCharAt(user.role, PRIVILEGES["ADMIN"], user.role[PRIVILEGES["ADMIN"]] == ROLES["ADMIN"] ? ROLES["NOT_ADMIN"] : ROLES["ADMIN"]) ?? "";
+            const updateUsers = await db.user.update({
+              where: {
+                id: user.id,
               },
+              data: {
+                role: newRole,
+              },
+            })
+            if (!updateUsers) return NextResponse.json({message: `Cannot change user ${user.id} role. Operation aborted`}, {status: 500});
+          });
+          return NextResponse.json({message: "All selected user granted ADMIN privilege"}, {status: 200});
+        }
+        
+        selectedUsers.forEach(async user => {
+          var newRole = "0,2";
+          if (user.role) newRole = setCharAt(user.role, PRIVILEGES["OTHERS"], user.role[PRIVILEGES["OTHERS"]] == ROLES["TEACHER"] ? ROLES["USER"] : ROLES["TEACHER"]) ?? "";
+          const updateUsers = await db.user.update({
+            where: {
+              id: user.id,
             },
             data: {
               role: newRole,
             },
           })
-        
-        if(!updateUsers) {
-            return NextResponse.json({message: "Something failed"}, {status: 500});
-        }
-        return NextResponse.json({message: "All user changed role"}, {status: 200});
+          if (!updateUsers) return NextResponse.json({message: `Cannot change user ${user.id} role. Operation aborted`}, {status: 500});
+        });
+        return NextResponse.json({message: "All selected user changed to TEACHER"}, {status: 200});
 
     } catch (error) {
-        console.log(error);
         return NextResponse.json({ message: "Error", error }, { status: 500 });
     }
 }

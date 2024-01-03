@@ -1,6 +1,6 @@
 "use client";
 import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserImageForm } from "./profile_image";
 import { getRole } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -8,31 +8,64 @@ import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
 
-interface FormData {
+export interface FormData {
+  id: string;
   name: string;
   email: string;
   phone: string;
   username: string;
   old_pass: string;
   new_pass: string;
+  role: string;
+  image: string;
 }
 
-export const Profile = (userData: any) => {
-  userData = userData.userData;
-
-  console.log(userData);
+export const Profile = () => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing((current) => !current);
   const [formData, setFormData] = useState<FormData>({
-    name: userData.name,
-    email: userData.email,
-    phone: userData.phone,
-    username: userData.username,
+    name: '',
+    id: '',
+    email: '',
+    phone: '',
+    username: '',
     old_pass: '',
     new_pass: '',
+    role: '',
+    image: '',
   });
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch("/api/users", {
+          method: "GET",
+        });
 
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+
+        const response = await res.json();
+        setFormData({
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          phone: response.phone,
+          username: response.username,
+          old_pass: '',
+          new_pass: '',
+          role: response.role,
+          image: response.image,
+        });
+      } catch (error) {
+        toast.error("Cannot get user information");
+        
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value;
     const name = e.target.name;
@@ -63,8 +96,8 @@ export const Profile = (userData: any) => {
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col items-center mr-28">
-        <UserImageForm initialData={userData} />
-        <span className="font-semibold">{userData.name}</span>
+        <UserImageForm initialData={formData} />
+        <span className="font-semibold">{formData.name}</span>
       </div>
       {!isEditing && (
         <div className="relative flex flex-col items-center rounded-[20px] mx-auto p-3">
@@ -74,29 +107,29 @@ export const Profile = (userData: any) => {
           <div className="grid grid-cols-2 gap-4 px-2 w-full">
             <div className="flex flex-col items-start justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600">Full Name</p>
-              <p className="text-base font-medium">{userData.name}</p>
+              <p className="text-base font-medium">{formData.name}</p>
             </div>
 
             <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600">Email</p>
-              <p className="text-base font-medium">{userData.email}</p>
+              <p className="text-base font-medium">{formData.email}</p>
             </div>
 
             <div className="flex flex-col items-start justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600">Phone</p>
               <p className="text-base font-medium">
-                {userData.phone ? userData.phone : ""}
+                {formData.phone ? formData.phone : ""}
               </p>
             </div>
 
             <div className="flex flex-col items-start justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600">Username</p>
-              <p className="text-base font-medium">{userData.username}</p>
+              <p className="text-base font-medium">{formData.username}</p>
             </div>
             
             <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600">Role</p>
-              <p className="text-base font-medium">{getRole(userData.role)}</p>
+              <p className="text-base font-medium">{getRole(formData.role)}</p>
             </div>
           </div>
           <div> 
@@ -148,7 +181,7 @@ export const Profile = (userData: any) => {
             </div>
             <div className="flex flex-col justify-center rounded-2xl bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
               <p className="text-sm text-gray-600 mb-2">Role</p>
-              <p className="text-base font-medium">{getRole(userData.role)}</p>
+              <p className="text-base font-medium">{getRole(formData.role)}</p>
             </div>
             <div className="col-span-2 flex items-center justify-center">
             <Button onClick={toggleEdit} className="mr-4">

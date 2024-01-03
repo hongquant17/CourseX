@@ -33,3 +33,15 @@ export const ROLES: { [key: string]: string } = {
     userRole: string | null;
     courseOwner: string;
 };
+
+export type UserItem = {
+  id: string;
+  name: string | null;
+  username: string | null;
+  phone: string | null;
+  email: string;
+  password: string | null;
+  emailVerified: Date | null;
+  image: string | null;
+  role: string | null;
+};
