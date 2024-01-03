@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import {
@@ -11,7 +11,7 @@ import {
   useReactTable,
   getSortedRowModel,
   getPaginationRowModel,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -20,26 +20,34 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { TYPE_CHANGE, UserItem } from "@/lib/constant";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-}
 interface FormData {
-  ids: Array<string>,
-  role: string,
-  type: string,
+  ids: Array<string>;
+  type: number;
 }
-export function DataTable<TData, TValue>({
+interface DataTableProps<TData extends UserItem, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+}
+
+export function DataTable<TData extends UserItem, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
+  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -56,7 +64,37 @@ export function DataTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
-  })
+  });
+
+  React.useEffect(() => {
+    const selectedRows = table
+      .getRowModel()
+      .flatRows.filter((row) => row.getIsSelected());
+    const selectedIds = selectedRows.map((row) => row.original.id);
+    setSelectedIds(selectedIds);
+  }, [rowSelection]);
+
+  const handleBatchClick = async (typeAction: number) => {
+    const formData: FormData = {
+      ids: selectedIds,
+      type: typeAction,
+    };
+    try {
+      if (typeAction == TYPE_CHANGE["ADMIN"] && formData.ids.length > 1)
+        toast.error("Choose only one user to grant admin privilege");
+      else {
+        const res = await axios.post(`/api/users/change/role`, formData);
+        if (res.status == 200) {
+          toast.success(res.data.message);
+          table.toggleAllPageRowsSelected(false);
+          setSelectedIds([]);
+          router.refresh();
+        }
+      }
+    } catch {
+      toast.error("Select an user");
+    }
+  };
 
   return (
     <div className="px-10 pt-4 pb-10">
@@ -69,6 +107,26 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <div className="flex space-x-2">
+          <Button
+            className="bg-red-500"
+            onClick={() => handleBatchClick(TYPE_CHANGE["ADMIN"])}
+          >
+            Toggle Admin
+          </Button>
+          <Button
+            className="bg-green-500"
+            onClick={() => handleBatchClick(TYPE_CHANGE["OTHER_ROLE"])}
+          >
+            Toggle Teacher
+          </Button>
+          <Button
+            className="bg-gray-500"
+            onClick={() => handleBatchClick(TYPE_CHANGE["DELETE"])}
+          >
+            Delete Users
+          </Button>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

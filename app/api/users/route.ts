@@ -24,7 +24,7 @@ export async function GET(req: Request) {
       { status: 500 }
     );
   } catch (error) {
-    console.log("[CHAPTER_ID_DELETE", error);
+    console.log("[USER_INFO", error);
     return NextResponse.json({ message: "Internal Error" }, { status: 500 });
   }
 }

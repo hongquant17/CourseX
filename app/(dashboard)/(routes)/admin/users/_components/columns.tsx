@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { User } from "@prisma/client"
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
+import { User } from "@prisma/client";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import {
@@ -14,12 +14,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { cn, getRole } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import UserActions from "./actions";
-
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -61,18 +59,14 @@ export const columns: ColumnDef<User>[] = [
     },
     cell: ({ row }) => {
       const userId = String(row.getValue("id") || "");
-      return (
-        <div className="pl-2">
-          {userId}
-        </div>
-      );
-    }
+      return <div className="pl-2">{userId}</div>;
+    },
   },
   {
     accessorKey: "name",
     header: ({ column }) => {
       return (
-        <div className="pl-20">
+        <div className="pl-4">
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -85,39 +79,12 @@ export const columns: ColumnDef<User>[] = [
     },
     cell: ({ row }) => {
       const name = String(row.getValue("name") || "");
-      return (
-        <div className="pl-2">
-          {name}
-        </div>
-      );
-    }
+      return <div className="pl-2">{name}</div>;
+    },
   },
-  // {
-  //   accessorKey: "price",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //       >
-  //         Username
-  //         <ArrowUpDown className="ml-2 h-4 w-4" />
-  //       </Button>
-  //     );
-  //   },
-  //   cell: ({ row }) => {
-  //     const price = parseFloat(row.getValue("price") || "0");
-  //     const formatted = new Intl.NumberFormat("vi-VN", {
-  //       style: "currency",
-  //       currency: "VND",
-  //     }).format(price);
-
-  //     return <div>{formatted}</div>;
-  //   },
-  // },
   {
     accessorKey: "role",
-    accessorFn: row => getRole(row.role),
+    accessorFn: (row) => getRole(row.role),
     header: ({ column }) => {
       return (
         <Button
@@ -131,34 +98,22 @@ export const columns: ColumnDef<User>[] = [
     },
     cell: ({ row }) => {
       const currentRole = String(row.getValue("role") || "");
-
+      var firstRole = "";
+      var secondRole = "";
+      if (currentRole.includes("ADMIN")) {
+        firstRole = "ADMIN";
+        if(currentRole.includes("TEACHER")) secondRole = "TEACHER";
+      } else {
+        if (currentRole.includes("TEACHER")) secondRole = "TEACHER";
+        if (currentRole.includes("USER")) secondRole = "USER";
+      }
 
       return (
-        <div className="pl-8">
-          {/* <Badge className={cn("bg-slate-500", true && "bg-sky-700" ,true && "bg-red-700")}>
-            {true ? "Admin" : true ? "Teacher" : "Student"}
-          </Badge> */}
-          <Badge>
-            {currentRole}
-          </Badge>
+        <div className={`${!firstRole ? "pl-10" : ""}`}>
+          {(firstRole) && <Badge className="bg-red-500">{firstRole}</Badge>}
+          {(secondRole) && <Badge className={`${(secondRole == "TEACHER") ? "bg-green-500" : ""} ${firstRole ? "ml-2" : ""}`}>{secondRole}</Badge>}
         </div>
       );
     },
-  },
-  {
-    id: "actions",
-    header: ({ column }) => {
-      return (
-        <div>
-          Options
-        </div>
-      );
-    },
-    cell: ({ row }) => (
-       <UserActions
-       id = {row.original.id}
-       role = {row.original.role}
-       />
-    )
   },
 ];
