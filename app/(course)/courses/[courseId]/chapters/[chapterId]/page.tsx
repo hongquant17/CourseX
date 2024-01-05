@@ -13,38 +13,16 @@ import { getSession } from "@/lib/auth";
 import Link from "next/link";
 import { Metadata } from "next";
 import { db } from "@/lib/db";
+import { getCurrentCourse } from "@/actions/get-current-course";
 
 export async function generateMetadata({
   params,
 }: {
   params: { courseId: string };
 }) {
-  let courseName = "";
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
-    include: {
-      chapters: {
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          position: "asc",
-        },
-      },
-      categories: {
-        select: {
-          category: true,
-        }
-      },
-    },
-  });
-  if (course) {
-    courseName = course.title;
-  }
+  const course = await getCurrentCourse(params.courseId);
   return {
-    title: `${courseName} - Details | CourseX`,
+    title: `${course?.title} - Details | CourseX`,
   };
 }
 

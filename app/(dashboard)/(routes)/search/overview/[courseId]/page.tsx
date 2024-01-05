@@ -11,35 +11,14 @@ import { getProgress } from "@/actions/get-progress";
 import { getSession } from "@/lib/auth";
 import { ViewCourse } from "./_components/view";
 import { Forum } from "./_components/forum-button";
-import { Metadata } from "next";
+import { getCurrentCourse } from "@/actions/get-current-course";
+import getOverviewCourse from "@/actions/get-overview-course";
 
 export async function generateMetadata({ params }: { params: { courseId: string } }) {
-  let courseName = ''
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
-    include: {
-      chapters: {
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          position: "asc"
-        }
-      },
-      categories: {
-        select: {
-          category: true,
-        }
-      },
-    }
-  })
-  if (course) {
-    courseName = course.title
-  }
+  const course = await getCurrentCourse(params.courseId);
+  
   return {
-    title: `${courseName} - Overview | CourseX`,
+    title: `${course?.title} - Overview | CourseX`,
   };
 }
 
@@ -55,32 +34,7 @@ const CourseIdOverview = async ({
   }
   const userId = session.user.uid;
 
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
-    include: {
-      chapters: {
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          position: "asc"
-        }
-      },
-      categories: {
-        select: {
-          category: true,
-        }
-      },
-      enrolls: {
-        where: {
-          userId: userId, 
-          courseId: params.courseId
-        }
-      }
-    }
-  });
+  const course = await getOverviewCourse(params.courseId);
 
   if (!course) {
     return redirect("/");
@@ -94,9 +48,7 @@ const CourseIdOverview = async ({
     // Nếu có thông tin enroll, lấy giá trị của trường isAccepted
     isAccepted = course.enrolls[0].isAccepted;
   }
-  console.log('Course moi enroll duoc chap nhan chua')
-  console.log(isAccepted)
-  console.log(isEnrolled)
+
   const progressCount = await getProgress(userId, course.id)
 
   return (

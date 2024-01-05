@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 import { DataTable } from "./_components/data-table";
 import { columns } from "./_components/columns";
 import { Metadata } from "next";
+import { getAllUsers } from "@/actions/get-all-users";
 
 export const metadata: Metadata = {
   title: "User Authorization | CourseX",
@@ -14,10 +15,7 @@ const UserPage = async () => {
   if (!session) {
     return redirect("/auth/signin");
   }
-  const users = await db.user.findMany({
-    where: {},
-    distinct: ["id"],
-  });
+  const users = await getAllUsers();
   return (
     <div>
       <DataTable columns={columns} data={users} />

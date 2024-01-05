@@ -7,13 +7,10 @@ import { Metadata } from "next";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { getCurrentCourse } from "@/actions/get-current-course";
 
 export async function generateMetadata({ params }: { params: { courseId: string } }) {
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    }
-  })
+  const course = await getCurrentCourse(params.courseId);
   return {
     title: `${course?.title} - Forum | CourseX`
   }

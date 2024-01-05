@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
 import { CourseProgress } from "@/components/course-progress";
 import { getSession } from "@/lib/auth";
+import { getEnroll } from "@/actions/get-enroll";
 
 interface CourseSidebarProps {
   course: Course & {
@@ -25,15 +26,7 @@ export const CourseSidebar = async ({
 
   const userId = session.user.uid;
 
-  const enroll = await db.enroll.findUnique({
-    where: {
-      userId_courseId: {
-        userId,
-        courseId: course.id,
-      },
-      isAccepted: true,
-    },
-  });
+  const enroll = await getEnroll(course.id, userId)
 
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">

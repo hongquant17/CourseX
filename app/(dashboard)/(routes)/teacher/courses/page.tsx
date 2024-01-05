@@ -6,35 +6,28 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { Metadata } from "next";
+import getCoursesCreated from "@/actions/get-courses-created";
 
 export const metadata: Metadata = {
   title: "Teacher Dashboard | CourseX",
-}
+};
 
-
-const CoursesPage = async() =>{
+const CoursesPage = async () => {
   const session = await getSession();
-    
+
   if (!session) {
-      return redirect("/auth/signin");
+    return redirect("/auth/signin");
   }
 
   const userId = session.user.uid;
 
-    const courses = await db.course.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      }
-    })
+  const courses = await getCoursesCreated(userId);
 
-    return (
-      <div className="py-8 px-16">
-        <DataTable columns={columns} data={courses} />
-      </div>
-    );
-}
+  return (
+    <div className="py-8 px-16">
+      <DataTable columns={columns} data={courses} />
+    </div>
+  );
+};
 
 export default CoursesPage;
