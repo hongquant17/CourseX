@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth";
 import { options } from "@/lib/auth";
 import { Metadata } from "next";
 import getAllCategories from "@/actions/get-categories";
+// import getAllCategories from "@/actions/get-categories";
 
 export const metadata: Metadata = {
   title: "Browse | CourseX",
@@ -24,7 +25,7 @@ interface SearchPageProps {
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const session = await getServerSession(options);
-  
+
   if (!session) {
     redirect("/");
   }
