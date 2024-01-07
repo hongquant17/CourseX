@@ -111,11 +111,7 @@ const ChapterIdPage = async ({
                 nextChapterId={nextChapter?.id}
                 isCompleted={!!userProgress?.isCompleted}
               />
-            ) : (
-              <CourseEnrollButton
-                courseId={params.courseId}
-              />
-            )}
+            ) : null}
           </div>
           <Separator />
           <div>

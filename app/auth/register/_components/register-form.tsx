@@ -133,9 +133,6 @@ const UserForm = () => {
                 onChange={handleChange}
                 value={formData.password}
               />
-              <p className="text-gray-600 text-xs mt-1">
-                Must contain 1 uppercase letter, 1 number, min. 8 characters.
-              </p>
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-semibold mb-2">

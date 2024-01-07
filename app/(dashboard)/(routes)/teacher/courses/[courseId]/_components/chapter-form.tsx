@@ -122,7 +122,7 @@ export const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
               )}
             />
             <Button disabled={!isValid || isSubmitting}  type="submit">
-              Tạo mới
+              Create
             </Button>
           </form>
         </Form>

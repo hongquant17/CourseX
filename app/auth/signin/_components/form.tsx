@@ -135,14 +135,11 @@ const LoginForm = () => {
                   onChange={handleChange}
                   className="flex items-center w-full px-5 py-4 mb-3 md:mb-5 mr-2 text-sm font-medium outline-none rounded-2xl"
                 />
-                <div className="flex flex-row justify-between mb-5 md:mb-8 items-center">
+                <div className="flex flex-row justify-center mb-5 md:mb-8 items-center">
                   <Checkbox id="terms" />
                   <Label htmlFor="terms" className="mr-4 pl-1">
                     Keep me signed in
                   </Label>
-                  <a href="/auth/forget" className="text-sm font-medium">
-                    Forgot password?
-                  </a>
                 </div>
                 <Button className="mb-3 md:mb-2 h-14">{loading}</Button>
                 <p className="text-sm leading-relaxed">

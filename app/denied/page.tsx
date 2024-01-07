@@ -10,7 +10,7 @@ const Denied = () => {
     <div className="bg-red-500 px-2 text-sm rounded rotate-12 absolute">
     <h1>You dont have permission to access this page</h1>
     </div>
-    <Button className="mt-5 px-8 py-3">
+    <Button className="mt-5 px-8 py-3" variant="secondary">
     <Link href="/auth/signin">Sign in</Link>
       </Button>
   </div>
