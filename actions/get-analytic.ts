@@ -33,14 +33,10 @@ export const getAnalytics = async (userId: string) => {
       }
     });
 
-    const distinctEnrolls = await db.enroll.findMany({
+    const distinctEnrolls = await db.course.findMany({
       where: {
-        course: {
-          userId: userId,
-        }
-      },
-      distinct: ["courseId"],
-    
+        userId: userId,
+      },    
     })
 
     const groupedEarnings = groupByCourse(enrolls);
