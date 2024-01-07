@@ -18,42 +18,18 @@ import { getSession } from "@/lib/auth";
 import { Metadata } from "next";
 import { Category } from "@prisma/client";
 import { text } from "stream/consumers";
+import { getCurrentCourse } from "@/actions/get-current-course";
+import getCategories from "@/actions/get-categories";
+import getCreatingCourse from "@/actions/get-creating-course";
 
 export async function generateMetadata({
   params,
 }: {
   params: { courseId: string };
 }) {
-  let courseName = "";
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-    },
-    include: {
-      chapters: {
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          position: "asc",
-        },
-      },
-      categories: {
-        include: {
-          category: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-  if (course) {
-    courseName = course.title;
-  }
+  const currentCourse = await getCurrentCourse(params.courseId);
   return {
-    title: `${courseName} - Creation | CourseX`,
+    title: `${currentCourse?.title} - Creation | CourseX`,
   };
 }
 
@@ -70,41 +46,14 @@ const CourseIdPage = async ({
 
     const userId = session.user.uid;
 
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId,
-      userId
-    },
-    include: {
-      chapters: {
-        orderBy: {
-          position: "asc",
-        },
-      },
-      attachments: {
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-      categories: {
-        include: {
-          category: {
-          },
-        },
-      },
-    },
-  });
+  const course = await getCreatingCourse(params.courseId, userId);
 
   const courseCategoryTags: Tag[] = (course?.categories || []).map((item) => ({
     id: item.category.id,
     text: item.category.name
   }));
 
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc",
-    }
-  });
+  const categories = await getCategories();
 
   if (!course) {
     return redirect('/')

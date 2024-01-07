@@ -1,6 +1,4 @@
-import { isAdminDB, isAdminSession } from "@/lib/admin";
 import { getSession } from "@/lib/auth";
-import { isTeacherDB, isTeacherSession } from "@/lib/teacher";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
  
 const f = createUploadthing();
@@ -8,13 +6,8 @@ const f = createUploadthing();
 const handleAuth = async () => {
     const session = await getSession();
     const userId = session?.user.uid;
-    const role = session?.user.role;
-    var isAuthorized = isAdminSession(role) || isTeacherSession(role);
-    if (!isAuthorized) {
-        isAuthorized = await isAdminDB(userId) || await isTeacherDB(userId);
-    }
 
-    if (!userId || !isAuthorized) throw new Error("Unauthorized");
+    if (!userId) throw new Error("Unauthorized");
     return { userId }; 
 } 
 

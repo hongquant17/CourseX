@@ -57,7 +57,7 @@ export async function POST(req: Request) {
             })
             if (!updateUsers) return NextResponse.json({message: `Cannot change user ${user.id} role. Operation aborted`}, {status: 500});
           });
-          return NextResponse.json({message: "All selected user granted ADMIN privilege"}, {status: 200});
+          return NextResponse.json({message: "Role changed"}, {status: 200});
         }
         
         selectedUsers.forEach(async user => {
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
           })
           if (!updateUsers) return NextResponse.json({message: `Cannot change user ${user.id} role. Operation aborted`}, {status: 500});
         });
-        return NextResponse.json({message: "All selected user changed to TEACHER"}, {status: 200});
+        return NextResponse.json({message: "Role changed"}, {status: 200});
 
     } catch (error) {
         return NextResponse.json({ message: "Error", error }, { status: 500 });

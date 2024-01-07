@@ -12,24 +12,17 @@ import { ChapterActions } from "./_components/chapter-actions";
 import { getSession } from "@/lib/auth";
 
 import { Metadata } from "next";
+import { getCurrentCourse } from "@/actions/get-current-course";
+import { getCurrentChapter } from "@/actions/get-current-chapter";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { chapterId: string, courseId: string };
+  params: { courseId: string };
 }) {
-  let chapterTitle = "";
-  const chapter = await db.chapter.findUnique({
-    where: {
-      id: params.chapterId,
-      courseId: params.courseId,
-    },
-  });
-  if (chapter) {
-    chapterTitle = chapter.title;
-  }
+  const course = await getCurrentCourse(params.courseId);
   return {
-    title: `${chapterTitle} - Chapter Creation | CourseX`,
+    title: `${course?.title} - Chapter Creation | CourseX`,
   };
 }
 
@@ -46,15 +39,7 @@ const ChapterIdPage = async ({
 
   const userId = session.user.uid;
 
-  const chapter = await db.chapter.findUnique({
-    where: {
-      id: params.chapterId,
-      courseId: params.courseId,
-    },
-    include: {
-      muxData: true,
-    },
-  });
+  const chapter = await getCurrentChapter(params.courseId, params.chapterId)
 
   if (!chapter) {
     return redirect("/");

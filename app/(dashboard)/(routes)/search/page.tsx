@@ -9,6 +9,8 @@ import { Categories } from "./_components/categories";
 import { getServerSession } from "next-auth";
 import { options } from "@/lib/auth";
 import { Metadata } from "next";
+import getAllCategories from "@/actions/get-categories";
+// import getAllCategories from "@/actions/get-categories";
 
 export const metadata: Metadata = {
   title: "Browse | CourseX",
@@ -23,17 +25,13 @@ interface SearchPageProps {
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const session = await getServerSession(options);
-  
+
   if (!session) {
     redirect("/");
   }
   const userId = session.user.uid;
 
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
+  const categories = await getAllCategories();
 
   const courses = await getCourses({
     userId,
