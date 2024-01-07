@@ -10,6 +10,8 @@ Bản build của server cùng NodeJs18 được tải sẵn lên platform, các
   jovyan@jupyter-fall2324w3g2:~$ bash start.sh
   ```
   Truy cập trang web http://fall2324w3g2.int3306.freeddns.org
+
+  Link video demo: https://youtu.be/xGjlS_0WA1c
   
 - Chi tiết file `start.sh`
   - `cd CourseX`: Di chuyển vào folder CourseX
