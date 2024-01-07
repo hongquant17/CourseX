@@ -9,6 +9,8 @@ Bản build của server cùng NodeJs18 được tải sẵn lên platform, các
   ```shell
   jovyan@jupyter-fall2324w3g2:~$ bash start.sh
   ```
+  Truy cập trang web http://fall2324w3g2.int3306.freeddns.org
+  
 - Chi tiết file `start.sh`
   - `cd CourseX`: Di chuyển vào folder CourseX
   - `/etc/jupyter/bin/expose 8000`: Mở cổng 8000
