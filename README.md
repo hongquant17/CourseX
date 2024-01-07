@@ -43,7 +43,7 @@ GOOGLE_ID=
 GOOGLE_SECRET=
 ```
 ### Cài đặt Prisma
-Sau khi thêm Database URL, cài đặt Prisma
+Sau khi thêm Database URL, cài đặt Prisma.
 ```shell
 npx prisma generate
 npx prisma db push
