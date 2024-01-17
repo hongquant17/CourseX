@@ -6,6 +6,7 @@ import { ConfettiProvider } from '@/components/providers/confetti-provider'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import SessionProvider from '@/components/providers/session-provider';
 import { getSession } from '@/lib/auth';
+import { NotificationProvider } from '@/components/providers/notification-provider'
 
 const inter = Inter({
   subsets: ['vietnamese']
@@ -27,6 +28,7 @@ export default async function RootLayout({
         <body className={inter.className}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <ConfettiProvider />
+            <NotificationProvider />
             <ToasterProvider />
             {children}
           </ThemeProvider>

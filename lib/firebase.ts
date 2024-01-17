@@ -1,39 +1,22 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getMessaging, getToken } from "firebase/messaging";
-import { env } from "process";
+import { FirebaseOptions, initializeApp } from "firebase/app";
+import { getMessaging } from "firebase/messaging";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDQAu91jDJUIc0_ewrLAuHTBq9AQ1eNMH0",
-  authDomain: "coursexxx-c4f70.firebaseapp.com",
-  projectId: "coursexxx-c4f70",
-  storageBucket: "coursexxx-c4f70.appspot.com",
-  messagingSenderId: "283056874113",
-  appId: "1:283056874113:web:7152040c50dd8f50a02380",
-  measurementId: "G-L23V0WG2FF"
+const firebaseConfig: FirebaseOptions = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
+const firebaseApp = initializeApp(firebaseConfig);
+export const messaging = () => getMessaging(firebaseApp);
 
-export const requestForToken = async () => {
-    return getToken(messaging, {vapidKey: process.env.FIREBASE_VAPID_KEY})
-            .then((currentToken) => {
-                if (currentToken) {
-                    console.log('current token: ', currentToken);
-                }
-                else {
-                    console.log('no token available: ');
-                    
-                }
-            })
-            .catch((err : any) => {
-                console.log('Error while retrieving token', err); 
-            })
-}
+export default firebaseApp;
