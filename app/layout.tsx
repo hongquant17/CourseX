@@ -28,7 +28,7 @@ export default async function RootLayout({
         <body className={inter.className}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
             <ConfettiProvider />
-            <NotificationProvider />
+            {session && <NotificationProvider />}
             <ToasterProvider />
             {children}
           </ThemeProvider>

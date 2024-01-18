@@ -11,7 +11,6 @@ const useFCM = () => {
     if ("serviceWorker" in navigator) {
       const fcmMessaging = messaging();
       const unsubscribe = onMessage(fcmMessaging, (payload) => {
-        toast(payload.notification?.title);
         setMessages((messages) => [...messages, payload]);
       });
       return () => unsubscribe();
