@@ -11,6 +11,7 @@ import { UserButton } from "@/components/user-button";
 import { PRIVILEGES, ROLES } from "@/lib/constant";
 import { isAdminSession } from "@/lib/admin";
 import { isTeacherSession } from "@/lib/teacher";
+import NotiSection from "./noti-section";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -56,9 +57,10 @@ export const NavbarRoutes = () => {
         <div className="pr-4">
           <ModeToggle />
         </div>
-        <div>
-          <UserButton></UserButton>
+        <div className="pr-4">
+          <UserButton />
         </div>
+          <NotiSection />
       </div>
     </>
   );

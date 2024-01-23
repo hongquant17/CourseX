@@ -107,6 +107,28 @@ model Like {
 
 }
 
+model NotificationData {
+  id String @id @default(uuid())
+  notiId String
+  subjectCount Int
+  subjects Json
+  inObj Json
+  prObj Json
+  diObj Json
+}
+
+model Notification {
+  id String @id @default(uuid())
+  userId String
+  notiDataId String
+  type String
+  createdAt DateTime @default(now())
+  readAt DateTime
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 model MuxData {
   id         String  @id @default(uuid())
   assetId    String
@@ -186,6 +208,7 @@ model User {
   enrolls       Enroll[]
   comments      Comment[]
   likes         Like[]
+  notifications Notification[]
 }
 
 model VerificationToken {
