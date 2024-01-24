@@ -26,6 +26,7 @@ import { isAdminDB } from "@/lib/admin";
 import { isTeacherDB } from "@/lib/teacher";
 import { getRole } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { NotificationProps } from "@/lib/constant";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -95,6 +96,21 @@ export const CommentCard = ({
       toast.error(response.message);
     } else {
       toast.success(response.message);
+      if (response.message === "Liked") {
+        var newNoti : NotificationProps = { 
+          type: 'like',
+          subjectCount: 1,
+          subjects: [{ id: forumContext.userId, name: forumContext.userName ? forumContext.userName : '', type: 'user' }],
+          inObj: { id: id },
+          prObj: { id: forumContext.courseId, type: "course" },
+          receiveId: id,
+      }
+        const pushNoti = await fetch(`/api/users/notification`, {
+          method: "POST",
+          body: JSON.stringify(newNoti),
+          headers,
+        })
+      };
       router.refresh();
     }
   };

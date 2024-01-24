@@ -8,6 +8,7 @@ export interface ForumContext {
     createLocalComment: (comment: CommentItem) => void;
     courseId: string;
     userId: string | undefined;
+    userName: string | null | undefined;
 }
 
 const initialContextValue: ForumContext = {
@@ -16,6 +17,7 @@ const initialContextValue: ForumContext = {
     createLocalComment: (comment: CommentItem) => ([]),
     courseId: '',
     userId: undefined,
+    userName: undefined,
 };
 
 const Context = React.createContext(initialContextValue);
@@ -29,7 +31,7 @@ export function useForum() {
     return context;
 }
 
-export function ForumProvider({items, children, courseId, userId} : {items: CommentItem[],children: React.ReactNode, courseId: string, userId: string | undefined}) {
+export function ForumProvider({items, children, courseId, userId, userName} : {items: CommentItem[],children: React.ReactNode, courseId: string, userId: string | undefined, userName: string | null | undefined}) {
     const [comments, setComments] = useState<CommentItem[]>([]);
 
     const commentsByParentId = useMemo<{ [key: string]: CommentItem[] }>(() => {      
@@ -65,6 +67,7 @@ export function ForumProvider({items, children, courseId, userId} : {items: Comm
         createLocalComment,
         courseId,
         userId,
+        userName,
     }}>
         {children}
     </Context.Provider>

@@ -4,18 +4,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Link from "next/link";
 
 const NotiSection = () => {
   return (
     <>
-      <Popover>
-        <PopoverTrigger>
-            <Bell />
-        </PopoverTrigger>
-        <PopoverContent className="">
-            
-        </PopoverContent>
-      </Popover>
+      <Link href={`/notification`}>
+        <Bell className="cursor-pointer"></Bell>
+      </Link>
     </>
   );
 };
