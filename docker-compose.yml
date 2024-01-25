@@ -1,0 +1,13 @@
+version: '2.2'
+services:
+  redis:
+    image: redislabs/redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - data01:/usr/share/redis/data
+ 
+volumes:
+  data01:
+    driver: local

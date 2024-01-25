@@ -2,6 +2,7 @@ import { Category, Course } from "@prisma/client";
 
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
+import { rd } from "@/lib/redis";
 
 type CourseWithProgressWithCategory = Course & {
   categories: Category[];
@@ -17,91 +18,105 @@ type GetCourses = {
 
 export const getCourses = async ({
   userId,
-  title, 
-  categoryId
+  title,
+  categoryId,
 }: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
   try {
     if (categoryId === undefined) {
-        const courses = await db.course.findMany({
-          where: {
-            isPublished: true,
-            title: {
-              contains: title,
-            },
-          },
-          include: {
-            categories: {
-              select: {
-                category: true,
-              }
-            },
-            chapters: {
-              where: {
-                isPublished: true,
-              },
-              select: {
-                id: true,
-              }
-            },
-            enrolls: {
-              where: {
-                userId,
-                isAccepted: true,
-              }
-            }, 
-          },
-          orderBy: {
-            createdAt: "desc",
-          }
-        });
+      const keyData = "course:all";
+      const cachedData = await rd.get(keyData);
 
-        const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
-          courses.map(async course => {
+      // if (cachedData) {
+      //   return cachedData;
+      // }
+      const courses = await db.course.findMany({
+        where: {
+          isPublished: true,
+          title: {
+            contains: title,
+          },
+        },
+        include: {
+          categories: {
+            select: {
+              category: true,
+            },
+          },
+          chapters: {
+            where: {
+              isPublished: true,
+            },
+            select: {
+              id: true,
+            },
+          },
+          enrolls: {
+            where: {
+              userId,
+              isAccepted: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      const coursesWithProgress: CourseWithProgressWithCategory[] =
+        await Promise.all(
+          courses.map(async (course) => {
             if (course.enrolls.length === 0) {
               return {
                 ...course,
                 progress: null,
-                categories: course.categories.map(category => category.category),
-              }
+                categories: course.categories.map(
+                  (category) => category.category
+                ),
+              };
             }
 
             const progressPercentage = await getProgress(userId, course.id);
 
-            const formattedCategories: Category[] = course.categories.map(courseCategory => ({
-              id: courseCategory.category.id,
-              name: courseCategory.category.name,
-              createdAt: courseCategory.category.createdAt,
-              updatedAt: courseCategory.category.updatedAt,
-            }));
+            const formattedCategories: Category[] = course.categories.map(
+              (courseCategory) => ({
+                id: courseCategory.category.id,
+                name: courseCategory.category.name,
+                createdAt: courseCategory.category.createdAt,
+                updatedAt: courseCategory.category.updatedAt,
+              })
+            );
 
             return {
               ...course,
               progress: progressPercentage,
-              categories: formattedCategories
+              categories: formattedCategories,
             };
           })
         );
 
-        return coursesWithProgress;
-      } else {
-        const category = await db.category.findUnique({
-          where: {
-            id: categoryId,
-          }, include: {
-            Courses: {
-              select:{
-                course: true,
-              }
-            }
-          }
-        });
+      return coursesWithProgress;
+    } else {
+      const category = await db.category.findUnique({
+        where: {
+          id: categoryId,
+        },
+        include: {
+          Courses: {
+            select: {
+              course: true,
+            },
+          },
+        },
+      });
 
-        const courseList: Course[] = category?.Courses?.map(course => course.course) || [];
+      const courseList: Course[] =
+        category?.Courses?.map((course) => course.course) || [];
 
-        const coursesWithProgress: (CourseWithProgressWithCategory | null)[] = await Promise.all(
+      const coursesWithProgress: (CourseWithProgressWithCategory | null)[] =
+        await Promise.all(
           courseList.map(async (course) => {
             if (!course || course.isPublished === false) return null;
-        
+
             const courseData = await db.course.findUnique({
               where: {
                 id: course.id,
@@ -128,26 +143,30 @@ export const getCourses = async ({
                 },
               },
             });
-        
+
             if (!courseData) return null;
-        
+
             if (courseData.enrolls.length === 0) {
               return {
                 ...courseData,
                 progress: null,
-                categories: courseData.categories.map((courseCategory) => courseCategory.category),
+                categories: courseData.categories.map(
+                  (courseCategory) => courseCategory.category
+                ),
               };
             }
-        
+
             const progressPercentage = await getProgress(userId, course.id);
-        
-            const formattedCategories: Category[] = courseData.categories.map((courseCategory) => ({
-              id: courseCategory.category.id,
-              name: courseCategory.category.name,
-              createdAt: courseCategory.category.createdAt,
-              updatedAt: courseCategory.category.updatedAt,
-            }));
-        
+
+            const formattedCategories: Category[] = courseData.categories.map(
+              (courseCategory) => ({
+                id: courseCategory.category.id,
+                name: courseCategory.category.name,
+                createdAt: courseCategory.category.createdAt,
+                updatedAt: courseCategory.category.updatedAt,
+              })
+            );
+
             return {
               ...courseData,
               progress: progressPercentage,
@@ -155,17 +174,16 @@ export const getCourses = async ({
             } as CourseWithProgressWithCategory; // Ensure the correct type here
           })
         );
-        
-        // Filter out null values
-        const filteredCoursesWithProgress = coursesWithProgress.filter(
-          (course): course is CourseWithProgressWithCategory => course !== null
-        );
-        
-        return filteredCoursesWithProgress;
 
-      }
-    } catch (error) {
-      console.log("[GET_COURSES]", error);
-      return [];
+      // Filter out null values
+      const filteredCoursesWithProgress = coursesWithProgress.filter(
+        (course): course is CourseWithProgressWithCategory => course !== null
+      );
+
+      return filteredCoursesWithProgress;
     }
-}
+  } catch (error) {
+    console.log("[GET_COURSES]", error);
+    return [];
+  }
+};
