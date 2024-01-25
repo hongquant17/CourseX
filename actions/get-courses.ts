@@ -24,7 +24,7 @@ export const getCourses = async ({
   try {
     if (categoryId === undefined) {
       const keyData = "course:all";
-      const cachedData = await rd.get(keyData);
+      // const cachedData = await rd.get(keyData);
 
       // if (cachedData) {
       //   return cachedData;

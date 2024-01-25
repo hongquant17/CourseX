@@ -1,36 +1,39 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { ToasterProvider } from '@/components/providers/toaster-provider'
-import { ConfettiProvider } from '@/components/providers/confetti-provider'
-import { ThemeProvider } from '@/components/providers/theme-provider'
-import SessionProvider from '@/components/providers/session-provider';
-import { getSession } from '@/lib/auth';
-import { NotificationProvider } from '@/components/providers/notification-provider'
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ToasterProvider } from "@/components/providers/toaster-provider";
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import SessionProvider from "@/components/providers/session-provider";
+import { getSession } from "@/lib/auth";
+import { NotificationProvider } from "@/components/providers/notification-provider";
+import { SocketProvider } from "@/components/providers/socket-provider";
 
 const inter = Inter({
-  subsets: ['vietnamese']
-})
+  subsets: ["vietnamese"],
+});
 
 export const metadata: Metadata = {
-  title: 'CourseX',
-}
+  title: "CourseX",
+};
 
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const session = await getSession()
+  const session = await getSession();
   return (
-    <SessionProvider session={session} >
+    <SessionProvider session={session}>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            <ConfettiProvider />
-            {session && <NotificationProvider />}
-            <ToasterProvider />
-            {children}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <SocketProvider>
+              <ConfettiProvider />
+              {session && <NotificationProvider />}
+              <ToasterProvider />
+              {children}
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>
