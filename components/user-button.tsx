@@ -56,7 +56,7 @@ export const UserButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel className="font-vcl">ਚੜ੍ਹ ਸਤਰੰਗੀ</DropdownMenuLabel>
+        <DropdownMenuLabel className="font-vcl">{session?.user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>{session?.user.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import SessionProvider from "@/components/providers/session-provider";
 import { getSession } from "@/lib/auth";
 import { NotificationProvider } from "@/components/providers/notification-provider";
-import { SocketProvider } from "@/components/providers/socket-provider";
+import { SocketProvider } from "@/components/providers/socket/socket-provider";
 
 const inter = Inter({
   subsets: ["vietnamese"],

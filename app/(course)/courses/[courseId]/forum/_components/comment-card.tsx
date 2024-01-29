@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CommentForm from "./comment-form";
 import toast from "react-hot-toast";
+import { toast as notiToast } from "sonner";
 import {
   Card,
   CardContent,
@@ -27,6 +28,7 @@ import { isTeacherDB } from "@/lib/teacher";
 import { getRole } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { NotificationProps } from "@/lib/constant";
+import { useSocket } from "@/components/providers/socket/socket-provider";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -69,7 +71,8 @@ export const CommentCard = ({
   const [areChildrenHidden, setChildrenHidden] = useState(true);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
+  const { socket, isConnected } = useSocket();
+  
   const roleUser = getRole(userRole);
   const ownCourse = courseOwner == userId;
   const forumContext = useForum();
@@ -97,6 +100,7 @@ export const CommentCard = ({
     } else {
       toast.success(response.message);
       if (response.message === "Liked") {
+        socket.emit("like:comment", "Dep trai khoai to");
         var newNoti : NotificationProps = { 
           type: 'like',
           subjectCount: 1,

@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Link from "next/link";
-import { useSocket } from "./providers/socket-provider";
+import { useSocket } from "./providers/socket/socket-provider";
 
 const NotiSection = () => {
   const { isConnected } = useSocket();
