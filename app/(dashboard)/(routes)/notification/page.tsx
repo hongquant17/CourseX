@@ -13,7 +13,6 @@ export default async function Dashboard() {
   const userId = session.user.uid;
   const notiResponse = await getNotification(userId);
   const notiTemplate = Handlebars.compile("{{id}} liked your comment({{commentId}}) in course's forum {{courseId}}")
-  console.log(notiResponse);
   
   return (
     <div className="p-6 space-y-4">

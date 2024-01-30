@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextAPIResponseS
                 path: path,
                 pingTimeout: 60000,
                 cors: {
-                    origin: "http://localhost:3000",
+                    origin: process.env.SOCKET_URL as string,
                     credentials: true,
                 },
             });
@@ -71,12 +71,15 @@ const initializeSocketIO = (
             
             socket.user = user;
             socket.join(user.id);
-            socket.emit("connected");
-            console.log("User connected 🗼. userId: ", user.id);
-
+            socket.emit("hello");
+            socket.on("Client", () => {
+                console.log("Success");
+                
+            });
+            console.log("User connected 🗼. userId: ", user.id, socket.id);
 
             socket.on("disconnect", () => {
-                console.log("User has disconnected. userId: ");
+                console.log("User has disconnected. userId: ", user.id);
                 if (socket.user?.id) {
                     socket.leave(socket.user.id);
                 }

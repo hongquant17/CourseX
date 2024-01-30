@@ -6,10 +6,13 @@ import {
     useEffect,
     useState
 } from "react";
-import {io as ClientIO} from "socket.io-client";
+import {io as ClientIO, Socket as SocketClientIO} from "socket.io-client";
+import { requestHandler } from "@/lib/api/socket/requestHandler";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 type SocketContextType = {
-    socket: any | null;
+    socket: SocketClientIO | null;
     isConnected: boolean;
 }
 
@@ -23,33 +26,52 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({children}: {children: React.ReactNode}) => {
-    const [socket, setSocket] = useState(null);
+    const [socket, setSocket] = useState<SocketClientIO | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const { data: session, status } = useSession();
-    // const resSocket = await apiClient.get("/socket/io");
+    // const {data} = useQuery({
+    //     queryKey: ["socket"],
+    //     queryFn: requestHandler<null>(() => apiClient.get("/socket/io")),
+    // });
+    
     useEffect(() => {
         if (status === "authenticated") {
-            const socketInstance = new (ClientIO as any)("localhost:3000"!, {
-                path: "/api/socket/io",
-                addTrailingSlash: false,
+            const path = "/api/socket/io";
+            const socketClient: SocketClientIO = ClientIO(process.env.SOCKET_URL as string, {
+                path: path,
                 auth: {user: {id: session?.user.uid, role: session?.user.role}},
-            });
-    
-            socketInstance.on("connect", () => {
+                withCredentials: true,
+            })
+            socketClient.on("connect", () => {
                 setIsConnected(true);
+                // toast("Connected to socket server");
+                console.log(socketClient.id);
             });
-            socketInstance.on("disconnect", () => {
+            socketClient.on("disconnect", () => {
                 setIsConnected(false);
             });
-            
-            // console.log(socketInstance, isConnected);
-            setSocket(socketInstance);
-    
+
+            setSocket(socketClient);
+
+            socketClient.on("hello", () => {
+                toast("Lan dau tien");
+            })
+
+            socketClient.on("test", () => {
+                toast("Lan dau tien2");
+            })
+
+            socketClient.emit("Client");
+
+            socketClient.on("like:noti", (message) => {
+                toast(message);
+            });
+
             return () => {
-                socketInstance.disconnect();
+                socketClient.disconnect();
             };
         }
-    }, [status]);
+    }, [session?.user.role, session?.user.uid, status]);
     
     return (
         status === "authenticated" ? (

@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import SessionProvider from "@/components/providers/session-provider";
 import { getSession } from "@/lib/auth";
 import { NotificationProvider } from "@/components/providers/notification-provider";
-import { SocketProvider } from "@/components/providers/socket/socket-provider";
+import { QuerySocketProvider } from "@/components/providers/socket/socket-provider";
 
 const inter = Inter({
   subsets: ["vietnamese"],
@@ -28,12 +28,12 @@ export default async function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <SocketProvider>
+            <QuerySocketProvider>
               <ConfettiProvider />
               {session && <NotificationProvider />}
               <ToasterProvider />
               {children}
-            </SocketProvider>
+            </QuerySocketProvider>
           </ThemeProvider>
         </body>
       </html>

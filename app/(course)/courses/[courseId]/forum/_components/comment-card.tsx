@@ -28,7 +28,7 @@ import { isTeacherDB } from "@/lib/teacher";
 import { getRole } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { NotificationProps } from "@/lib/constant";
-import { useSocket } from "@/components/providers/socket/socket-provider";
+import { useSocket } from "@/components/providers/socket/socket-context";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -98,9 +98,15 @@ export const CommentCard = ({
     if (!res.ok) {
       toast.error(response.message);
     } else {
+      socket?.emit("like:comment", {message: "Like roi", userId: forumContext.userId});
       toast.success(response.message);
+      const testNoti = await fetch(`/api/socket/notifications`, {
+        method: "GET",
+        headers,
+      })
+      console.log(testNoti);
+      
       if (response.message === "Liked") {
-        socket.emit("like:comment", "Dep trai khoai to");
         var newNoti : NotificationProps = { 
           type: 'like',
           subjectCount: 1,
