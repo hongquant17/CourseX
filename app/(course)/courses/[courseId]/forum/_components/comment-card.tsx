@@ -29,6 +29,7 @@ import { getRole } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { NotificationProps } from "@/lib/constant";
 import { useSocket } from "@/components/providers/socket/socket-context";
+import { emitSocketEventClient } from "@/lib/socket/client/emitSocketEventClient";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -71,7 +72,7 @@ export const CommentCard = ({
   const [areChildrenHidden, setChildrenHidden] = useState(true);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { socket, isConnected } = useSocket();
+  const { socket: SocketClient, isConnected } = useSocket();
   
   const roleUser = getRole(userRole);
   const ownCourse = courseOwner == userId;
@@ -98,14 +99,7 @@ export const CommentCard = ({
     if (!res.ok) {
       toast.error(response.message);
     } else {
-      socket?.emit("like:comment", {message: "Like roi", userId: forumContext.userId});
       toast.success(response.message);
-      const testNoti = await fetch(`/api/socket/notifications`, {
-        method: "GET",
-        headers,
-      })
-      console.log(testNoti);
-      
       if (response.message === "Liked") {
         var newNoti : NotificationProps = { 
           type: 'like',
@@ -115,6 +109,9 @@ export const CommentCard = ({
           prObj: { id: forumContext.courseId, type: "course" },
           receiveId: id,
       }
+
+        emitSocketEventClient(SocketClient, "like:comment", {message: `${forumContext.userName} liked your comment.`, userId: userId})
+
         const pushNoti = await fetch(`/api/users/notification`, {
           method: "POST",
           body: JSON.stringify(newNoti),

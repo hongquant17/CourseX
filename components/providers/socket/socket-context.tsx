@@ -1,4 +1,3 @@
-import { apiClient } from "@/lib/api";
 import { useSession } from "next-auth/react";
 import {
     createContext,
@@ -7,8 +6,6 @@ import {
     useState
 } from "react";
 import {io as ClientIO, Socket as SocketClientIO} from "socket.io-client";
-import { requestHandler } from "@/lib/api/socket/requestHandler";
-import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 type SocketContextType = {
@@ -29,10 +26,6 @@ export const SocketProvider = ({children}: {children: React.ReactNode}) => {
     const [socket, setSocket] = useState<SocketClientIO | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const { data: session, status } = useSession();
-    // const {data} = useQuery({
-    //     queryKey: ["socket"],
-    //     queryFn: requestHandler<null>(() => apiClient.get("/socket/io")),
-    // });
     
     useEffect(() => {
         if (status === "authenticated") {
@@ -44,24 +37,12 @@ export const SocketProvider = ({children}: {children: React.ReactNode}) => {
             })
             socketClient.on("connect", () => {
                 setIsConnected(true);
-                // toast("Connected to socket server");
-                console.log(socketClient.id);
             });
             socketClient.on("disconnect", () => {
                 setIsConnected(false);
             });
 
             setSocket(socketClient);
-
-            socketClient.on("hello", () => {
-                toast("Lan dau tien");
-            })
-
-            socketClient.on("test", () => {
-                toast("Lan dau tien2");
-            })
-
-            socketClient.emit("Client");
 
             socketClient.on("like:noti", (message) => {
                 toast(message);
