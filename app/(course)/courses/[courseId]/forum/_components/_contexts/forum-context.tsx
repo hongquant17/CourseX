@@ -9,6 +9,7 @@ export interface ForumContext {
     courseId: string;
     userId: string | undefined;
     userName: string | null | undefined;
+    userImage: string | null | undefined;
 }
 
 const initialContextValue: ForumContext = {
@@ -18,6 +19,7 @@ const initialContextValue: ForumContext = {
     courseId: '',
     userId: undefined,
     userName: undefined,
+    userImage: undefined,
 };
 
 const Context = React.createContext(initialContextValue);
@@ -31,7 +33,7 @@ export function useForum() {
     return context;
 }
 
-export function ForumProvider({items, children, courseId, userId, userName} : {items: CommentItem[],children: React.ReactNode, courseId: string, userId: string | undefined, userName: string | null | undefined}) {
+export function ForumProvider({items, children, courseId, userId, userName, userImage} : {items: CommentItem[],children: React.ReactNode, courseId: string, userId: string | undefined, userName: string | null | undefined, userImage: string | null | undefined}) {
     const [comments, setComments] = useState<CommentItem[]>([]);
 
     const commentsByParentId = useMemo<{ [key: string]: CommentItem[] }>(() => {      
@@ -68,6 +70,7 @@ export function ForumProvider({items, children, courseId, userId, userName} : {i
         courseId,
         userId,
         userName,
+        userImage,
     }}>
         {children}
     </Context.Provider>

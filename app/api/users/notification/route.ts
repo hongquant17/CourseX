@@ -12,45 +12,20 @@ export async function POST(req: Request) {
         }
     
         var body = await req.json();
-        console.log(body);
-        if (body.type == 'like') {
-            const receiveUser = await db.comment.findFirst({
-                where: {
-                    id: body.receiveId,
-                },
-                select: {
-                    user: true,
-                }
-            });
-            body.receiveId = receiveUser?.user.id;
-            body.inObj = {id: receiveUser?.user.id, name: receiveUser?.user.name, type: "user"};
-        };
-        
+        const userReceiveNoti = (body.diObj?.type === 'user' ? body.diObj : body.inObj)?.id ?? '';
         const createNoti = await db.notification.create({
             data: {
-                userId: body.receiveId,
+                userId: userReceiveNoti,
                 type: body.type,
-                notiDataId: null,
                 readAt: null,
-            }
-        });
-        const dataNoti = await db.notificationData.create({
-            data: {
-                notiId: createNoti.id,
                 subjectCount: Object.keys(body.subjects).length,
                 subjects: body.subjects,
+                directObj: body.diObj,
                 inObj: body.inObj,
-                prObj: body.prObj,
+                prepObj: body.prObj,
             }
         });
-
-        const updateNoti = await db.notification.update({
-            where: { id: createNoti.id },
-            data: {
-              notiDataId: dataNoti.id,
-            },
-        });
-        if (!dataNoti) return NextResponse.json({message: "Cannot create noti"}, {status: 500});
+        if (!createNoti) return NextResponse.json({message: "Cannot create noti"}, {status: 500});
         return NextResponse.json({message: "Notification created"}, {status: 200});
 
         

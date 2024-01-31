@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CommentForm from "./comment-form";
 import toast from "react-hot-toast";
-import { toast as notiToast } from "sonner";
 import {
   Card,
   CardContent,
@@ -19,12 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { isAdminDB } from "@/lib/admin";
-import { isTeacherDB } from "@/lib/teacher";
 import { getRole } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { NotificationProps } from "@/lib/constant";
@@ -101,13 +95,13 @@ export const CommentCard = ({
     } else {
       toast.success(response.message);
       if (response.message === "Liked") {
-        var newNoti : NotificationProps = { 
-          type: 'like',
+        var newNoti : NotificationProps = {
+          type: 'like:comment',
           subjectCount: 1,
-          subjects: [{ id: forumContext.userId, name: forumContext.userName ? forumContext.userName : '', type: 'user' }],
-          inObj: { id: id },
+          subjects: [{ id: forumContext.userId ?? '', type: 'user' }],
+          diObj: { id: id, type: 'comment' },
+          inObj: { id: userId ?? '', type: 'user'},
           prObj: { id: forumContext.courseId, type: "course" },
-          receiveId: id,
       }
 
         emitSocketEventClient(SocketClient, "like:comment", {message: `${forumContext.userName} liked your comment.`, userId: userId})

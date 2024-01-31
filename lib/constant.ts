@@ -58,10 +58,15 @@ export type UserItem = {
 };
 
 export type NotificationProps = {
-  receiveId: string;
   type: string;
-  subjects: any;
-  inObj: any;
-  prObj: any;
+  subjects: objectNoti[];
+  diObj: objectNoti;
+  inObj: objectNoti;
+  prObj: objectNoti;
   subjectCount: number;
+}
+
+export type objectNoti = {
+  id: string;
+  type: string;
 }

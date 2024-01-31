@@ -26,6 +26,7 @@ export default async function ForumPage() {
   const session = await getSession();
   const userId = session?.user.uid;
   const userName = session?.user.name;
+  const userImage = session?.user.image;
 
   return (
     <div className="p-6 space-y-4">
@@ -39,7 +40,7 @@ export default async function ForumPage() {
         Back to course
       </Link>
       </div>
-      <ForumProvider items={commentList} courseId={courseId} userId={userId} userName={userName}>
+      <ForumProvider items={commentList} courseId={courseId} userId={userId} userName={userName} userImage={userImage}>
         <Forum />
       </ForumProvider>
     </div>

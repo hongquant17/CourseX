@@ -3,6 +3,13 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getNotification } from "@/actions/get-noti";
 import Handlebars from "handlebars";
+import { NotificationProps } from "@/lib/constant";
+
+type NotiProps = NotificationProps & {
+  id: string;
+  createdAt: Date;
+  readAt: Date | null;
+}
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -12,14 +19,16 @@ export default async function Dashboard() {
   }
   const userId = session.user.uid;
   const notiResponse = await getNotification(userId);
-  const notiTemplate = Handlebars.compile("{{id}} liked your comment({{commentId}}) in course's forum {{courseId}}")
-  
+  console.log(notiResponse);
+  // const notiTemplate = Handlebars.compile("{{id}} liked your comment in {{courseId}}'s forum")
   return (
     <div className="p-6 space-y-4">
-        {notiResponse?.slice().reverse().map((notiItem) => (
+        {notiResponse?.slice().reverse().map((notiItem: NotiProps) => (
         <div key={notiItem.id} className="mb-4">
           <span>
-          {notiTemplate({id: notiItem.inObj.id, commentId: "", courseId: notiItem.prObj.id})}
+            {/* {JSON.parse(JSON.stringify(notiItem.inObj)).id} */}
+            {notiItem.inObj?.id}
+          {/* {notiTemplate({id: notiItem.inObj?., commentId: "", courseId: notiItem.prObj.id})} */}
           </span>
         </div>
     ))}

@@ -107,26 +107,18 @@ model Like {
 
 }
 
-model NotificationData {
-  id String @id @default(uuid())
-  notiId String @unique
-  subjectCount Int
-  subjects Json
-  inObj Json
-  prObj Json
-  noti Notification @relation(fields: [notiId], references: [id])
-
-}
-
 model Notification {
   id String @id @default(uuid())
   userId String
-  notiDataId String?
   type String
+  subjectCount Int
+  subjects Json // cause action
+  directObj Json // object being primarily affected by action
+  inObj Json // object begin secondarily affected
+  prepObj Json // object in the action (in, for, of, ...) Eg: in Course WEB DEV
   createdAt DateTime @default(now())
   readAt DateTime?
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notiData NotificationData?
 
   @@unique([userId, id])
   @@index([userId])
